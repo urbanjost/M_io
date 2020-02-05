@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>dirname(3f)</b> - [M_io] strip last component from filename <b>(LICENSE:PD)</b>
+        <b>dirname(3f)</b> - [M_io] strip last component from filename 
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="9">SYNOPSIS</a></h3>
       <blockquote>

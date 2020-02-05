@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>read_all(3f)</b> - [M_io] read a line from specified LUN into allocatable string up to line length limit <b>(LICENSE:PD)</b>
+        <b>read_all(3f)</b> - [M_io] read a line from specified LUN into allocatable string up to line length limit
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="8">SYNTAX</a></h3>
       <blockquote>

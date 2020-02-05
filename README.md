@@ -20,7 +20,7 @@ This will compile the M_io module and build all the example programs from
 the document pages in the PROGRAMS/ sub-directory.
 
 - [fileclose](md/fileclose.3m_io.md)  A simple close of a sequential file
-- [filedelete](md/filedelete.3m_io.md)
+- [filedelete](md/filedelete.3m_io.md) A simple close of an open file with STATUS='DELETE'
 - [fileopen](md/fileopen.3m_io.md) A simple open of a sequential file
 
 - [read_all](md/read_all.3m_io.md) read a line from specified LUN into allocatable string up to line length limit

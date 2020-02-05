@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>fileclose(3f)</b> - [M_io] A simple close of a sequential file <b>(LICENSE:PD)</b>
+        <b>fileclose(3f)</b> - [M_io] A simple close of a sequential file 
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="8">SYNOPSIS</a></h3>
       <blockquote>

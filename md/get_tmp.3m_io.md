@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>get_tmp(3f)</b> - [M_io] Return the name of the scratch directory <b>(LICENSE:PD)</b>
+        <b>get_tmp(3f)</b> - [M_io] Return the name of the scratch directory 
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="6">SYNOPSIS</a></h3>
       <blockquote>

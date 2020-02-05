@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>uniq(3f)</b> - [M_io] append a number to the end of filename to make a unique name if name exists <b>(LICENSE:PD)</b>
+        <b>uniq(3f)</b> - [M_io] append a number to the end of filename to make a unique name if name exists
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="8">SYNOPSIS</a></h3>
       <blockquote>

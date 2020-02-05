@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>print_inquire(3f)</b> - [M_io] Do INQUIRE on file by name/number and print results <b>(LICENSE:PD)</b>
+        <b>print_inquire(3f)</b> - [M_io] Do INQUIRE on file by name/number and print results
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="7">SYNOPSIS</a></h3>
       <blockquote>

@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>splitpath(3f)</b> - [M_io] split a Unix pathname into components <b>(LICENSE:PD)</b>
+        <b>splitpath(3f)</b> - [M_io] split a Unix pathname into components
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="8">SYNOPSIS</a></h3>
       <blockquote>

@@ -7,7 +7,7 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>SLURP(3f)</b> - [M_io] read a file into a character array <b>(LICENSE:PD)</b>
+        <b>SLURP(3f)</b> - [M_io] read a file into a character array
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="7">SYNOPSIS</a></h3>
       <blockquote>

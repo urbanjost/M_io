@@ -8,7 +8,6 @@
       <h3><a name="0">NAME</a></h3>
       <blockquote>
         <b>read_line(3f)</b> - [M_io] read a line from specified LUN into allocatable string up to line length limit cleaning up input line
-        <b>(LICENSE:PD)</b>
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="6">SYNTAX</a></h3>
       <blockquote>
