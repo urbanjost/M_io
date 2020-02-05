@@ -37,8 +37,6 @@
             <td valign="bottom">
               Path to be broken into components. It is assumed
               <table width="100%" cellpadding="3">
-                <!-- tsb: Path to be broken into components. It is assumed
- -->
                 <tr valign="top">
                   <td width="3%">o</td>
                   <td>Forward slashes (/) separate pathname components.</td>
@@ -82,9 +80,6 @@
           </tr>
           <tr valign="top">
             <td class="c42" colspan="2">basename</td>
-          </tr>
-          <tr valign="top">
-            <td width="6%"></td>
             <td>NAME with any extension removed</td>
           </tr>
           <tr valign="top">
