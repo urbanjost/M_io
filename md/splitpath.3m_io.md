@@ -79,8 +79,8 @@
             <td valign="bottom">Name of file leaf or, if no file is specified in path, name of the lowest directory.</td>
           </tr>
           <tr valign="top">
-            <td class="c42" colspan="2">basename</td>
-            <td>NAME with any extension removed</td>
+            <td class="c42" width="6%" nowrap="nowrap">basename</td>
+            <td valign="bottom">NAME with any extension removed</td>
           </tr>
           <tr valign="top">
             <td class="c42" width="6%" nowrap="nowrap">ext</td>
