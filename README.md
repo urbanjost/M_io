@@ -13,17 +13,28 @@ GPF package this library is intertwined with several other large modules.
 
     git clone https://github.com/urbanjost/M_io.git
     cd M_io/src
-    # change Makefile if not using gfortran(1)
-    make
+    # change Makefile if not using one of the listed compilers
+     
+    # for gfortran
+    make clean
+    make F90=gfortran gfortran
+     
+    # for ifort
+    make clean
+    make F90=ifort ifort
+
+    # for nvfortran
+    make clean
+    make F90=nvfortran nvfortran
 
 This will compile the M_io module and build all the example programs from
-the document pages in the PROGRAMS/ sub-directory.
+the document pages in the `test/` sub-directory.
 
 - [fileclose](md/fileclose.3m_io.md)  A simple close of a sequential file
 - [filedelete](md/filedelete.3m_io.md) A simple close of an open file with STATUS='DELETE'
 - [fileopen](md/fileopen.3m_io.md) A simple open of a sequential file
 
-- [read_all](md/read_all.3m_io.md) read a line from specified LUN into allocatable string up to line length limit
+- [getline](md/getline.3m_io.md) read a line from specified LUN into allocatable string up to line length limit
 - [read_line](md/read_line.3m_io.md) read a line from specified LUN into allocatable string up to line length limit cleaning up input line
 - [read_table](md/read_table.3m_io.md) read file containing a table of numeric values
 - [slurp](md/slurp.3m_io.md) read a file into a character array

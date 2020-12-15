@@ -7,11 +7,11 @@
       </div><a name="0"></a>
       <h3><a name="0">NAME</a></h3>
       <blockquote>
-        <b>read_all(3f)</b> - [M_io] read a line from specified LUN into allocatable string up to line length limit
+        <b>getline(3f)</b> - [M_io] read a line from specified LUN into allocatable string up to line length limit
       </blockquote><a name="contents" id="contents"></a>
       <h3><a name="8">SYNTAX</a></h3>
       <blockquote>
-        function <b>read_all</b>(line,lun) <b>result</b>(ier)
+        function <b>getline</b>(line,lun) <b>result</b>(ier)
         <pre>
    character(len=:),allocatable,intent(out) :: line
    integer,intent(in),optional              :: lun
@@ -53,17 +53,17 @@
       <blockquote>
         Sample program:
         <pre>
-   program demo_read_all
-   use M_io, only : read_all
+   program demo_getline
+   use M_io, only : getline
    implicit none
    character(len=:),allocatable :: line
-      INFINITE: do while (read_all(line)==0)
+      INFINITE: do while (getline(line)==0)
          write(*,'(a)')'['//line//']'
       enddo INFINITE
-   end program demo_read_all
+   end program demo_getline
 </pre>
       <br />
-      <div class="c26"><img src="images/read_all.3m_io.gif" /></div>
+      <div class="c26"><img src="images/getline.3m_io.gif" /></div>
     </div>
   </div>
 </body>

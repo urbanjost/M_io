@@ -15,7 +15,7 @@ public fileclose
 public filedelete
 public get_tmp
 public read_line
-public read_all
+public getline
 public read_table
 
 character(len=*),parameter::ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
@@ -1793,11 +1793,11 @@ end subroutine splitpath
 !===================================================================================================================================
 !>
 !!##NAME
-!!     read_all(3f) - [M_io] read a line from specified LUN into allocatable string up to line length limit
+!!     getline(3f) - [M_io] read a line from specified LUN into allocatable string up to line length limit
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
-!!   function read_all(line,lun) result(ier)
+!!   function getline(line,lun) result(ier)
 !!
 !!    character(len=:),allocatable,intent(out) :: line
 !!    integer,intent(in),optional              :: lun
@@ -1831,24 +1831,24 @@ end subroutine splitpath
 !!
 !!   Sample program:
 !!
-!!    program demo_read_all
-!!    use M_io, only : read_all
+!!    program demo_getline
+!!    use M_io, only : getline
 !!    implicit none
 !!    character(len=:),allocatable :: line
-!!       INFINITE: do while (read_all(line)==0)
+!!       INFINITE: do while (getline(line)==0)
 !!          write(*,'(a)')'['//line//']'
 !!       enddo INFINITE
-!!    end program demo_read_all
+!!    end program demo_getline
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function read_all(line,lun) result(ier)
+function getline(line,lun) result(ier)
 use, intrinsic :: iso_fortran_env, only : INPUT_UNIT
 implicit none
 
 character(len=*),parameter::ident_10="&
-&@(#)M_io::read_all(3f): read a line from specified LUN into allocatable string up to line length limit"
+&@(#)M_io::getline(3f): read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
@@ -1882,7 +1882,7 @@ integer                                  :: lun_local
      endif
    enddo INFINITE
    line=line_local                                                   ! trim line
-end function read_all
+end function getline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2339,8 +2339,9 @@ end function s2c
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function expand(line,escape) result(lineout)
-USE ISO_C_BINDING ,ONLY: c_horizontal_tab
+!!USE ISO_C_BINDING ,ONLY: c_horizontal_tab
 implicit none
+character(len=1),parameter :: c_horizontal_tab=char(9)
 
 character(len=*),parameter::ident_29="@(#)M_strings::expand(3f): return string with escape sequences expanded"
 
