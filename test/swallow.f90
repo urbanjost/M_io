@@ -3,7 +3,7 @@
           implicit none
           character(len=4096)          :: FILENAME   ! file to read
           character(len=:),allocatable :: pageout(:) ! array to hold file in memory
-          integer                      :: longest, lines, i, ilen
+          integer                      :: longest, lines, i
              ! get a filename
              call get_command_argument(1, FILENAME)
              ! allocate character array and copy file into it
