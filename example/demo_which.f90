@@ -3,4 +3,5 @@
            implicit none
               write(*,*)'ls is ',which('ls')
               write(*,*)'dir is ',which('dir')
+              write(*,*)'install is ',which('install')
            end program demo_which
