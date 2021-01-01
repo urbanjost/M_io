@@ -5,4 +5,18 @@ license = "Public Domain"
 author = "John S. Urban"
 maintainer = "urbanjost@comcast.net"
 copyright = "2020 John S. Urban"
-description = "I/O-related tools"
+#description = "I/O-related tools"
+#categories = ["io"]
+#keywords = ["fortran", "files"]
+#homepage = "https://github.com/urbanjost/M_io.git"
+
+#[dev-dependencies]
+#M_msg    = { git = "https://github.com/urbanjost/M_msg.git" }
+
+[[test]]
+name = "test_suite_M_io"
+source-dir="test"
+main="test_suite_M_io.f90"
+##link = ["blas", "lapack"]
+[test.dependencies]
+M_msg = { git = "https://github.com/urbanjost/M_msg.git" }

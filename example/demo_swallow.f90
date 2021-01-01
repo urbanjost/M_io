@@ -3,7 +3,7 @@
           implicit none
           character(len=4096)          :: FILENAME   ! file to read
           character(len=:),allocatable :: pageout(:) ! array to hold file in memory
-          integer                      :: longest, lines, i
+          integer                      :: longest, lines, i, ilen
              ! get a filename
              call get_command_argument(1, FILENAME)
              ! allocate character array and copy file into it
@@ -17,9 +17,7 @@
                 write(*,*)'number of lines is ',lines
                 write(*,*)'and length of lines is ',longest
                 write(*,'(a)')repeat('%',longest+2)
-                do i=lines,1,-1
-                   write(*,'("%",a,"%")')pageout(i)
-                enddo
+                write(*,'("%",a,"%")')(trim(pageout(i)),i=lines,1,-1)
                 write(*,'(a)')repeat('%',longest+2)
                 deallocate(pageout)  ! release memory
              endif
