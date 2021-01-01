@@ -1,5 +1,6 @@
           program demo_rd
           use M_io, only : rd
+          implicit none
           character(len=:),allocatable :: mystring
           doubleprecision              :: d
           real                         :: r

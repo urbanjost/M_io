@@ -1,6 +1,8 @@
            program demo_read_table
            use M_io, only : read_table
+           implicit none
            doubleprecision,allocatable :: array(:,:)
+           integer :: i, ierr
 
            ! create test file
            open(file='inputfile',unit=10)
