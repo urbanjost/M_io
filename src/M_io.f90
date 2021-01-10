@@ -420,8 +420,13 @@ end subroutine print_inquire
 !!    First using the name the program was invoked with, then the name
 !!    returned by an INQUIRE(3f) of that name, then ".\NAME" and "./NAME"
 !!    try to determine the seperator character used to separate directory
-!!    names from file basenames.  Can be very system dependent. If the
-!!    queries fail the default returned is "/".
+!!    names from file basenames.
+!!
+!!    If a slash or backslash is not found in the name, the environment
+!!    variable PATH is examined first for a backslash, then a slash.
+!!
+!!    Can be very system dependent. If the queries fail the default returned
+!!    is "/".
 !!
 !!##EXAMPLE
 !!
@@ -480,7 +485,8 @@ character(len=:),allocatable :: fname
             inquire(file=fname,iostat=istat,exist=existing)
             if(existing)then
                sep='/'
-            else
+            else ! check environment variable PATH
+               sep=merge('\','/',index(system_getenv('PATH'),'\').ne.0)
                !*!write(*,*)'<WARNING>unknown system directory path separator'
                sep='/'
             endif
@@ -489,6 +495,36 @@ character(len=:),allocatable :: fname
    endif
    !*ifort_bug*!sep_cache=sep
 end function separator
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function system_getenv(name,default) result(value)
+!@(#) M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)
+character(len=*),intent(in)          :: name
+character(len=*),intent(in),optional :: default
+integer                              :: howbig
+integer                              :: stat
+character(len=:),allocatable         :: value
+   if(NAME.ne.'')then
+      call get_environment_variable(name, length=howbig, status=stat, trim_name=.true.)  ! get length required to hold value
+      if(howbig.ne.0)then
+         select case (stat)
+         case (1); value=''   ! NAME is not defined in the environment. Strange...
+         case (2); value=''   ! This processor doesn't support environment variables. Boooh!
+         case default         !  make string to hold value of sufficient size and get value
+          if(allocated(value))deallocate(value)
+          allocate(character(len=max(howbig,1)) :: VALUE)
+          call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
+          if(stat.ne.0)VALUE=''
+         end select
+      else
+         value=''
+      endif
+   else
+      value=''
+   endif
+   if(value.eq.''.and.present(default))value=default
+end function system_getenv
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
