@@ -3,6 +3,7 @@ MODULE M_io
 use, intrinsic :: iso_fortran_env, only : error_unit,input_unit,output_unit     ! access computing environment
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
+integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 private
 public uniq
 public print_inquire
@@ -2650,7 +2651,7 @@ integer                      :: icount
    enddo
 end function rd_character
 !===================================================================================================================================
-function rd_doubleprecision(prompt,default) result(dvalue)
+function rd_doubleprecision(prompt,default,iostat) result(dvalue)
 implicit none
 
 ! ident_15="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
@@ -2659,10 +2660,12 @@ doubleprecision              :: dvalue
 integer                      :: ivalue
 character(len=*),intent(in)  :: prompt
 doubleprecision,intent(in)   :: default
+integer,intent(out),optional :: iostat
 character(len=:),allocatable :: strout
 character(len=:),allocatable :: message
 integer                      :: itest
 
+   iostat=0
    dvalue=default
    strout=adjustl(rd_character(prompt,'NaN'))
 
@@ -2677,38 +2680,68 @@ integer                      :: itest
       if( decodebase(strout,0,ivalue))then
          dvalue=ivalue
       else
+         iostat=-1
          write(*,*)'ERROR> could not convert ',strout
       endif
    else
       itest=isnumber(strout,message)
       if(itest.gt.0)then
-         dvalue=s2v(strout)
+         dvalue=s2v(strout,ierr=iostat)
       else
+         iostat=-2
          write(*,*)' ERROR> for ',strout,' ',itest,':',trim(message)
       endif
    endif
 end function rd_doubleprecision
 !===================================================================================================================================
-function rd_real(prompt,default) result(rvalue)
+function rd_real(prompt,default,iostat) result(rvalue)
 implicit none
 
 ! ident_16="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
 
 real                         :: rvalue
+real(kind=dp)                :: dvalue
 character(len=*),intent(in)  :: prompt
 real,intent(in)              :: default
-   rvalue=real(rd_doubleprecision(prompt,dble(default)))
+integer,intent(out),optional :: iostat
+   !*! what about Nan, Inf, -Inf? Likely place for compiler bugs
+   dvalue=rd_doubleprecision(prompt,dble(default),iostat)
+   if(dvalue.ne.dvalue)then
+      write(stderr,'(*(g0))') &
+      & '<ERROR>*input* value [',dvalue,'] is indefinite'
+      rvalue=huge(0.0)
+   else
+      rvalue=real(dvalue)
+   endif
 end function rd_real
 !===================================================================================================================================
-function rd_integer(prompt,default) result(ivalue)
+function rd_integer(prompt,default,iostat) result(ivalue)
 implicit none
 
 ! ident_17="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
 
 integer                      :: ivalue
+real(kind=dp)                :: dvalue
 character(len=*),intent(in)  :: prompt
 integer,intent(in)           :: default
-   ivalue=nint(rd_doubleprecision(prompt,dble(default)))
+integer,intent(out),optional :: iostat
+   dvalue=rd_doubleprecision(prompt,dble(default),iostat)
+   !*! what about Nan, Inf, -Inf?
+   if(dvalue.ne.dvalue)then
+      write(stderr,'(*(g0))') &
+      & '<ERROR>*input* value [',dvalue,'] is indefinite'
+      ivalue=huge(0)
+   elseif(dvalue.gt.huge(0))then
+      write(stderr,'(*(g0))') &
+      & '<ERROR>*input* value [',dvalue,'] greater than ', huge(0)
+      ivalue=huge(0)
+   elseif(dvalue.lt.1-huge(0))then
+      write(stderr,'(*(g0))') &
+      & '<ERROR>*input* value [',dvalue,'] less than ', 1-huge(0)
+      ivalue=1-huge(0)
+   else
+      ivalue=nint(dvalue)
+   endif
 end function rd_integer
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
