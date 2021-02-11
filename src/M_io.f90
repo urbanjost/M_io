@@ -29,16 +29,18 @@ public getname
 
 ! ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
 
-interface read_table
-   module procedure read_table_real, read_table_doubleprecision
-end interface
-
 ! ident_2="@(#)M_io::rd(3f): ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
    module procedure rd_integer
    module procedure rd_real
    module procedure rd_doubleprecision
+end interface
+
+interface read_table
+   module procedure read_table_i
+   module procedure read_table_r
+   module procedure read_table_d
 end interface
 
 integer,save,private       :: my_stdout=OUTPUT_UNIT
@@ -420,7 +422,7 @@ end subroutine print_inquire
 !!##DESCRIPTION
 !!    First using the name the program was invoked with, then the name
 !!    returned by an INQUIRE(3f) of that name, then ".\NAME" and "./NAME"
-!!    try to determine the seperator character used to separate directory
+!!    try to determine the separator character used to separate directory
 !!    names from file basenames.
 !!
 !!    If a slash or backslash is not found in the name, the environment
@@ -538,13 +540,13 @@ end function system_getenv
 !!
 !!   subroutine read_table(filename,array,ierr)
 !!
-!!    character(len=*),intent(in)             :: filename
-!!
-!!    doubleprecision,allocatable,intent(out) :: array(:,:)
-!!    ! or
-!!    real           ,allocatable,intent(out) :: array(:,:)
-!!
-!!    integer,intent(out)                     :: ierr
+!!    character(len=*),intent(in)              :: filename
+!!    integer,allocatable,intent(out)          :: array(:,:)
+!!       or
+!!    real,allocatable,intent(out)             :: array(:,:)
+!!       or
+!!    doubleprecision,allocatable,intent(out)  :: array(:,:)
+!!    integer,intent(out)                      :: ierr
 !!
 !!##DESCRIPTION
 !!    Read a table from a file that is assumed to be columns of
@@ -553,8 +555,8 @@ end function system_getenv
 !!
 !!##OPTIONS
 !!    filename   filename to read
-!!    array      array to create
-!!    ierr       zero if no error occurred
+!!    array      array to create. May be INTEGER, REAL, or DOUBLEPRECISION
+!!    ierr       zero if no error occurred.
 !!##EXAMPLES
 !!
 !!    Sample program, assuming the input file "inputfile" exists:
@@ -616,11 +618,14 @@ end function system_getenv
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine read_table_doubleprecision(filename,array,ierr)
+subroutine read_table_d(filename,darray,ierr)
 implicit none
+! note the array is allocated as text, and then doubleprecision, and then placed in the output array.
+! for large files it would be worth it to just determine the file size and allocate and fill the output
+! array
 
 character(len=*),intent(in)             :: FILENAME
-doubleprecision,allocatable,intent(out) :: array(:,:)
+doubleprecision,allocatable,intent(out) :: darray(:,:)
 integer,intent(out)                     :: ierr
 
 character(len=1),allocatable :: text(:) ! array to hold file in memory
@@ -639,7 +644,7 @@ character(len=:),allocatable :: line
     ierr=0
 
     if(.not.allocated(text))then
-       write(*,*)'*read_table_doubleprecision* failed to load file '//FILENAME
+       write(*,*)'*read_table* failed to load file '//FILENAME
        ierr=-1
     else
        if(allocated(line))deallocate(line)
@@ -657,10 +662,10 @@ character(len=:),allocatable :: line
           endif
        enddo
        icols=size(s2vs(line))
-       if(allocated(array))deallocate(array)
-       allocate(array(irows,icols))
+       if(allocated(darray))deallocate(darray)
+       allocate(darray(irows,icols))
 
-       array=0.0d0
+       darray=0.0d0
        istart=1
        do j=1,irows
           k=0
@@ -677,84 +682,32 @@ character(len=:),allocatable :: line
              endif
           enddo
           istart=i+1
-          array(j,:)=s2vs(line)
+          darray(j,:)=s2vs(line)
        enddo
-
        deallocate(text)  ! release memory
     endif
 
-end subroutine read_table_doubleprecision
+end subroutine read_table_d
 !===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-subroutine read_table_real(filename,array,ierr)
+subroutine read_table_i(filename,array,ierr)
 implicit none
-
 character(len=*),intent(in)             :: FILENAME
-real,allocatable,intent(out) :: array(:,:)
+integer,allocatable,intent(out)         :: array(:,:)
 integer,intent(out)                     :: ierr
-
-character(len=1),allocatable :: text(:) ! array to hold file in memory
-integer                      :: length
-integer                      :: irows
-integer                      :: icols
-integer                      :: nchars
-integer                      :: i
-integer                      :: j
-integer                      :: k
-integer                      :: istart
-character(len=:),allocatable :: line
-
-    call slurp(FILENAME,text,lines=irows,length=length) ! allocate character array and copy file into it
-    nchars=size(text)
-    ierr=0
-
-    if(.not.allocated(text))then
-       write(*,*)'*read_table_real* failed to load file '//FILENAME
-       ierr=-1
-    else
-       if(allocated(line))deallocate(line)
-       allocate(character(len=length) :: line)
-       ! find number of values on first line and assume this is constant
-       line(:)=''
-       do i=1,nchars
-          if(text(i).eq.NEW_LINE('A'))then
-             exit
-          endif
-          if(text(i).eq.char(9))then
-             line(i:i)=' '
-          else
-             line(i:i)=text(i)
-          endif
-       enddo
-       icols=size(s2vs(line))
-       if(allocated(array))deallocate(array)
-       allocate(array(irows,icols))
-
-       array=0.0
-       istart=1
-       do j=1,irows
-          k=0
-          line(:)=''
-          do i=istart,nchars
-             if(text(i).eq.NEW_LINE('A').or.i.eq.nchars)then
-                exit
-             endif
-             k=k+1
-             if(text(i).eq.char(9))then
-                line(k:k)=' '
-             else
-                line(k:k)=text(i)
-             endif
-          enddo
-          istart=i+1
-          array(j,:)=s2vs(line)
-       enddo
-
-       deallocate(text)  ! release memory
-    endif
-
-end subroutine read_table_real
+doubleprecision,allocatable             :: darray(:,:)
+call read_table_d(filename,darray,ierr)
+array=nint(darray)
+end subroutine read_table_i
+!===================================================================================================================================
+subroutine read_table_r(filename,array,ierr)
+implicit none
+character(len=*),intent(in)             :: FILENAME
+real,allocatable,intent(out)            :: array(:,:)
+integer,intent(out)                     :: ierr
+doubleprecision,allocatable             :: darray(:,:)
+call read_table_d(filename,darray,ierr)
+array=real(darray)
+end subroutine read_table_r
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -999,7 +952,6 @@ end subroutine swallow
 !!##LICENSE
 !!    Public Domain
 subroutine slurp(filename,text,length,lines)
-!-----------------------------------------------------------------------------------------------------------------------------------
 implicit none
 
 ! ident_6="@(#)M_io::slurp(3f): allocate text array and read file filename into it"
@@ -1008,7 +960,6 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-!-----------------------------------------------------------------------------------------------------------------------------------
 integer :: nchars=0             ! holds size of file
 integer :: igetunit             ! use newunit=igetunit in f08
 integer :: ios=0                ! used for I/O error status
@@ -1018,10 +969,8 @@ integer :: i
 integer :: icount
 character(len=256)  :: message
 character(len=4096) :: local_filename
-!-----------------------------------------------------------------------------------------------------------------------------------
    length_local=0
    lines_local=0
-!-------------------------------------------
    message=''
       select type(FILENAME)
        type is (character(len=*))
@@ -1033,17 +982,13 @@ character(len=4096) :: local_filename
           write(local_filename,'("unit ",i0)')filename
           igetunit=filename
       end select
-!-------------------------------------------
    if(ios.eq.0)then  ! if file was successfully opened
-!-------------------------------------------
       inquire(unit=igetunit, size=nchars)
-!-------------------------------------------
       if(nchars.le.0)then
          call stderr_local( '*slurp* empty file '//trim(local_filename) )
          return
       endif
       ! read file into text array
-      !
       if(allocated(text))deallocate(text) ! make sure text array not allocated
       allocate ( text(nchars) )           ! make enough storage to hold file
       read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array

@@ -5,10 +5,10 @@ license = "Public Domain"
 author = "John S. Urban"
 maintainer = "urbanjost@comcast.net"
 copyright = "2020 John S. Urban"
-#description = "I/O-related tools"
-#categories = ["io"]
-#keywords = ["fortran", "files"]
-#homepage = "https://github.com/urbanjost/M_io.git"
+description = "I/O-related tools"
+categories = ["io"]
+keywords = ["fortran", "files"]
+homepage = "https://github.com/urbanjost/M_io.git"
 
 #[dev-dependencies]
 #M_msg    = { git = "https://github.com/urbanjost/M_msg.git" }
