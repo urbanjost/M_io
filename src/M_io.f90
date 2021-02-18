@@ -10,6 +10,7 @@ public print_inquire
 public notopen
 public slurp
 public swallow
+public number_of_lines
 public dirname
 public basename
 public splitpath
@@ -491,7 +492,6 @@ character(len=:),allocatable :: fname
             else ! check environment variable PATH
                sep=merge('\','/',index(system_getenv('PATH'),'\').ne.0)
                !*!write(*,*)'<WARNING>unknown system directory path separator'
-               sep='/'
             endif
          endif
       endif
@@ -1030,6 +1030,68 @@ character(len=*) :: message
 end subroutine stderr_local
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine slurp
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    number_of_lines(3f) - [M_io] read an open sequential file to get
+!!                          number of lines
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!   function number_of_lines(lun) result(nlines)
+!!
+!!    integer,intent(in)          :: lun
+!!    integer                     :: nlines
+!!
+!!##DESCRIPTION
+!!    Rewind an open sequential file and read through it to count the number
+!!    of lines. The file is rewound on exit.
+!!
+!!##OPTIONS
+!!    lun       logical unit number of open sequential file to count lines in
+!!
+!!##RETURNS
+!!    nlines    number of lines read
+!!
+!!##EXAMPLES
+!!
+!!   Sample program
+!!
+!!    program demo_number_of_lines
+!!    use M_io,      only : number_of_lines, fileopen
+!!    implicit none
+!!    integer :: ios
+!!    integer :: lun
+!!       lun=fileopen('test.txt','r',ios)
+!!       if(ios.eq.0)then
+!!          write(*,*) number_of_lines(lun)
+!!       else
+!!          write(*,*)'ERROR: IOS=',ios
+!!       endif
+!!    end program demo_number_of_lines
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function number_of_lines(lun) result(nlines)
+!@(#) determine number or lines in file given a LUN to the open file
+integer,intent(in) :: lun
+integer            :: ios
+integer            :: nlines
+   if(lun.ne.stdin)rewind(lun,iostat=ios)
+   nlines = 0
+   do
+      read(lun, '(A)', iostat=ios)
+      if (ios /= 0) exit
+      nlines = nlines + 1
+   enddo
+   if(lun.ne.stdin)rewind(lun,iostat=ios)
+end function number_of_lines
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2791,42 +2853,46 @@ end function getname
 !!##LICENSE
 !!    Public Domain
 function which(command) result(pathname)
-character(len=*),intent(in)         :: command
-character(len=:),allocatable        :: pathname
-character(len=:),allocatable        :: checkon
-
-character(len=:),allocatable        :: path
-character(len=:),allocatable        :: paths(:)
-character(len=256)                  :: message
-character(len=1)                    :: sep
-integer                             :: howbig, stat, i
-logical                             :: existing
+character(len=*),intent(in)     :: command
+character(len=:),allocatable    :: pathname, checkon, paths(:), exts(:)
+integer                         :: i, j
    pathname=''
-   ! get length required to hold value
-   call get_environment_variable('PATH', length=howbig,status=stat)
-   select case (stat)
-   case (1)
-      print *, "<WARNING>*which*:PATH is not defined in the environment. Strange..."
-   case (2)
-      print *, "<WARNING>*which*:This processor doesn't support environment variables. Boooh!"
-   case default
-      allocate(character(len=howbig) :: path)  ! make string to hold value of sufficient size
-      call get_environment_variable('PATH', path) ! get value
-      sep=separator()
-      sep=merge('%',':',sep.eq.'\')
-      call split(path,paths,delimiters=sep)
-      existing=.false.
-      do i=1,size(paths)
-         checkon=joinpath(paths(i),command)
-         inquire(file=checkon,exist=existing,iostat=stat,iomsg=message)
-         if(stat.ne.0)then
-            write(*,'(a,a)')'<WARNING>*which*',trim(message)
-         elseif(existing)then
+   call split(system_getenv('PATH'),paths,delimiters=merge(';',':',separator().eq.'\'))
+   SEARCH: do i=1,size(paths)
+      checkon=trim(joinpath(trim(paths(i)),command))
+      select case(separator())
+      case('/')
+         if(exists(checkon))then
             pathname=checkon
-            exit
+            exit SEARCH
          endif
-      enddo
-   end select
+      case('\')
+         if(exists(checkon))then
+            pathname=checkon
+            exit SEARCH
+         endif
+         if(exists(checkon//'.bat'))then
+            pathname=checkon//'.bat'
+            exit SEARCH
+         endif
+         if(exists(checkon//'.exe'))then
+            pathname=checkon//'.exe'
+            exit SEARCH
+         endif
+         call split(system_getenv('PATHEXT'),exts,delimiters=';')
+         do j=1,size(exts)
+            if(exists(checkon//'.'//trim(exts(j))))then
+               pathname=checkon//'.'//trim(exts(j))
+               exit SEARCH
+            endif
+         enddo
+      end select
+   enddo SEARCH
+contains
+logical function exists(filename) result(r)
+character(len=*), intent(in) :: filename
+    inquire(file=filename, exist=r)
+end function
 end function which
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
