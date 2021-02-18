@@ -28,6 +28,20 @@ use M_verify, only : unit_check_level
    call test_splitpath()
    call test_uniq()
    call test_notopen()
+   call test_swallow()
+   call test_number_of_lines()
+   call test_basename()
+   call test_joinpath()
+   call test_fileopen()
+   call test_fileclose()
+   call test_filewrite()
+   call test_filedelete()
+!$IFNDEF GITHUB
+!   call test_scratch()
+!$ENDIF
+   call test_separator()
+   call test_which()
+   call test_getname()
 !! teardown
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -120,8 +134,79 @@ subroutine test_slurp()
    call unit_check_done('slurp',msg='')
 end subroutine test_slurp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_swallow()
+   call unit_check_start('swallow',msg='')
+   !!call unit_check('swallow', 0.eq.0, 'checking',100)
+   call unit_check_done('swallow',msg='')
+end subroutine test_swallow
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_number_of_lines()
+   call unit_check_start('number_of_lines',msg='')
+   !!call unit_check('number_of_lines', 0.eq.0, 'checking',100)
+   call unit_check_done('number_of_lines',msg='')
+end subroutine test_number_of_lines
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_basename()
+   call unit_check_start('basename',msg='')
+   !!call unit_check('basename', 0.eq.0, 'checking',100)
+   call unit_check_done('basename',msg='')
+end subroutine test_basename
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_joinpath()
+   call unit_check_start('joinpath',msg='')
+   !!call unit_check('joinpath', 0.eq.0, 'checking',100)
+   call unit_check_done('joinpath',msg='')
+end subroutine test_joinpath
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_fileopen()
+   call unit_check_start('fileopen',msg='')
+   !!call unit_check('fileopen', 0.eq.0, 'checking',100)
+   call unit_check_done('fileopen',msg='')
+end subroutine test_fileopen
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_fileclose()
+   call unit_check_start('fileclose',msg='')
+   !!call unit_check('fileclose', 0.eq.0, 'checking',100)
+   call unit_check_done('fileclose',msg='')
+end subroutine test_fileclose
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_filewrite()
+   call unit_check_start('filewrite',msg='')
+   !!call unit_check('filewrite', 0.eq.0, 'checking',100)
+   call unit_check_done('filewrite',msg='')
+end subroutine test_filewrite
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_filedelete()
+   call unit_check_start('filedelete',msg='')
+   !!call unit_check('filedelete', 0.eq.0, 'checking',100)
+   call unit_check_done('filedelete',msg='')
+end subroutine test_filedelete
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_scratch
+   call unit_check_start('scratch',msg='')
+   !!call unit_check('scratch', 0.eq.0, 'checking',100)
+   call unit_check_done('scratch',msg='')
+end subroutine test_scratch
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_separator()
+   call unit_check_start('separator',msg='')
+   !!call unit_check('separator', 0.eq.0, 'checking',100)
+   call unit_check_done('separator',msg='')
+end subroutine test_separator
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_which()
+   call unit_check_start('which',msg='')
+   !!call unit_check('which', 0.eq.0, 'checking',100)
+   call unit_check_done('which',msg='')
+end subroutine test_which
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_getname()
+   call unit_check_start('getname',msg='')
+   !!call unit_check('getname', 0.eq.0, 'checking',100)
+   call unit_check_done('getname',msg='')
+end subroutine test_getname
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_splitpath()
-
 integer,parameter      :: maxlen=4096
 character(len=maxlen)  :: dir
 character(len=maxlen)  :: name
