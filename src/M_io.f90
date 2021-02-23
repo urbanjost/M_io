@@ -25,6 +25,7 @@ public getline
 public read_table
 public rd
 public separator
+public lookfor
 public which
 public getname
 
@@ -2755,8 +2756,7 @@ end function rd_integer
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getname(3f) - [M_io:ENVIRONMENT] get environment variable
-!!                   from Fortran by calling get_environment_variable(3f)
+!!    getname(3f) - [M_io:ENVIRONMENT] get name of the currnt executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2838,8 +2838,6 @@ end function getname
 !!
 !!   Sample program:
 !!
-!!   Checking the error message and counting lines:
-!!
 !!     program demo_which
 !!     use M_io, only : which
 !!     implicit none
@@ -2894,6 +2892,74 @@ character(len=*), intent(in) :: filename
     inquire(file=filename, exist=r)
 end function
 end function which
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!     lookfor(3f) - [M_io:ENVIRONMENT] look for a filename in a number of directories
+!!                 specified by an environment variable
+!!     (LICENSE:PD)
+!!
+!!##SYNTAX
+!!   function lookfor(basename,env) result(pathname)
+!!
+!!    character(len=:),intent(in)  :: basename
+!!    character(len=:),intent(in)  :: env
+!!    character(len=:),allocatable :: pathname
+!!
+!!##DESCRIPTION
+!!    Given a base filename find the first file with that name in the directories
+!!    specified by the environment variable ENV
+!!
+!!##OPTIONS
+!!    BASENAME   the file to search for
+!!    ENV        environment variable name. Seperator between directory names is
+!!               assumed to be a colon on ULS (Unix-Like Systems) and semi-colon on
+!!               MS-Windows machines.
+!!
+!!##RETURNS
+!!    PATHNAME  the first pathname found in the current user path. Returns blank
+!!              if the file is not found.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!     program demo_lookfor
+!!     use M_io, only : lookfor
+!!     implicit none
+!!     character(len=:),allocatable :: returned
+!!        returned=lookfor('ls','PATH')
+!!        write(*,*)'ls is ',returned
+!!        returned=lookfor('dir.exe','PATH')
+!!        write(*,*)'dir is ',returned
+!!     end program demo_lookfor
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function lookfor(basename,env) result(pathname)
+character(len=*),intent(in)     :: basename
+character(len=*),intent(in)     :: env
+character(len=:),allocatable    :: pathname, checkon, paths(:)
+integer                         :: i
+logical                         :: r
+   pathname=''
+   call split(system_getenv(env),paths,delimiters=merge(';',':',separator().eq.'\'))
+   if(size(paths).eq.0)then
+      paths=['']
+   endif
+   do i=1,size(paths)
+      checkon=trim(joinpath(trim(paths(i)),basename))
+      inquire(file=checkon, exist=r)
+      if(r)then
+         pathname=checkon
+         exit
+      endif
+   enddo
+end function lookfor
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

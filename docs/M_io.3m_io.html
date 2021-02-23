@@ -50,7 +50,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
       <pre>
       use M_io, only : slurp, swallow, notopen, print_inquire, read_table
       use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
-      use M_io, only : separator, getname, which
+      use M_io, only : separator, getname, which, lookfor
       use M_io, only : read_line, getline
       use M_io, only : fileopen, fileclose, filedelete, filewrite
       use M_io, only : number_of_lines
@@ -102,7 +102,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
             <li><a href="separator.3m_io.html"> SEPARATOR </a> - try to determine pathname directory separator</li>
             <li><a href="getname.3m_io.html"> GETNAME </a> - a pathname to the current executable</li>
             <li><a href="which.3m_io.html"> WHICH </a> - return a pathname for a command name found with the environment variable
-            PATH</li>
+            <li><a href="lookfor.3m_io.html"> LOOKFOR </a> - return a pathname for a file basename found with the directories in the
+            specified environment variable</li>
 
          <li> MISCELLANEOUS
          <ul>
