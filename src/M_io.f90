@@ -443,6 +443,7 @@ end subroutine print_inquire
 !!       write(*,*)'separator=',separator()
 !!    end program demo_separator
 function separator() result(sep)
+
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
 character(len=:),allocatable :: arg0
@@ -450,54 +451,68 @@ integer                      :: arg0_length
 integer                      :: istat
 logical                      :: existing
 character(len=1)             :: sep
-!*ifort_bug*!character(len=1),save        :: sep_cache=' '
+character(len=1),save        :: sep_cache=' '
 character(len=4096)          :: name
 character(len=:),allocatable :: fname
 
-   !*ifort_bug*!   if(sep_cache.ne.' ')then  ! use cached value. NOTE:  A parallel code might theoretically use multiple OS
-   !*ifort_bug*!      sep=sep_cache
-   !*ifort_bug*!      return
-   !*ifort_bug*!   endif
-
-   arg0_length=0
-   name=' '
-   call get_command_argument(0,length=arg0_length,status=istat)
-   if(allocated(arg0))deallocate(arg0)
-   allocate(character(len=arg0_length) :: arg0)
-   call get_command_argument(0,arg0,status=istat)
-   ! check argument name
-   if(index(arg0,'\').ne.0)then
+   if(sep_cache.ne.' ')then  ! use cached value. NOTE:  A parallel code might theoretically use multiple OS
+         sep=sep_cache
+         return
+   endif
+   ! check PATH variable for slash or backslash
+   if(index(get_env('PATH'),'\').ne.0)then
       sep='\'
-   elseif(index(arg0,'/').ne.0)then
-      sep='/'
+   elseif(index(get_env('PATH'),'/').ne.0)then
+      sep='\'
    else
-      ! try name returned by INQUIRE(3f)
-      existing=.false.
+      ! get arg0
+      arg0_length=0
       name=' '
-      inquire(file=arg0,iostat=istat,exist=existing,name=name)
-      if(index(name,'\').ne.0)then
+      call get_command_argument(0,length=arg0_length,status=istat)
+      if(allocated(arg0))deallocate(arg0)
+      allocate(character(len=arg0_length) :: arg0)
+      call get_command_argument(0,arg0,status=istat)
+
+      ! check argument name, although this may be just the command verb or nothing at all
+      if(index(arg0,'\').ne.0)then
          sep='\'
-      elseif(index(name,'/').ne.0)then
+      elseif(index(arg0,'/').ne.0)then
          sep='/'
       else
-         ! well, try some common syntax and assume in current directory
-         fname='.\'//arg0
-         inquire(file=fname,iostat=istat,exist=existing)
-         if(existing)then
+         ! used to try './' and '.\' but exist test on some systems only returns true
+         ! for a regular file so directory names always fail; although this can cause
+         ! problems if trying to see if a filename is unused (the reverse is true in
+         ! that you think a data file exists that is actually a directory!)
+         ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
+         existing=.false.
+         name=' '
+         inquire(file=arg0,iostat=istat,exist=existing,name=name)
+         if(index(name,'\').ne.0)then
             sep='\'
+         elseif(index(name,'/').ne.0)then
+            sep='/'
          else
-            fname='./'//arg0
+            ! well, try some common syntax and assume arg0 is in current directory
+            ! could try opening a file assuming in a directory with write permission
+            ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
+            fname='.\'//arg0
             inquire(file=fname,iostat=istat,exist=existing)
             if(existing)then
-               sep='/'
-            else ! check environment variable PATH
-               sep=merge('\','/',index(system_getenv('PATH'),'\').ne.0)
-               !*!write(*,*)'<WARNING>unknown system directory path separator'
+               sep='\'
+            else
+               fname='./'//arg0
+               inquire(file=fname,iostat=istat,exist=existing)
+               if(existing)then
+                  sep='/'
+               else
+                  write(*,*)'<WARNING>unknown system directory path separator'
+                  sep='\'
+               endif
             endif
          endif
       endif
    endif
-   !*ifort_bug*!sep_cache=sep
+   sep_cache=sep
 end function separator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
