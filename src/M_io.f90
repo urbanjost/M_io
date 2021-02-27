@@ -422,16 +422,22 @@ end subroutine print_inquire
 !!     character(len=1) :: sep
 !!
 !!##DESCRIPTION
-!!    First using the name the program was invoked with, then the name
-!!    returned by an INQUIRE(3f) of that name, then ".\NAME" and "./NAME"
-!!    try to determine the separator character used to separate directory
-!!    names from file basenames.
 !!
-!!    If a slash or backslash is not found in the name, the environment
-!!    variable PATH is examined first for a backslash, then a slash.
+!!    Try to determine the separator character used to separate directory
+!!    names from file basenames. It is assumed it is either a backslash or
+!!    a slash character.
+!!
+!!    First, the environment variable PATH or then HOME is examined for a
+!!    backslash, then a slash.
+!!
+!!    Then, using the name the program was invoked with, then an INQUIRE(3f)
+!!    of that name, then ".\NAME" and "./NAME" try to find an expected
+!!    separator character.
 !!
 !!    Can be very system dependent. If the queries fail the default returned
 !!    is "/".
+!!
+!!    The value is cached as a return value for subsequent calls.
 !!
 !!##EXAMPLE
 !!
@@ -448,70 +454,101 @@ function separator() result(sep)
 implicit none
 character(len=:),allocatable :: arg0
 integer                      :: arg0_length
-integer                      :: istat
+integer                      :: ios
 logical                      :: existing
 character(len=1)             :: sep
 character(len=1),save        :: sep_cache=' '
 character(len=4096)          :: name
 character(len=:),allocatable :: fname
+character(len=:),allocatable :: envnames(:)
+integer                      :: i
 
    if(sep_cache.ne.' ')then  ! use cached value. NOTE:  A parallel code might theoretically use multiple OS
          sep=sep_cache
          return
    endif
-   ! check PATH variable for slash or backslash
-   if(index(get_env('PATH'),'\').ne.0)then
-      sep='\'
-   elseif(index(get_env('PATH'),'/').ne.0)then
-      sep='\'
-   else
-      ! get arg0
-      arg0_length=0
-      name=' '
-      call get_command_argument(0,length=arg0_length,status=istat)
-      if(allocated(arg0))deallocate(arg0)
-      allocate(character(len=arg0_length) :: arg0)
-      call get_command_argument(0,arg0,status=istat)
 
-      ! check argument name, although this may be just the command verb or nothing at all
-      if(index(arg0,'\').ne.0)then
+   TESTS: block
+
+   ! check variables names common to many platforms that usually have a directory path in them
+   envnames=[character(len=10) :: 'PATH', 'HOME']
+   ! check PATH variable for slash or backslash
+   do i=1,size(envnames)
+      if(index(get_env(envnames(i)),'\').ne.0)then
          sep='\'
-      elseif(index(arg0,'/').ne.0)then
+         exit TESTS
+      elseif(index(get_env(envnames(i)),'/').ne.0)then
          sep='/'
-      else
-         ! used to try './' and '.\' but exist test on some systems only returns true
-         ! for a regular file so directory names always fail; although this can cause
-         ! problems if trying to see if a filename is unused (the reverse is true in
-         ! that you think a data file exists that is actually a directory!)
-         ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
-         existing=.false.
-         name=' '
-         inquire(file=arg0,iostat=istat,exist=existing,name=name)
-         if(index(name,'\').ne.0)then
-            sep='\'
-         elseif(index(name,'/').ne.0)then
-            sep='/'
-         else
-            ! well, try some common syntax and assume arg0 is in current directory
-            ! could try opening a file assuming in a directory with write permission
-            ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
-            fname='.\'//arg0
-            inquire(file=fname,iostat=istat,exist=existing)
-            if(existing)then
-               sep='\'
-            else
-               fname='./'//arg0
-               inquire(file=fname,iostat=istat,exist=existing)
-               if(existing)then
-                  sep='/'
-               else
-                  write(*,*)'<WARNING>unknown system directory path separator'
-                  sep='\'
-               endif
-            endif
-         endif
+         exit TESTS
+      endif
+   enddo
+
+   ! get argument name ARG0, although this may be just the command verb or nothing at all
+   arg0_length=0
+   name=' '
+   call get_command_argument(0,length=arg0_length,status=ios)
+   if(allocated(arg0))deallocate(arg0)
+   allocate(character(len=arg0_length) :: arg0)
+   call get_command_argument(0,arg0,status=ios)
+   if(index(arg0,'\').ne.0)then
+      sep='\'
+      exit TESTS
+   elseif(index(arg0,'/').ne.0)then
+      sep='/'
+      exit TESTS
+   endif
+
+
+   ! used to try './' and '.\' but exist test on some systems only returns true
+   ! for a regular file so directory names always fail; although this can cause
+   ! problems if trying to see if a filename is unused (the reverse is true in
+   ! that you think a data file exists that is actually a directory!)
+
+   ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
+   existing=.false.
+   name=' '
+   inquire(file=arg0,iostat=ios,name=name)
+   if(ios.eq.0)then
+      if(index(name,'\').ne.0)then
+         sep='\'
+         exit TESTS
+      elseif(index(name,'/').ne.0)then
+         sep='/'
+         exit TESTS
       endif
    endif
+
+   ! well, try some common syntax and assume arg0 is in current directory
+   ! could try opening a file assuming in a directory with write permission
+   ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
+   fname='.\'//arg0
+   inquire(file=fname,iostat=ios,exist=existing)
+   if(ios.eq.0)then
+      if(existing)then
+         sep='\'
+         exit TESTS
+      endif
+   endif
+   fname='./'//arg0
+   inquire(file=fname,iostat=ios,exist=existing)
+   if(ios.eq.0)then
+      if(existing)then
+         sep='/'
+         exit TESTS
+      endif
+   endif
+
+   ! used to then call which(arg0) and see if could find pathname
+
+   ! used to then try to open "/tmp/UNIQUE_NAME" and assume "/" if successful, as any normal ULS has /tmp.
+
+   endblock TESTS
+
+   if(sep.eq.' ')then
+      write(*,*)'<WARNING>unknown system directory path separator, defaulting to slash ("/")'
+      sep='\'
+   endif
+
    sep_cache=sep
 end function separator
 !===================================================================================================================================
@@ -2804,19 +2841,19 @@ function getname() result(name)
 implicit none
 character(len=:),allocatable :: arg0
 integer                      :: arg0_length
-integer                      :: istat
+integer                      :: ios
 character(len=4096)          :: long_name
 character(len=:),allocatable :: name
    arg0_length=0
    name=''
    long_name=''
-   call get_command_argument(0,length=arg0_length,status=istat)
-   if(istat.eq.0)then
+   call get_command_argument(0,length=arg0_length,status=ios)
+   if(ios.eq.0)then
       if(allocated(arg0))deallocate(arg0)
       allocate(character(len=arg0_length) :: arg0)
-      call get_command_argument(0,arg0,status=istat)
-      if(istat.eq.0)then
-         inquire(file=arg0,iostat=istat,name=long_name)
+      call get_command_argument(0,arg0,status=ios)
+      if(ios.eq.0)then
+         inquire(file=arg0,iostat=ios,name=long_name)
          name=trim(long_name)
       else
          name=arg0
@@ -2975,6 +3012,40 @@ logical                         :: r
       endif
    enddo
 end function lookfor
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+function get_env(NAME,DEFAULT) result(VALUE)
+implicit none
+character(len=*),intent(in)          :: NAME
+character(len=*),intent(in),optional :: DEFAULT
+character(len=:),allocatable         :: VALUE
+integer                              :: howbig
+integer                              :: stat
+integer                              :: length
+   ! get length required to hold value
+   length=0
+   if(NAME.ne.'')then
+      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+      select case (stat)
+      case (1)
+         !*!print *, NAME, " is not defined in the environment. Strange..."
+         VALUE=''
+      case (2)
+         !*!print *, "This processor doesn't support environment variables. Boooh!"
+         VALUE=''
+      case default
+         ! make string to hold value of sufficient size
+         allocate(character(len=max(howbig,1)) :: VALUE)
+         ! get value
+         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
+         if(stat.ne.0)VALUE=''
+      end select
+   else
+      VALUE=''
+   endif
+   if(VALUE.eq.''.and.present(DEFAULT))VALUE=DEFAULT
+end function get_env
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
