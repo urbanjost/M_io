@@ -27,6 +27,7 @@ public rd
 public separator
 public lookfor
 public which
+public get_env
 public getname
 
 ! ident_1="@(#)M_io::read_table(3f): read file containing a table of numeric values"
