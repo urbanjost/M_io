@@ -471,8 +471,13 @@ integer                      :: i
 
    TESTS: block
 
-   ! check variables names common to many platforms that usually have a directory path in them
-   envnames=[character(len=10) :: 'PATH', 'HOME']
+   ! check variable names common to many platforms that usually have a directory path in them
+   !
+   ! you can put a backslash in a filename on ULS but hopefully you did not ("touch a\\b\\\c"
+   ! if you want to play with why that is such a bad idea).
+   !
+   ! you can put a slash in a directory name on Windows but hopefully you did not
+   envnames=[character(len=10) :: 'PATH', 'HOME', 'HOMEPATH']
    ! check PATH variable for slash or backslash
    do i=1,size(envnames)
       if(index(get_env(envnames(i)),'\').ne.0)then
@@ -499,13 +504,13 @@ integer                      :: i
       exit TESTS
    endif
 
-
-   ! used to try './' and '.\' but exist test on some systems only returns true
+   ! used to try './' and '.\' but EXIST test on some systems only returns true
    ! for a regular file so directory names always fail; although this can cause
    ! problems if trying to see if a filename is unused (the reverse is true in
    ! that you think a data file exists that is actually a directory!)
 
    ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
+   ! if in local directory
    existing=.false.
    name=' '
    inquire(file=arg0,iostat=ios,name=name)
@@ -520,18 +525,14 @@ integer                      :: i
    endif
 
    ! well, try some common syntax and assume arg0 is in current directory
-   ! could try opening a file assuming in a directory with write permission
-   ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
-   fname='.\'//arg0
-   inquire(file=fname,iostat=ios,exist=existing)
+   inquire(file='.\'//arg0,iostat=ios,exist=existing)
    if(ios.eq.0)then
       if(existing)then
          sep='\'
          exit TESTS
       endif
    endif
-   fname='./'//arg0
-   inquire(file=fname,iostat=ios,exist=existing)
+   inquire(file='/'//arg0,iostat=ios,exist=existing)
    if(ios.eq.0)then
       if(existing)then
          sep='/'
@@ -542,6 +543,10 @@ integer                      :: i
    ! used to then call which(arg0) and see if could find pathname
 
    ! used to then try to open "/tmp/UNIQUE_NAME" and assume "/" if successful, as any normal ULS has /tmp.
+   ! could try opening a basename file assuming in a directory with write permission
+   ! or can test an open of /tmp/unique_file_name , which does exist on any 
+   ! Unix-Like System I know of unless someone went out of their way to make
+   ! things difficult (or secure!).
 
    endblock TESTS
 
