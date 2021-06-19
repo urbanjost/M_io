@@ -9,7 +9,7 @@ public uniq
 public print_inquire
 public notopen
 public slurp
-public swallow
+public gulp,swallow
 public number_of_lines
 public dirname
 public basename
@@ -44,6 +44,10 @@ interface read_table
    module procedure read_table_i
    module procedure read_table_r
    module procedure read_table_d
+end interface
+
+interface swallow
+   module procedure gulp
 end interface
 
 integer,save,private       :: my_stdout=OUTPUT_UNIT
@@ -328,37 +332,37 @@ integer                        :: lun
 !  FORM      =  FORMATTED   |  UNFORMATTED
 !  POSITION  =  ASIS        |  REWIND       |  APPEND
 !  STATUS    =  NEW         |  REPLACE      |  OLD     |  SCRATCH   | UNKNOWN
-character(len=20)              :: access         ; namelist/inquire/access
-character(len=20)              :: action         ; namelist/inquire/action
-character(len=20)              :: asynchronous   ; namelist/inquire/asynchronous
-character(len=20)              :: blank          ; namelist/inquire/blank
-character(len=20)              :: decimal        ; namelist/inquire/decimal
-character(len=20)              :: delim          ; namelist/inquire/delim
-character(len=20)              :: direct         ; namelist/inquire/direct
-character(len=20)              :: encoding       ; namelist/inquire/encoding
-logical                        :: exist          ; namelist/inquire/exist
-character(len=20)              :: form           ; namelist/inquire/form
-character(len=20)              :: formatted      ; namelist/inquire/formatted
-integer                        :: id             ; namelist/inquire/id
-character(len=20)              :: name           ; namelist/inquire/name
-logical                        :: named          ; namelist/inquire/named
-integer                        :: nextrec        ; namelist/inquire/nextrec
-integer                        :: number         ; namelist/inquire/number
-logical                        :: opened         ; namelist/inquire/opened
-character(len=20)              :: pad            ; namelist/inquire/pad
-logical                        :: pending        ; namelist/inquire/pending
-integer                        :: pos            ; namelist/inquire/pos
-character(len=20)              :: position       ; namelist/inquire/position
-character(len=20)              :: read           ; namelist/inquire/read
-character(len=20)              :: readwrite      ; namelist/inquire/readwrite
-integer                        :: recl           ; namelist/inquire/recl
-character(len=20)              :: round          ; !BUG!namelist/inquire/round
-character(len=20)              :: sequential     ; namelist/inquire/sequential
-character(len=20)              :: sign           ; !BUG!namelist/inquire/sign
-integer                        :: size           ; namelist/inquire/size
-character(len=20)              :: stream         ; namelist/inquire/stream
-character(len=20)              :: unformatted    ; namelist/inquire/unformatted
-character(len=20)              :: write          ; namelist/inquire/write
+character(len=20)             :: access         ; namelist/inquire/access
+character(len=20)             :: action         ; namelist/inquire/action
+character(len=20)             :: asynchronous   ; namelist/inquire/asynchronous
+character(len=20)             :: blank          ; namelist/inquire/blank
+character(len=20)             :: decimal        ; namelist/inquire/decimal
+character(len=20)             :: delim          ; namelist/inquire/delim
+character(len=20)             :: direct         ; namelist/inquire/direct
+character(len=20)             :: encoding       ; namelist/inquire/encoding
+logical                       :: exist          ; namelist/inquire/exist
+character(len=20)             :: form           ; namelist/inquire/form
+character(len=20)             :: formatted      ; namelist/inquire/formatted
+integer                       :: id             ; namelist/inquire/id
+character(len=20)             :: name           ; namelist/inquire/name
+logical                       :: named          ; namelist/inquire/named
+integer                       :: nextrec        ; namelist/inquire/nextrec
+integer                       :: number         ; namelist/inquire/number
+logical                       :: opened         ; namelist/inquire/opened
+character(len=20)             :: pad            ; namelist/inquire/pad
+logical                       :: pending        ; namelist/inquire/pending
+integer                       :: pos            ; namelist/inquire/pos
+character(len=20)             :: position       ; namelist/inquire/position
+character(len=20)             :: read           ; namelist/inquire/read
+character(len=20)             :: readwrite      ; namelist/inquire/readwrite
+integer                       :: recl           ; namelist/inquire/recl
+character(len=20)             :: round          ; !BUG!namelist/inquire/round
+character(len=20)             :: sequential     ; namelist/inquire/sequential
+character(len=20)             :: sign           ; !BUG!namelist/inquire/sign
+integer                       :: size           ; namelist/inquire/size
+character(len=20)             :: stream         ; namelist/inquire/stream
+character(len=20)             :: unformatted    ; namelist/inquire/unformatted
+character(len=20)             :: write          ; namelist/inquire/write
 !==============================================================================================
    namein=merge_str(namein_in,'',present(namein_in))
    lun=merge(lun_in,-1,present(lun_in))
@@ -428,8 +432,8 @@ end subroutine print_inquire
 !!    names from file basenames. It is assumed it is either a backslash or
 !!    a slash character.
 !!
-!!    First, the environment variable PATH or then HOME is examined for a
-!!    backslash, then a slash.
+!!    First, the environment variables PATH, HOME, PWD, and  SHELL  are
+!!    examined for a backslash, then a slash.
 !!
 !!    Then, using the name the program was invoked with, then an INQUIRE(3f)
 !!    of that name, then ".\NAME" and "./NAME" try to find an expected
@@ -449,7 +453,7 @@ end subroutine print_inquire
 !!    implicit none
 !!       write(*,*)'separator=',separator()
 !!    end program demo_separator
-function separator() result(sep)
+function separator2() result(sep)
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
@@ -471,13 +475,8 @@ integer                      :: i
 
    TESTS: block
 
-   ! check variable names common to many platforms that usually have a directory path in them
-   !
-   ! you can put a backslash in a filename on ULS but hopefully you did not ("touch a\\b\\\c"
-   ! if you want to play with why that is such a bad idea).
-   !
-   ! you can put a slash in a directory name on Windows but hopefully you did not
-   envnames=[character(len=10) :: 'PATH', 'HOME', 'HOMEPATH']
+   ! check variables names common to many platforms that usually have a directory path in them
+   envnames=[character(len=10) :: 'PATH', 'HOME','PWD','SHELL']
    ! check PATH variable for slash or backslash
    do i=1,size(envnames)
       if(index(get_env(envnames(i)),'\').ne.0)then
@@ -496,6 +495,7 @@ integer                      :: i
    if(allocated(arg0))deallocate(arg0)
    allocate(character(len=arg0_length) :: arg0)
    call get_command_argument(0,arg0,status=ios)
+
    if(index(arg0,'\').ne.0)then
       sep='\'
       exit TESTS
@@ -504,13 +504,12 @@ integer                      :: i
       exit TESTS
    endif
 
-   ! used to try './' and '.\' but EXIST test on some systems only returns true
+   ! used to try './' and '.\' but exist test on some systems only returns true
    ! for a regular file so directory names always fail; although this can cause
    ! problems if trying to see if a filename is unused (the reverse is true in
    ! that you think a data file exists that is actually a directory!)
 
    ! try name returned by INQUIRE(3f) of arg0, as some PE will give canonical name
-   ! if in local directory
    existing=.false.
    name=' '
    inquire(file=arg0,iostat=ios,name=name)
@@ -525,14 +524,18 @@ integer                      :: i
    endif
 
    ! well, try some common syntax and assume arg0 is in current directory
-   inquire(file='.\'//arg0,iostat=ios,exist=existing)
+   ! could try opening a file assuming in a directory with write permission
+   ! or can open /tmp/unique_file_name can be opened, which does on any Unix-Like System I know of
+   fname='.\'//arg0
+   inquire(file=fname,iostat=ios,exist=existing)
    if(ios.eq.0)then
       if(existing)then
          sep='\'
          exit TESTS
       endif
    endif
-   inquire(file='/'//arg0,iostat=ios,exist=existing)
+   fname='./'//arg0
+   inquire(file=fname,iostat=ios,exist=existing)
    if(ios.eq.0)then
       if(existing)then
          sep='/'
@@ -540,13 +543,18 @@ integer                      :: i
       endif
    endif
 
-   ! used to then call which(arg0) and see if could find pathname
+   ! used to then call which(arg0) and see if could find pathname but now it calls this function
 
    ! used to then try to open "/tmp/UNIQUE_NAME" and assume "/" if successful, as any normal ULS has /tmp.
-   ! could try opening a basename file assuming in a directory with write permission
-   ! or can test an open of /tmp/unique_file_name , which does exist on any 
-   ! Unix-Like System I know of unless someone went out of their way to make
-   ! things difficult (or secure!).
+   ! but now some systems allow a "/" in a filename
+
+   inquire(file='///',iostat=ios,exist=existing) ! on POSIX systems this is the same as '/'.
+   if(ios.eq.0)then
+      if(existing)then
+         sep='/'
+         exit TESTS
+      endif
+   endif
 
    endblock TESTS
 
@@ -556,37 +564,93 @@ integer                      :: i
    endif
 
    sep_cache=sep
-end function separator
+end function separator2
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-function system_getenv(name,default) result(value)
-!@(#) M_system::system_getenv(3f): call get_environment_variable as a function with a default value(3f)
-character(len=*),intent(in)          :: name
-character(len=*),intent(in),optional :: default
-integer                              :: howbig
-integer                              :: stat
-character(len=:),allocatable         :: value
-   if(NAME.ne.'')then
-      call get_environment_variable(name, length=howbig, status=stat, trim_name=.true.)  ! get length required to hold value
-      if(howbig.ne.0)then
-         select case (stat)
-         case (1); value=''   ! NAME is not defined in the environment. Strange...
-         case (2); value=''   ! This processor doesn't support environment variables. Boooh!
-         case default         !  make string to hold value of sufficient size and get value
-          if(allocated(value))deallocate(value)
-          allocate(character(len=max(howbig,1)) :: VALUE)
-          call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-          if(stat.ne.0)VALUE=''
-         end select
-      else
-         value=''
-      endif
-   else
-      value=''
-   endif
-   if(value.eq.''.and.present(default))value=default
-end function system_getenv
+function separator() result(sep)
+!>
+!!##NAME
+!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory separator character
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function separator() result(sep)
+!!
+!!     character(len=1) :: sep
+!!
+!!##DESCRIPTION
+!!   First testing for the existence of "/.",  then if that fails a list
+!!   of variable names assumed to contain directory paths {PATH|HOME} are
+!!   examined first for a backslash, then a slash.  Assuming basically the
+!!   choice is a ULS or MSWindows system, and users can do weird things like
+!!   put a backslash in a ULS path and break it.
+!!
+!!   Therefore can be very system dependent. If the queries fail the
+!!   default returned is "/".
+!!
+!!##EXAMPLE
+!!
+!!   sample usage
+!!
+!!    program demo_separator
+!!    use M_io, only : separator
+!!    implicit none
+!!       write(*,*)'separator=',separator()
+!!    end program demo_separator
+
+! use the pathname returned as arg0 to determine pathname separator
+implicit none
+integer                      :: ios
+integer                      :: i
+logical                      :: existing=.false.
+character(len=1)             :: sep
+!*!IFORT BUG:character(len=1),save        :: sep_cache=' '
+integer,save                 :: isep=-1
+character(len=4096)          :: name
+character(len=:),allocatable :: envnames(:)
+
+    ! NOTE:  A parallel code might theoretically use multiple OS
+    !*!FORT BUG:if(sep_cache.ne.' ')then  ! use cached value.
+    !*!FORT BUG:    sep=sep_cache
+    !*!FORT BUG:    return
+    !*!FORT BUG:endif
+    if(isep.ne.-1)then  ! use cached value.
+        sep=char(isep)
+        return
+    endif
+    FOUND: block
+    ! simple, but does not work with ifort
+    ! most MSWindows environments see to work with backslash even when
+    ! using POSIX filenames to do not rely on '\.'.
+    inquire(file='/.',exist=existing,iostat=ios,name=name)
+    if(existing.and.ios.eq.0)then
+        sep='/'
+        exit FOUND
+    endif
+    ! check variables names common to many platforms that usually have a
+    ! directory path in them although a ULS file can contain a backslash
+    ! and vice-versa (eg. "touch A\\B\\C"). Removed HOMEPATH because it
+    ! returned a name with backslash on CygWin, Mingw, WLS even when using
+    ! POSIX filenames in the environment.
+    envnames=[character(len=10) :: 'PATH', 'HOME']
+    do i=1,size(envnames)
+       if(index(get_env(envnames(i)),'\').ne.0)then
+          sep='\'
+          exit FOUND
+       elseif(index(get_env(envnames(i)),'/').ne.0)then
+          sep='/'
+          exit FOUND
+       endif
+    enddo
+
+    write(*,*)'<WARNING>unknown system directory path separator'
+    sep='\'
+    endblock FOUND
+    !*!IFORT BUG:sep_cache=sep
+    isep=ichar(sep)
+end function separator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -772,17 +836,17 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    swallow(3f) - [M_io] read a file into a character array line by line
+!!    gulp(3f) - [M_io] read a file into a character array line by line
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine swallow(filename,pageout)
+!!   subroutine gulp(filename,pageout)
 !!
 !!    character(len=*),intent(in) :: filename
 !!      or
 !!    integer,intent(in)          :: io
 !!
-!!    character(len=1),allocatable,intent(out) :: pageout(:)
+!!    character(len=:),allocatable,intent(out) :: pageout(:)
 !!##DESCRIPTION
 !!    Read an entire file into memory as a character array, one character
 !!    variable per line.
@@ -812,8 +876,8 @@ end subroutine read_table_r
 !!
 !!   Sample program
 !!
-!!    program demo_swallow
-!!    use M_io,      only : swallow
+!!    program demo_gulp
+!!    use M_io,      only : gulp
 !!    implicit none
 !!    character(len=4096)          :: FILENAME   ! file to read
 !!    character(len=:),allocatable :: pageout(:) ! array to hold file in memory
@@ -821,9 +885,9 @@ end subroutine read_table_r
 !!       ! get a filename
 !!       call get_command_argument(1, FILENAME)
 !!       ! allocate character array and copy file into it
-!!       call swallow(FILENAME,pageout)
+!!       call gulp(FILENAME,pageout)
 !!       if(.not.allocated(pageout))then
-!!          write(*,*)'*demo_swallow* failed to load file '//FILENAME
+!!          write(*,*)'*demo_gulp* failed to load file '//FILENAME
 !!       else
 !!          ! write file from last line to first line
 !!          longest=len(pageout)
@@ -835,7 +899,7 @@ end subroutine read_table_r
 !!          write(*,'(a)')repeat('%',longest+2)
 !!          deallocate(pageout)  ! release memory
 !!       endif
-!!    end program demo_swallow
+!!    end program demo_gulp
 !!
 !!   Given
 !!
@@ -857,7 +921,7 @@ end subroutine read_table_r
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine swallow(FILENAME,pageout)
+subroutine gulp(FILENAME,pageout)
 implicit none
 class(*),intent(in)                      :: FILENAME   ! file to read
 character(len=:),allocatable,intent(out) :: pageout(:) ! page to hold file in memory
@@ -867,8 +931,8 @@ character(len=1),allocatable             :: text(:)    ! array to hold file in m
 
    if(.not.allocated(text))then
       select type(FILENAME)
-       type is (character(len=*)); write(*,*)'*swallow* failed to load file '//FILENAME
-       type is (integer);          write(*,'(a,i0)')'*swallow* failed to load file unit ',FILENAME
+       type is (character(len=*)); write(*,*)'*gulp* failed to load file '//FILENAME
+       type is (integer);          write(*,'(a,i0)')'*gulp* failed to load file unit ',FILENAME
       end select
    else  ! convert array of characters to array of lines
       pageout=page(text)
@@ -926,7 +990,7 @@ character(len=1),parameter   :: nl=char(10)
       endif
    enddo
 end function page
-end subroutine swallow
+end subroutine gulp
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -2814,7 +2878,7 @@ end function rd_integer
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getname(3f) - [M_io:ENVIRONMENT] get name of the currnt executable
+!!    getname(3f) - [M_io:ENVIRONMENT] get name of the current executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2913,7 +2977,7 @@ character(len=*),intent(in)     :: command
 character(len=:),allocatable    :: pathname, checkon, paths(:), exts(:)
 integer                         :: i, j
    pathname=''
-   call split(system_getenv('PATH'),paths,delimiters=merge(';',':',separator().eq.'\'))
+   call split(get_env('PATH'),paths,delimiters=merge(';',':',separator().eq.'\'))
    SEARCH: do i=1,size(paths)
       checkon=trim(joinpath(trim(paths(i)),command))
       select case(separator())
@@ -2935,7 +2999,7 @@ integer                         :: i, j
             pathname=checkon//'.exe'
             exit SEARCH
          endif
-         call split(system_getenv('PATHEXT'),exts,delimiters=';')
+         call split(get_env('PATHEXT'),exts,delimiters=';')
          do j=1,size(exts)
             if(exists(checkon//'.'//trim(exts(j))))then
                pathname=checkon//'.'//trim(exts(j))
@@ -3005,7 +3069,7 @@ character(len=:),allocatable    :: pathname, checkon, paths(:)
 integer                         :: i
 logical                         :: r
    pathname=''
-   call split(system_getenv(env),paths,delimiters=merge(';',':',separator().eq.'\'))
+   call split(get_env(env),paths,delimiters=merge(';',':',separator().eq.'\'))
    if(size(paths).eq.0)then
       paths=['']
    endif
@@ -4401,14 +4465,15 @@ character(len=4096)                :: mssge
    enddo
 end subroutine where_write_message
 
-subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, nospace)
+subroutine where_write_message_all(where, g0, g1, g2, g3, g4, g5, g6, g7, g8, g9, sep)
 implicit none
 ! ident_5="@(#)M_journal::where_write_message_all(3f): writes a message to a string composed of any standard scalar types"
 character(len=*),intent(in)   :: where
 class(*),intent(in)           :: g0
 class(*),intent(in),optional  :: g1, g2, g3, g4, g5, g6, g7, g8 ,g9
-logical,intent(in),optional   :: nospace
-call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9,nospace))
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+call where_write_message(where,str(g0, g1, g2, g3, g4, g5, g6, g7, g8, g9,sep))
 end subroutine where_write_message_all
 
 subroutine write_message_only(message)
@@ -4419,24 +4484,23 @@ end subroutine write_message_only
 
 function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                   & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
-                  & nospace)
+                  & sep)
 ! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
 class(*),intent(in),optional  :: genericf, genericg, generich, generici, genericj
-logical,intent(in),optional   :: nospace
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
 character(len=:), allocatable :: msg_scalar
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+         increment=len(sep)+1
+         sep_local=sep
    else
+      sep_local=' '
       increment=2
    endif
    istart=1
@@ -4481,28 +4545,28 @@ class(*),intent(in) :: generic
       type is (complex);                write(line(istart:),'("(",1pg0,",",1pg0,")")') generic
    end select
    istart=len_trim(line)+increment
+   line=trim(line)//sep_local
 end subroutine print_generic
 
 end function msg_scalar
 
-function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,nospace)
+function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
 ! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
-logical,intent(in),optional   :: nospace
-character(len=:), allocatable :: msg_one
+character(len=*),intent(in),optional :: sep
+character(len=:),allocatable  :: sep_local
+character(len=:),allocatable  :: msg_one
 character(len=4096)           :: line
 integer                       :: istart
 integer                       :: increment
-   if(present(nospace))then
-      if(nospace)then
-         increment=1
-      else
-         increment=2
-      endif
+   if(present(sep))then
+      increment=len(sep)+1
+      sep_local=sep
    else
+      sep_local=' '
       increment=2
    endif
    istart=1
@@ -4540,8 +4604,8 @@ integer :: i
       class default
          stop 'unknown type in *print_generic*'
    end select
-   line=trim(line)//"]"
    istart=len_trim(line)+increment
+   line=trim(line)//"]"//sep_local
 end subroutine print_generic
 
 end function msg_one

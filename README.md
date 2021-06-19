@@ -48,7 +48,7 @@ directory.
 This will compile the M_io module and build all the example programs from
 the document pages in the `example/` sub-directory.
 
-## BUILD WITH FPM 
+## BUILD WITH FPM ![fpm](docs/images/fpm_logo.gif)
 
 Alternatively, download the github repository and build it with 
 fpm ( as described at [Fortran Package Manager](https://github.com/fortran-lang/fpm) )
