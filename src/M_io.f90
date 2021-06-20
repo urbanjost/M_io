@@ -50,6 +50,11 @@ interface swallow
    module procedure gulp
 end interface
 
+interface filedelete
+   module procedure filedelete_filename
+   module procedure filedelete_lun
+end interface
+
 integer,save,private       :: my_stdout=OUTPUT_UNIT
 logical,save               :: debug=.false.
 integer,save               :: last_int=0
@@ -1919,7 +1924,7 @@ end function fileclose
 !!
 !!##SYNOPSIS
 !!
-!!     function filewrite(filename,data,status) result(ierr)
+!!     function filewrite(filename,data,status,position) result(ierr)
 !!
 !!      character(len=*),intent(in) :: filename
 !!      character(len=*),intent(in) :: data(:)
@@ -2043,13 +2048,16 @@ end function filewrite
 !!    function filedelete(lun) result(ios)
 !!
 !!     integer,intent(in)    :: lun
+!!       or
+!!     character(len=*),intent(in)    :: filename
 !!     integer               :: ios
 !!
 !!##DESCRIPTION
 !!   A convenience command for deleting an OPEN(3f) file that leaves an
-!!   error message in the current journal file if active.
+!!   error message in the current journal file if active or a file by
+!!   filename.
 !!##OPTION
-!!   LUN  unit number of open file to delete
+!!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
 !!   IOS  status returned by CLOSE().
 !!##EXAMPLE
@@ -2068,15 +2076,33 @@ end function filewrite
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-function filedelete(lun) result(ios)
+function filedelete_lun(lun) result(iostat)
 integer,intent(in)    :: lun
-integer               :: ios
+integer               :: iostat
 character(len=256)    :: message
-   close(unit=lun,iostat=ios,status='delete',iomsg=message)
-   if(ios.ne.0)then
+   close(unit=lun,iostat=iostat,status='delete',iomsg=message)
+   if(iostat.ne.0)then
       call journal('sc','*filedelete* ',message)
    endif
-end function filedelete
+end function filedelete_lun
+function filedelete_filename(filename) result(iostat)
+character(len=*),intent(in) :: filename
+integer                     :: number
+integer                     :: iostat
+character(len=256)          :: message
+logical                     :: opened
+logical                     :: exist
+   inquire(file=filename,opened=opened,iostat=iostat,exist=exist,number=number)
+   if(exist)then
+      if(.not.opened)then
+         open(newunit=number,iostat=iostat,file=filename)
+      endif
+      close(unit=number,iostat=iostat,status='delete',iomsg=message)
+      if(iostat.ne.0)then
+         call journal('sc','*filedelete* ',message)
+      endif
+   endif
+end function filedelete_filename
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
