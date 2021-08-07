@@ -1,10 +1,9 @@
 !===================================================================================================================================
 MODULE M_io
-use, intrinsic :: iso_fortran_env, only : error_unit,input_unit,output_unit     ! access computing environment
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
 implicit none
-integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 private
+integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 public uniq
 public print_inquire
 public notopen
@@ -38,6 +37,7 @@ interface rd
    module procedure rd_integer
    module procedure rd_real
    module procedure rd_doubleprecision
+   module procedure rd_logical
 end interface
 
 interface read_table
@@ -55,7 +55,7 @@ interface filedelete
    module procedure filedelete_lun
 end interface
 
-integer,save,private       :: my_stdout=OUTPUT_UNIT
+integer,save,private       :: my_stdout=stdout
 logical,save               :: debug=.false.
 integer,save               :: last_int=0
 
@@ -338,7 +338,6 @@ integer                        :: lun
 !  POSITION  =  ASIS        |  REWIND       |  APPEND
 !  STATUS    =  NEW         |  REPLACE      |  OLD     |  SCRATCH   | UNKNOWN
 character(len=20)             :: access         ; namelist/inquire/access
-character(len=20)             :: action         ; namelist/inquire/action
 character(len=20)             :: asynchronous   ; namelist/inquire/asynchronous
 character(len=20)             :: blank          ; namelist/inquire/blank
 character(len=20)             :: decimal        ; namelist/inquire/decimal
@@ -346,8 +345,11 @@ character(len=20)             :: delim          ; namelist/inquire/delim
 character(len=20)             :: direct         ; namelist/inquire/direct
 character(len=20)             :: encoding       ; namelist/inquire/encoding
 logical                       :: exist          ; namelist/inquire/exist
+
 character(len=20)             :: form           ; namelist/inquire/form
 character(len=20)             :: formatted      ; namelist/inquire/formatted
+character(len=20)             :: unformatted    ; namelist/inquire/unformatted
+
 integer                       :: id             ; namelist/inquire/id
 character(len=20)             :: name           ; namelist/inquire/name
 logical                       :: named          ; namelist/inquire/named
@@ -358,16 +360,18 @@ character(len=20)             :: pad            ; namelist/inquire/pad
 logical                       :: pending        ; namelist/inquire/pending
 integer                       :: pos            ; namelist/inquire/pos
 character(len=20)             :: position       ; namelist/inquire/position
+
+character(len=20)             :: action         ; namelist/inquire/action
 character(len=20)             :: read           ; namelist/inquire/read
 character(len=20)             :: readwrite      ; namelist/inquire/readwrite
+character(len=20)             :: write          ; namelist/inquire/write
+
 integer                       :: recl           ; namelist/inquire/recl
 character(len=20)             :: round          ; !BUG!namelist/inquire/round
 character(len=20)             :: sequential     ; namelist/inquire/sequential
 character(len=20)             :: sign           ; !BUG!namelist/inquire/sign
 integer                       :: size           ; namelist/inquire/size
 character(len=20)             :: stream         ; namelist/inquire/stream
-character(len=20)             :: unformatted    ; namelist/inquire/unformatted
-character(len=20)             :: write          ; namelist/inquire/write
 !==============================================================================================
    namein=merge_str(namein_in,'',present(namein_in))
    lun=merge(lun_in,-1,present(lun_in))
@@ -1154,7 +1158,7 @@ contains
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
-   write(error_unit,'(a)')trim(message)    ! write message to standard error
+   write(stderr,'(a)')trim(message)    ! write message to standard error
 end subroutine stderr_local
 !-----------------------------------------------------------------------------------------------------------------------------------
 end subroutine slurp
@@ -1376,7 +1380,7 @@ logical         :: lexist                                         ! returned fro
 !-----------------------------------------------------------------------------------------------------------------------------------
    do i10=istart,iend                                             ! check units over selected range
       select case (i10)                                           ! always skip these predefined units
-      case(error_unit,input_unit,output_unit)
+      case(stderr,stdin,stdout)
           cycle
       end select
       inquire( unit=i10, opened=lopen, exist=lexist, iostat=ios )
@@ -1386,7 +1390,7 @@ logical         :: lexist                                         ! returned fro
             exit                                                  ! only need to find one, so return
          endif
       else
-         write(error_unit,*)'*notopen*:error on unit ',i10,'=',ios
+         write(stderr,*)'*notopen*:error on unit ',i10,'=',ios
       endif
    enddo
 !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2479,7 +2483,7 @@ integer                                  :: lun_local
    if(present(lun))then
       lun_local=lun
    else
-      lun_local=INPUT_UNIT
+      lun_local=stdin
    endif
    open(lun_local,pad='yes')
 
@@ -2597,7 +2601,7 @@ integer                                  :: lun_local
 
    line_local=''
    ier=0
-   lun_local=merge(lun,INPUT_UNIT,present(lun))
+   lun_local=merge(lun,stdin,present(lun))
    open(lun_local,pad='yes')
    INFINITE: do                                                           ! read characters from line and append to result
       read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
@@ -2711,19 +2715,27 @@ end function get_tmp
 !! rd(3f) - [M_io] ask for string from standard input with user-definable prompt
 !! (LICENSE:PD)
 !!
-!!   function rd(prompt,default) result(strout)
+!!   function rd(prompt,default) result(out)
 !!
 !!    character(len=*),intent(in)              :: prompt
 !!
-!!    character(len=*),intent(in)              :: default
-!!          or
-!!    integer,intent(in)                       :: default
-!!          or
-!!    real,intent(in)                          :: default
-!!          or
-!!    doubleprecision,intent(in)               :: default
+!!   One of
 !!
-!!    character(len=:),allocatable,intent(out) :: strout
+!!    character(len=*),intent(in)              :: default
+!!    character(len=:),allocatable,intent(out) :: out
+!!
+!!    integer,intent(in)                       :: default
+!!    integer,intent(out)                      :: out
+!!
+!!    real,intent(in)                          :: default
+!!    real,intent(out)                         :: out
+!!
+!!    doubleprecision,intent(in)               :: default
+!!    doubleprecision,intent(out)              :: out
+!!
+!!    logical,intent(in)                       :: default
+!!    logical,intent(out)                      :: out
+!!
 !!
 !!##DESCRIPTION
 !!    Ask for string or value from standard input with user-definable prompt
@@ -2739,9 +2751,9 @@ end function get_tmp
 !!    default   default answer on carriage-return. The type of the default
 !!              determines the type of the output.
 !!##RETURNS
-!!    strout    returned string or value. If an end-of-file or system error
+!!    out       returned string or value. If an end-of-file or system error
 !!              is encountered the string "EOF" is returned, or a "Nan"
-!!              numeric value.
+!!              REAL numeric value, or huge(0), or .false. .
 !!##EXAMPLE
 !!
 !!   Sample program:
@@ -2753,6 +2765,7 @@ end function get_tmp
 !!    doubleprecision              :: d
 !!    real                         :: r
 !!    integer                      :: i
+!!    logical                      :: l
 !!
 !!    INFINITE: do
 !!       mystring=rd('Enter string or "STOP":',default='Today')
@@ -2760,8 +2773,10 @@ end function get_tmp
 !!       i=rd('Enter integer:',default=huge(0))
 !!       r=rd('Enter real:',default=huge(0.0))
 !!       d=rd('Enter double:',default=huge(0.0d0))
+!!       l=rd('Enter logical:',default=.false.)
 !!
 !!       write(*,*)'I=', i, 'R=', r, 'D=',d,  'MYSTRING=', mystring
+!!       write(*,*)'L=', l
 !!    enddo INFINITE
 !!
 !!    end program demo_rd
@@ -2770,12 +2785,64 @@ end function get_tmp
 !!    John S. Urban, 1993
 !!##LICENSE
 !!    Public Domain
+function rd_logical(prompt,default) result(out)
+! 1995 John S. Urban
+!
+implicit none
+
+! ident_14="@(#)M_io::rd_logical(3fp): ask for logical value from standard input with user-definable prompt"
+
+character(len=*),intent(in)  :: prompt
+logical,intent(in)           :: default
+logical                      :: out
+
+integer                      :: prompt_len
+integer                      :: igot
+integer                      :: ierr
+integer                      :: icount
+integer                      :: ios
+character(:),allocatable     :: response
+character(len=256)           :: iomsg
+   out=.false.
+   response=''
+   prompt_len=len(prompt)
+   do icount=1,20                                                 ! prevent infinite loop on error or end-of-file
+      if(prompt_len.gt.0)write(*,'(a,'' '')',advance='no')prompt  ! write prompt
+      ierr=getline(response,stdin)                                ! get back string
+      igot=len(response)
+      if(ierr.ne.0)then
+         cycle
+      elseif(igot.eq.0.and.prompt_len.gt.0)then
+         out=default
+         exit
+      elseif(igot.le.0)then
+         call journal('*rd* blank string not allowed')
+         cycle
+      else
+         response=response//' '
+         select case(response(1:1))
+         case('y','Y')
+            out=.true.
+         case('n','N')
+            out=.false.
+         case default
+            read(response,*,iostat=ios,iomsg=iomsg)out
+            if(ios.ne.0)then
+               write(*,*)trim(iomsg)
+               cycle
+            endif
+         end select
+         exit
+      endif
+   enddo
+end function rd_logical
+!===================================================================================================================================
 function rd_character(prompt,default) result(strout)
 ! 1995 John S. Urban
 !
 implicit none
 
-! ident_14="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
+! ident_15="@(#)M_io::rd_character(3fp): ask for string from standard input with user-definable prompt"
 
 character(len=*),intent(in)  :: prompt
 character(len=*),intent(in)  :: default
@@ -2810,7 +2877,7 @@ end function rd_character
 function rd_doubleprecision(prompt,default,iostat) result(dvalue)
 implicit none
 
-! ident_15="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
+! ident_16="@(#)M_io::rd_doubleprecision(3fp): ask for number from standard input with user-definable prompt"
 
 doubleprecision              :: dvalue
 integer                      :: ivalue
@@ -2853,7 +2920,7 @@ end function rd_doubleprecision
 function rd_real(prompt,default,iostat) result(rvalue)
 implicit none
 
-! ident_16="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
+! ident_17="@(#)M_io::rd_real(3fp): ask for number from standard input with user-definable prompt"
 
 real                         :: rvalue
 real(kind=dp)                :: dvalue
@@ -2874,7 +2941,7 @@ end function rd_real
 function rd_integer(prompt,default,iostat) result(ivalue)
 implicit none
 
-! ident_17="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
+! ident_18="@(#)M_io::rd_integer(3fp): ask for number from standard input with user-definable prompt"
 
 integer                      :: ivalue
 real(kind=dp)                :: dvalue
