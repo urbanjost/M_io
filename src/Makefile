@@ -14,7 +14,7 @@ PROGFILES = \
    ../example/demo_read_table.f90 \
    ../example/demo_slurp.f90 \
    ../example/demo_splitpath.f90 \
-   ../example/demo_swallow.f90 \
+   ../example/demo_gulp.f90 \
    ../example/demo_uniq.f90
 
 CPROGFILES = 
