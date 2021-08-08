@@ -31,7 +31,7 @@ In the docs/ directory there is
    [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
 ### real man-pages ![gmake](docs/images/manpages.gif)
- - manpages in 
+ - manpages are in archive files that can be installed on ULS (Unix-like systems)
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
     + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
 
