@@ -15,16 +15,16 @@ this library is intertwined with several other large modules.
 
 In the docs/ directory there is
 
- - An [index](https://urbanjost.github.io/M_strings/man3.html) to HTML versions
+ - An [index](https://urbanjost.github.io/M_io/man3.html) to HTML versions
    of the manpages 
 
  - A single page that uses javascript to combine all the HTML descriptions
    of the manpages is at
-   [BOOK_FORTRAN](https://urbanjost.github.io/M_strings/BOOK_M_strings.html).
+   [BOOK_FORTRAN](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
  - manpages in 
-    + [manpages.zip](https://urbanjost.github.io/M_strings/manpages.zip) 
-    + [manpages.tgz](https://urbanjost.github.io/M_strings/manpages.tgz) 
+    + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
+    + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
 
 ## DEMO PROGRAMS
 
