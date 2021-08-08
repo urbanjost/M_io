@@ -28,8 +28,9 @@ In the docs/ directory there is
 
  - A single page that uses javascript to combine all the HTML descriptions
    of the manpages is at
-   [BOOK_FORTRAN](https://urbanjost.github.io/M_io/BOOK_M_io.html).
+   [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
+### real man-pages ![gmake](docs/images/manpages.gif)
  - manpages in 
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
     + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
@@ -39,7 +40,7 @@ In the docs/ directory there is
 There are demo programs extracted from the man pages in the example/
 directory.
 
-## BUILD WITH MAKE
+## BUILD WITH MAKE ![gmake](docs/images/gnu.gif)
 
     git clone https://github.com/urbanjost/M_io.git
     cd M_io/src
