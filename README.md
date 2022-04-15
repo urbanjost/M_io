@@ -19,19 +19,20 @@ but note that it requires a POSIX system at the time of this writing, and
  The procedures collected into M_io are hopefully very portable, unlike
  in M_system(3f).
 
-## USER DOCUMENTATION
+## DOCUMENTATION   ![docs](docs/images/docs.gif)
+### USER 
 
 In the docs/ directory there is
 
  - An [index](https://urbanjost.github.io/M_io/man3.html) to HTML versions
-   of the manpages 
+   of the man-pages 
 
  - A single page that uses javascript to combine all the HTML descriptions
-   of the manpages is at
+   of the man-pages is at
    [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
 ### real man-pages ![gmake](docs/images/manpages.gif)
- - manpages are in archive files that can be installed on ULS (Unix-like systems)
+ - man-pages are in archive files that can be installed on ULS (Unix-like systems)
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
     + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
 

@@ -2,9 +2,8 @@
       use M_io, only : filewrite
       implicit none
       integer :: ierr
-      character(len=:),allocatable :: data(:)
-         data=[ character(len=80) :: &
-              &'This is the text to write  ', &
+      character(len=80),allocatable :: data(:)
+         data=['This is the text to write  ', &
               &'into the file. It will be  ', &
               &'trimmed on the right side. ', &
               &' ', &
