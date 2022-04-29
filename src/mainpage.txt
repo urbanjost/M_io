@@ -1,0 +1,10 @@
+'mainpage.txt
+/**
+         @mainpage M_io Fortran Library
+
+         @section Introduction
+      IO procedures
+
+         @image html docs/images/orderpack.gif
+
+*/'
