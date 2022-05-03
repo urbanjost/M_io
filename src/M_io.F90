@@ -90,7 +90,8 @@ CONTAINS
 !===================================================================================================================================
 !>
 !!##NAME
-!!      uniq(3f) - [M_io] append a number to the end of filename to make a unique name if name exists
+!!      uniq(3f) - [M_io] append a number to the end of filename to make
+!!                 a unique name if name exists
 !!      (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -266,7 +267,8 @@ end function uniq
 !===================================================================================================================================
 !>
 !!##NAME
-!!    print_inquire(3f) - [M_io] Do INQUIRE on file by name/number and print results
+!!    print_inquire(3f) - [M_io] Do INQUIRE on file by name/number and
+!!                        print results
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -280,8 +282,8 @@ end function uniq
 !!    character(len=*),intent(in),optional :: name
 !!
 !!##DESCRIPTION
-!!    Given either a Fortran file-unit-number or filename, call the INQUIRE(3f)
-!!    intrinsic and print typical status information.
+!!    Given either a Fortran file-unit-number or filename, call the
+!!    INQUIRE(3f) intrinsic and print typical status information.
 !!
 !!##OPTIONS
 !!    lun    if lun is not equal to -1 then query by number and ignore
@@ -432,7 +434,8 @@ end subroutine print_inquire
 !===================================================================================================================================
 !>
 !!##NAME
-!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory separator character
+!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory
+!!                    separator character
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -486,7 +489,7 @@ function separator() result(sep)
 !!##DESCRIPTION
 !!   First testing for the existence of "/.",  then if that fails a list
 !!   of variable names assumed to contain directory paths {PATH|HOME} are
-!!   examined first for a backslash, then a slash.  Assuming basically the
+!!   examined first for a backslash, then a slash. Assuming basically the
 !!   choice is a ULS or MSWindows system, and users can do weird things like
 !!   put a backslash in a ULS path and break it.
 !!
@@ -797,8 +800,9 @@ end subroutine read_table_r
 !!    amounts of memory.
 !!
 !!##OPTIONS
-!!    filename   filename to read into memory, or LUN (Fortran Logical Unit Number).
-!!               If filename is a LUN, file must be opened with
+!!    filename   filename to read into memory, or LUN (Fortran Logical
+!!               Unit Number).  If filename is a LUN, file must be opened
+!!               with
 !!
 !!                  form='unformatted',access='stream'
 !!
@@ -1189,9 +1193,9 @@ end function number_of_lines
 !!##OPTIONS
 !!       start  optional logical unit number to start scan at, defaults to 10.
 !!       end    optional logical unit number to stop scan at, defaults to 99.
-!!       err    optional error flag returned. ERR will be non-zero if no errors.
-!!              If not present and an error occurs the program will stop instead
-!!              of returning.
+!!       err    optional error flag returned. ERR will be non-zero if
+!!              no errors. If not present and an error occurs the program
+!!              will stop instead of returning.
 !!
 !!##NOTES
 !!
@@ -1660,10 +1664,11 @@ end function basename
 !!           executed by this function. If not present the program stops on
 !!           an error.
 !!##RETURNS
-!!        FILEOPEN(3f) returns a Fortran unit number which you can use for other file
-!!        operations, unless the file you requested could not be opened;
-!!        in that situation, the result is -1 (a reserved value that cannot be returned
-!!        as a NEWUNIT value on an OPEN(3f)) and IOS will be non-zero.
+!!        FILEOPEN(3f) returns a Fortran unit number which you can use
+!!        for other file operations, unless the file you requested could
+!!        not be opened; in that situation, the result is -1 (a reserved
+!!        value that cannot be returned as a NEWUNIT value on an OPEN(3f))
+!!        and IOS will be non-zero.
 !!
 !!##EXAMPLE
 !!
@@ -2343,7 +2348,8 @@ end subroutine splitpath
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getline(3f) - [M_io] read a line from specified LUN into allocatable string up to line length limit
+!!    getline(3f) - [M_io] read a line from specified LUN into allocatable
+!!                  string up to line length limit
 !!    (LICENSE:PD)
 !!
 !!##SYNTAX
@@ -2420,10 +2426,9 @@ integer                                  :: lun_local
    else
       lun_local=stdin
    endif
-   open(lun_local,pad='yes')
 
    INFINITE: do                                                      ! read characters from line and append to result
-      read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
                                                                      ! other than stdin so system line limit is not limiting
       if(isize.gt.0)line_local=line_local//buffer(:isize)            ! append what was read to result
       if(is_iostat_eor(ier))then                                     ! if hit EOR reading is complete unless backslash ends the line
@@ -2441,7 +2446,8 @@ end function getline
 !===================================================================================================================================
 !>
 !!##NAME
-!!     read_line(3f) - [M_io] read a line from specified LUN into allocatable string up to line length limit cleaning up input line
+!!     read_line(3f) - [M_io] read a line from specified LUN into allocatable
+!!                     string up to line length limit cleaning up input line
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
@@ -2537,9 +2543,8 @@ integer                                  :: lun_local
    line_local=''
    ier=0
    lun_local=merge(lun,stdin,present(lun))
-   open(lun_local,pad='yes')
    INFINITE: do                                                           ! read characters from line and append to result
-      read(lun_local,iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
                                                                           ! files other than stdin so system line limit
                                                                           ! is not limiting
       if(isize.gt.0)line_local=line_local//buffer(:isize)   ! append what was read to result
@@ -2601,7 +2606,8 @@ end function read_line
 !!        answer=get_tmp()
 !!        write(*,*)'result is ',answer
 !!        answer=get_tmp()//uniq('_scratch',create=.false.)
-!!        write(*,*)'the file ',answer,' was a good scratch file name, at least a moment ago'
+!!        write(*,*)'the file ',answer, &
+!!        & ' was a good scratch file name, at least a moment ago'
 !!     end program demo_get_tmp
 !!
 !!   Sample Results:
@@ -2963,8 +2969,9 @@ end function getname
 !===================================================================================================================================
 !>
 !!##NAME
-!!     which(3f) - [M_io:ENVIRONMENT] given a command name find the pathname by searching
-!!                 the directories in the environment variable $PATH
+!!     which(3f) - [M_io:ENVIRONMENT] given a command name find the pathname
+!!                 by searching the directories in the environment variable
+!!                 $PATH
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
@@ -3047,8 +3054,8 @@ end function which
 !===================================================================================================================================
 !>
 !!##NAME
-!!     lookfor(3f) - [M_io:ENVIRONMENT] look for a filename in a number of directories
-!!                 specified by an environment variable
+!!     lookfor(3f) - [M_io:ENVIRONMENT] look for a filename in a number
+!!                   of directories specified by an environment variable
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
@@ -3115,7 +3122,8 @@ end function lookfor
 !===================================================================================================================================
 !>
 !!##NAME
-!!     get_env(3f) - [M_io:ENVIRONMENT] a function returning the value of an environment variable
+!!     get_env(3f) - [M_io:ENVIRONMENT] a function returning the value of
+!!                   an environment variable
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
@@ -3135,7 +3143,8 @@ end function lookfor
 !!
 !!##OPTIONS
 !!    NAME     name of environment variable
-!!    DEFAULT  value to return if environment variable is not set or set to an empty string
+!!    DEFAULT  value to return if environment variable is not set or set
+!!             to an empty string
 !!##RETURNS
 !!    VALUE    the value of the environment variable or the default
 !!
@@ -3210,15 +3219,15 @@ end function get_env
 !!
 !!
 !!##DESCRIPTION
-!!    This reads a file opened with stream access one character at a time,
-!!    much like ""read(fd,iostat=ios) c" but with buffering, which I have
-!!    found to be up to sixty times faster than such a plain read, although
-!!    this varies depending on how or if the programming environment implements
-!!    I/O buffering itself.
+!!    This reads a file opened with stream access one character at a
+!!    time, much like ""read(fd,iostat=ios) c" but with buffering, which
+!!    I have found to be up to sixty times faster than such a plain read,
+!!    although this varies depending on how or if the programming environment
+!!    implements I/O buffering itself.
 !!
-!!    IT USES SAVED VARIABLES AND CAN ONLY BE USED ON ONE FILE AT A TIME IN
-!!    THE CURRENT FORM. A user type including the saved values and the LUN
-!!    could easily resolve this.
+!!    IT USES SAVED VARIABLES AND CAN ONLY BE USED ON ONE FILE AT A TIME
+!!    IN THE CURRENT FORM. A user type including the saved values and the
+!!    LUN could easily resolve this.
 !!
 !!##OPTIONS
 !!    FD    A Fortran unit number of a file opened for stream access

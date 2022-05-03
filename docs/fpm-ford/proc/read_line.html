@@ -126,7 +126,7 @@
      <li><i class="fa fa-list-ol"></i>
        <a data-toggle="tooltip"
     data-placement="bottom" data-html="true"
-    title=" 3.8% of total for procedures.">45 statements</a>
+    title=" 3.7% of total for procedures.">44 statements</a>
      </li> 
      
      
@@ -236,7 +236,8 @@ public function read_line(line, lun, ios) result(ier)
 
     
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">read_line</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">specified</span><span class="w"> </span><span class="n">LUN</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">allocatable</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="n">cleaning</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">input</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">read_line</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">specified</span><span class="w"> </span><span class="n">LUN</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">allocatable</span><span class="w"></span>
+<span class="w">                 </span><span class="n">string</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="n">cleaning</span><span class="w"> </span><span class="n">up</span><span class="w"> </span><span class="k">input</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
 <span class="w"> </span><span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
 
@@ -628,9 +629,8 @@ integer                                  :: ier
    <span class="n">line_local</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
    <span class="n">ier</span><span class="o">=</span><span class="mi">0</span>
    <span class="n">lun_local</span><span class="o">=</span><span class="nb">merge</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="n">stdin</span><span class="p">,</span><span class="nb">present</span><span class="p">(</span><span class="n">lun</span><span class="p">))</span>
-   <span class="k">open</span><span class="p">(</span><span class="n">lun_local</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
    <span class="n">INFINITE</span><span class="p">:</span> <span class="k">do</span>                                                           <span class="c">! read characters from line and append to result</span>
-      <span class="k">read</span><span class="p">(</span><span class="n">lun_local</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ier</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">advance</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">isize</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span> <span class="n">buffer</span> <span class="c">! read next buffer (might use stream I/O for</span>
+      <span class="k">read</span><span class="p">(</span><span class="n">lun_local</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ier</span><span class="p">,</span><span class="n">fmt</span><span class="o">=</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">advance</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">,</span><span class="n">size</span><span class="o">=</span><span class="n">isize</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span> <span class="n">buffer</span> <span class="c">! read next buffer (might use stream I/O for</span>
                                                                           <span class="c">! files other than stdin so system line limit</span>
                                                                           <span class="c">! is not limiting</span>
       <span class="k">if</span><span class="p">(</span><span class="n">isize</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="n">line_local</span><span class="o">=</span><span class="n">line_local</span><span class="o">//</span><span class="n">buffer</span><span class="p">(:</span><span class="n">isize</span><span class="p">)</span>   <span class="c">! append what was read to result</span>
@@ -679,7 +679,7 @@ integer                                  :: ier
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2022-04-28 23:06  
+             on 2022-05-02 21:34  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> easy was developed by John Doe</p></div>

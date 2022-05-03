@@ -243,15 +243,15 @@ public subroutine get_next_char(fd, c, ios)
 </code></pre></div>
 
 <h2 id="description">DESCRIPTION</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">This</span> <span class="n">reads</span> <span class="n">a</span> <span class="n">file</span> <span class="n">opened</span> <span class="n">with</span> <span class="n">stream</span> <span class="n">access</span> <span class="n">one</span> <span class="n">character</span> <span class="n">at</span> <span class="n">a</span> <span class="n">time</span><span class="p">,</span>
-<span class="n">much</span> <span class="n">like</span> <span class="s2">&quot;&quot;</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">c</span><span class="s2">&quot; but with buffering, which I have</span>
-<span class="n">found</span> <span class="n">to</span> <span class="n">be</span> <span class="n">up</span> <span class="n">to</span> <span class="n">sixty</span> <span class="n">times</span> <span class="n">faster</span> <span class="n">than</span> <span class="n">such</span> <span class="n">a</span> <span class="n">plain</span> <span class="n">read</span><span class="p">,</span> <span class="n">although</span>
-<span class="n">this</span> <span class="n">varies</span> <span class="n">depending</span> <span class="n">on</span> <span class="n">how</span> <span class="ow">or</span> <span class="k">if</span> <span class="n">the</span> <span class="n">programming</span> <span class="n">environment</span> <span class="n">implements</span>
-<span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">buffering</span> <span class="n">itself</span><span class="o">.</span>
+<div class="codehilite"><pre><span></span><code><span class="n">This</span> <span class="n">reads</span> <span class="n">a</span> <span class="n">file</span> <span class="n">opened</span> <span class="n">with</span> <span class="n">stream</span> <span class="n">access</span> <span class="n">one</span> <span class="n">character</span> <span class="n">at</span> <span class="n">a</span>
+<span class="n">time</span><span class="p">,</span> <span class="n">much</span> <span class="n">like</span> <span class="s2">&quot;&quot;</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span> <span class="n">c</span><span class="s2">&quot; but with buffering, which</span>
+<span class="n">I</span> <span class="n">have</span> <span class="n">found</span> <span class="n">to</span> <span class="n">be</span> <span class="n">up</span> <span class="n">to</span> <span class="n">sixty</span> <span class="n">times</span> <span class="n">faster</span> <span class="n">than</span> <span class="n">such</span> <span class="n">a</span> <span class="n">plain</span> <span class="n">read</span><span class="p">,</span>
+<span class="n">although</span> <span class="n">this</span> <span class="n">varies</span> <span class="n">depending</span> <span class="n">on</span> <span class="n">how</span> <span class="ow">or</span> <span class="k">if</span> <span class="n">the</span> <span class="n">programming</span> <span class="n">environment</span>
+<span class="n">implements</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">buffering</span> <span class="n">itself</span><span class="o">.</span>
 
-<span class="n">IT</span> <span class="n">USES</span> <span class="n">SAVED</span> <span class="n">VARIABLES</span> <span class="n">AND</span> <span class="n">CAN</span> <span class="n">ONLY</span> <span class="n">BE</span> <span class="n">USED</span> <span class="n">ON</span> <span class="n">ONE</span> <span class="n">FILE</span> <span class="n">AT</span> <span class="n">A</span> <span class="n">TIME</span> <span class="n">IN</span>
-<span class="n">THE</span> <span class="n">CURRENT</span> <span class="n">FORM</span><span class="o">.</span> <span class="n">A</span> <span class="n">user</span> <span class="n">type</span> <span class="n">including</span> <span class="n">the</span> <span class="n">saved</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">LUN</span>
-<span class="n">could</span> <span class="n">easily</span> <span class="n">resolve</span> <span class="n">this</span><span class="o">.</span>
+<span class="n">IT</span> <span class="n">USES</span> <span class="n">SAVED</span> <span class="n">VARIABLES</span> <span class="n">AND</span> <span class="n">CAN</span> <span class="n">ONLY</span> <span class="n">BE</span> <span class="n">USED</span> <span class="n">ON</span> <span class="n">ONE</span> <span class="n">FILE</span> <span class="n">AT</span> <span class="n">A</span> <span class="n">TIME</span>
+<span class="n">IN</span> <span class="n">THE</span> <span class="n">CURRENT</span> <span class="n">FORM</span><span class="o">.</span> <span class="n">A</span> <span class="n">user</span> <span class="n">type</span> <span class="n">including</span> <span class="n">the</span> <span class="n">saved</span> <span class="n">values</span> <span class="ow">and</span> <span class="n">the</span>
+<span class="n">LUN</span> <span class="n">could</span> <span class="n">easily</span> <span class="n">resolve</span> <span class="n">this</span><span class="o">.</span>
 </code></pre></div>
 
 <h2 id="options">OPTIONS</h2>
@@ -611,7 +611,7 @@ public subroutine get_next_char(fd, c, ios)
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2022-04-28 23:06  
+             on 2022-05-02 21:34  
           </p>
         </div>
         <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> easy was developed by John Doe</p></div>
