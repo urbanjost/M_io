@@ -83,6 +83,7 @@ end interface journal
 interface str
    module procedure msg_scalar, msg_one
 end interface str
+character(len=*),parameter,private :: gen='(*(g0,1x))'
 
 CONTAINS
 !===================================================================================================================================
@@ -567,12 +568,12 @@ end function separator
 !!
 !!##SYNOPSIS
 !!
-!!   subroutine read_table(filename,array,comment,ierr)
+!!   subroutine read_table(filename,array,ierr,comment)
 !!
 !!    character(len=*),intent(in)          :: filename
 !!    TYPE,allocatable,intent(out)         :: array(:,:)
-!!    character(len=1,intent(in),optional  :: comment
 !!    integer,intent(out)                  :: ierr
+!!    character(len=1,intent(in),optional  :: comment
 !!
 !!   where TYPE may be REAL, INTEGER, or DOUBLEPRECISION
 !!
@@ -587,9 +588,9 @@ end function separator
 !!##OPTIONS
 !!    filename   filename to read
 !!    array      array to create. May be INTEGER, REAL, or DOUBLEPRECISION
+!!    ierr       zero if no error occurred.
 !!    comment    ignore lines which contain this as the first non-blank
 !!               character. Ignore it and subsequent characters on any line.
-!!    ierr       zero if no error occurred.
 !!##EXAMPLES
 !!
 !!    Sample program, assuming the input file "inputfile" exists:
@@ -683,8 +684,8 @@ implicit none
 
 character(len=*),intent(in)             :: FILENAME
 doubleprecision,allocatable,intent(out) :: darray(:,:)
-character(len=1),intent(in),optional    :: comment
 integer,intent(out)                     :: ierr
+character(len=1),intent(in),optional    :: comment
 character(len=:),allocatable :: page(:) ! array to hold file in memory
 integer                      :: irows,irowsmax
 integer                      :: icols
@@ -713,9 +714,9 @@ doubleprecision,allocatable  :: dline(:)
             dline=s2vs(page(i))
             irows=irows+1
             if(size(dline) /= icols)then
-                  write(*,*)page(i),' does not contain ',icols,' values'
+               write(*,gen)page(i),'does not contain',icols,'values'
                ierr=ierr+1
-               darray(irows,:min(size(dline),icols))=dline
+               darray(irows,:min(size(dline),icols))=dline(min(size(dline),icols))
             else
                darray(irows,:)=dline
             endif
@@ -745,6 +746,7 @@ contains
           if(present(comment))then
              if(page(i)(j:j) == comment)then
                 page(i)(j:)=' '
+                exit
              endif
           endif
           select case(page(i)(j:j))
@@ -769,23 +771,25 @@ contains
     end subroutine cleanse
 end subroutine read_table_d
 !===================================================================================================================================
-subroutine read_table_i(filename,array,ierr)
+subroutine read_table_i(filename,array,ierr,comment)
 implicit none
 character(len=*),intent(in)             :: FILENAME
 integer,allocatable,intent(out)         :: array(:,:)
 integer,intent(out)                     :: ierr
+character(len=1),intent(in),optional    :: comment
 doubleprecision,allocatable             :: darray(:,:)
-call read_table_d(filename,darray,ierr)
+call read_table_d(filename,darray,ierr,comment)
 array=nint(darray)
 end subroutine read_table_i
 !===================================================================================================================================
-subroutine read_table_r(filename,array,ierr)
+subroutine read_table_r(filename,array,ierr,comment)
 implicit none
 character(len=*),intent(in)             :: FILENAME
 real,allocatable,intent(out)            :: array(:,:)
 integer,intent(out)                     :: ierr
+character(len=1),intent(in),optional    :: comment
 doubleprecision,allocatable             :: darray(:,:)
-call read_table_d(filename,darray,ierr)
+call read_table_d(filename,darray,ierr,comment)
 array=real(darray)
 end subroutine read_table_r
 !===================================================================================================================================
@@ -840,18 +844,19 @@ end subroutine read_table_r
 !!    character(len=4096)          :: FILENAME   ! file to read
 !!    character(len=:),allocatable :: pageout(:) ! array to hold file in memory
 !!    integer                      :: longest, lines, i
+!!    character(len=*),parameter   :: gen='(*(g0,1x))'
 !!       ! get a filename
 !!       call get_command_argument(1, FILENAME)
 !!       ! allocate character array and copy file into it
 !!       call gulp(FILENAME,pageout)
 !!       if(.not.allocated(pageout))then
-!!          write(*,*)'*demo_gulp* failed to load file '//FILENAME
+!!          write(*,gen)'*demo_gulp* failed to load file',FILENAME
 !!       else
 !!          ! write file from last line to first line
 !!          longest=len(pageout)
 !!          lines=size(pageout)
-!!          write(*,*)'number of lines is ',lines
-!!          write(*,*)'and length of lines is ',longest
+!!          write(*,gen)'number of lines is',lines
+!!          write(*,gen)'and length of lines is',longest
 !!          write(*,'(a)')repeat('%',longest+2)
 !!          write(*,'("%",a,"%")')(trim(pageout(i)),i=lines,1,-1)
 !!          write(*,'(a)')repeat('%',longest+2)
@@ -1129,13 +1134,13 @@ end subroutine slurp
 !!
 !!##DESCRIPTION
 !!    Rewind an open sequential file and read through it to count the number
-!!    of lines. The file is rewound on exit.
+!!    of lines. The file is rewound on exit. If it is not readable -1 is returned.
 !!
 !!##OPTIONS
-!!    lun       logical unit number of open sequential file to count lines in
+!!    lun       logical unit number of open sequential file to count lines in.
 !!
 !!##RETURNS
-!!    nlines    number of lines read
+!!    nlines    number of lines read. If it is not readable -1 is returned.
 !!
 !!##EXAMPLES
 !!
@@ -1162,16 +1167,28 @@ end subroutine slurp
 function number_of_lines(lun) result(nlines)
 !@(#) determine number or lines in file given a LUN to the open file
 integer,intent(in) :: lun
+
 integer            :: ios
 integer            :: nlines
-   if(lun /= stdin)rewind(lun,iostat=ios)
+character(len=256) :: iomsg
+
+   if(lun /= stdin)rewind(lun,iostat=ios,iomsg=iomsg)
    nlines = 0
+
    do
-      read(lun, '(A)', iostat=ios)
-      if (ios /= 0) exit
+   read(lun, '(A)', end=99, iostat=ios,iomsg=iomsg)
+      if (ios /= 0) then
+         write(stderr,gen)'*number_of_lines*:',trim(iomsg)
+         nlines=-1
+         exit
+      endif
       nlines = nlines + 1
    enddo
-   if(lun /= stdin)rewind(lun,iostat=ios)
+
+99 continue
+
+   if(lun /= stdin)rewind(lun,iostat=ios,iomsg=iomsg)
+
 end function number_of_lines
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!

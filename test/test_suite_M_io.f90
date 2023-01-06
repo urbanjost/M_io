@@ -13,6 +13,8 @@ end program runtest
 !===================================================================================================================================
 subroutine test_suite_M_io()
 use M_io, only : dirname, get_tmp, notopen, print_inquire, rd, getline, read_line, read_table, slurp, splitpath, uniq
+use M_io, only : number_of_lines
+use M_io
 use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
 use M_verify, only : unit_check_level
 
@@ -133,7 +135,7 @@ integer :: i, ierr
    ! create test file
    open(file='inputfile',unit=10,action='write')
    write(10,'(a)') [character(len=80):: &
-       '# a                     ', &
+       '# a comment number 10   ', &
        ' #test                  ', &
        '  # table               ', &
        '.-----.-----.-----.     ', &
@@ -152,14 +154,9 @@ integer :: i, ierr
    call unit_check('read_table', size(array,dim=2).eq.3, 'checking columns')
    call unit_check('read_table', sum(nint(array)).eq.308, 'sum')
    call unit_check('read_table', all([nint(array)].eq.[1,4,-5,2,300,6]), 'values')
-      do i=1,size(array,dim=1)
-         write(*,*)array(i,:)
-      enddo
-      write(*,*)[array]
-      ! remove sample file
-      open(file='inputfile',unit=10)
-      close(unit=10,status='delete')
-   !!call unit_check('read_table', 0.eq.0, 'checking',100)
+   ! remove sample file
+   open(file='inputfile',unit=10)
+   close(unit=10,status='delete')
    call unit_check_done('read_table',msg='')
 end subroutine test_read_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -177,8 +174,29 @@ subroutine test_gulp()
 end subroutine test_gulp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_number_of_lines()
+integer,parameter  :: lun=10
+character(len=256) :: iomsg
+integer            :: iostat
    call unit_check_start('number_of_lines',msg='')
-   !!call unit_check('number_of_lines', 0.eq.0, 'checking',100)
+   ! create test file
+   open(file='inputfile',unit=LUN,action='write')
+   write(LUN,'(a)') [character(len=80):: &
+       '1                       ', &
+       '2                       ', &
+       '3                       ', &
+       '4                       ', &
+       '5                       ']
+   call unit_check('number_of_lines', number_of_lines(LUN).eq.-1, 'expected -1 lines, got', number_of_lines(LUN))
+   close(unit=LUN,iostat=iostat)
+   open(file='inputfile',unit=LUN,action='read')
+   if(iostat.ne.0)write(*,*)'<ERROR>*test_number_of_lines* 1:',trim(iomsg)
+   call unit_check('number_of_lines', number_of_lines(LUN).eq.5, 'expected 5 lines, got', number_of_lines(LUN))
+   close(unit=LUN,iostat=iostat,iomsg=iomsg)
+   if(iostat.ne.0)write(*,*)'<ERROR>*test_number_of_lines* 2:',trim(iomsg)
+   ! read file as a table
+   open(file='inputfile',unit=LUN)
+   close(unit=LUN,status='delete',iostat=iostat)
+   if(iostat.ne.0)write(*,*)'<ERROR>*test_number_of_lines* 3:',trim(iomsg)
    call unit_check_done('number_of_lines',msg='')
 end subroutine test_number_of_lines
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
