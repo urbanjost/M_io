@@ -126,8 +126,39 @@ subroutine test_read_line()
 end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
+doubleprecision,allocatable :: array(:,:)
+integer :: i, ierr
 
    call unit_check_start('read_table',msg='')
+   ! create test file
+   open(file='inputfile',unit=10,action='write')
+   write(10,'(a)') [character(len=80):: &
+       '# a                     ', &
+       ' #test                  ', &
+       '  # table               ', &
+       '.-----.-----.-----.     ', &
+       '| 1   | -5  | 3e2 |     ', &
+       '.-----+-----+-----.     ', &
+       '| 4   | 2.0 | 6   |     ', &
+       '.-----.-----.-----.     ', &
+       '                        ', &
+       '                        ']
+   close(unit=10)
+   ! read file as a table
+   call read_table('inputfile',array,ierr,comment='#')
+      ! print values
+   call unit_check('read_table', size(array      ).eq.6, 'checking size')
+   call unit_check('read_table', size(array,dim=1).eq.2, 'checking rows')
+   call unit_check('read_table', size(array,dim=2).eq.3, 'checking columns')
+   call unit_check('read_table', sum(nint(array)).eq.308, 'sum')
+   call unit_check('read_table', all([nint(array)].eq.[1,4,-5,2,300,6]), 'values')
+      do i=1,size(array,dim=1)
+         write(*,*)array(i,:)
+      enddo
+      write(*,*)[array]
+      ! remove sample file
+      open(file='inputfile',unit=10)
+      close(unit=10,status='delete')
    !!call unit_check('read_table', 0.eq.0, 'checking',100)
    call unit_check_done('read_table',msg='')
 end subroutine test_read_table

@@ -4,9 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   
    <meta name="description" content="easy project">
-    
     <meta name="author" content="John Doe" >
     <link rel="icon" href="./favicon.png">
 
@@ -16,10 +14,7 @@
     <link href="./css/pygments.css" rel="stylesheet">
     <link href="./css/font-awesome.min.css" rel="stylesheet">
     <link href="./css/local.css" rel="stylesheet">
-    
     <link  href="./tipuesearch/tipuesearch.css" rel="stylesheet">
-    
-    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -48,49 +43,25 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-        
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
               data-toggle="dropdown" role="button"
               aria-haspopup="true"
      aria-expanded="false">Contents <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          
-              
             <li><a href="./lists/files.html">Source Files</a></li>
-        
-        
-        
             <li><a href="./lists/modules.html">Modules</a></li>
-        
-            
-                                
             <li><a href="./lists/procedures.html">Procedures</a></li>
-        
-               
-        
-            <li><a href="./lists/programs.html">Programs</a></li>
-        
+                   <li><a href="./lists/programs.html">Programs</a></li>
+       
             </ul>
-            </li>
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="./lists/files.html">Source Files</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="./lists/modules.html">Modules</a></li>
-
-
-
-<li class="visible-xs hidden-sm visible-lg"><a href="./lists/procedures.html">Procedures</a></li>
-
-                             
-
-<li class="visible-xs hidden-sm visible-lg"><a href="./lists/programs.html">Programs</a></li>
-
-          </ul>
         
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="./lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="./lists/programs.html">Programs</a></li>
+          </ul>
         <form action="./search.html" class="navbar-form navbar-right" role="search">
         <div class="form-group">
           <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
@@ -99,34 +70,22 @@
         <button type="submit" class="btn btn-default">Submit</button>
 -->
         </form>
-        
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
     <div class="container">
-    
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
         <p>easy project</p>
-        	 
 	<p> Find us on&hellip;</p>
         <p>
-        	 
           <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/easy" role="button">GitHub</a>
-			 
-			 
-			 
-			 
-	         
-			 
         </p>
       </div>
 
       <div class="row" id='text'>
-		  
         <div class="col-md-8">
-		  
           <h1>easy</h1>
           <h1 id="m_iof90-and-associated-files">M_io.f90 and associated files</h1>
 <h2 id="name">NAME</h2>
@@ -143,7 +102,9 @@ but note that it requires a POSIX system at the time of this writing, and
  of functions for pure string manipulation.
  The procedures collected into M_io are hopefully very portable, unlike
  in M_system(3f).</p>
-<h2 id="documentation">DOCUMENTATION   <img alt="docs" src="docs/images/docs.gif"></h2>
+<hr>
+<h2 id="_1"><img alt="docs" src="docs/images/docs.gif"></h2>
+<h2 id="documentation">DOCUMENTATION</h2>
 <h3 id="user">USER</h3>
 <p>In the docs/ directory there is</p>
 <ul>
@@ -157,18 +118,39 @@ but note that it requires a POSIX system at the time of this writing, and
    <a href="https://urbanjost.github.io/M_io/BOOK_M_io.html">BOOK_M_io</a>.</p>
 </li>
 </ul>
-<h3 id="real-man-pages">real man-pages <img alt="gmake" src="docs/images/manpages.gif"></h3>
+<hr>
+<h2 id="_2"><img alt="manpages" src="docs/images/manpages.gif"></h2>
+<h3 id="real-man-pages">real man-pages</h3>
 <ul>
-<li>man-pages are in archive files that can be installed on ULS (Unix-like systems)<ul>
+<li>
+<p>man-pages are in archive files that can be installed on ULS (Unix-like systems)</p>
+<ul>
 <li><a href="https://urbanjost.github.io/M_io/manpages.zip">manpages.zip</a> </li>
 <li><a href="https://urbanjost.github.io/M_io/manpages.tgz">manpages.tgz</a> </li>
 </ul>
 </li>
+<li>
+<p><a href="docs/CHANGELOG.md">CHANGELOG</a> provides a history of significant changes</p>
+</li>
 </ul>
+<h3 id="developer">DEVELOPER</h3>
+<ul>
+<li>
+<p>The code was run through <a href="https://politicalphysicist.github.io/ford-fortran-documentation.html">ford(1)</a>
+   to produce a <a href="https://urbanjost.github.io/M_strings/fpm-ford/index.html">developers&rsquo; document</a>.</p>
+</li>
+<li>
+<p><a href="docs/STATUS.md">github action status</a></p>
+</li>
+</ul>
+<hr>
+<h2 id="_3"><img alt="demos" src="docs/images/demo.gif"></h2>
 <h2 id="demo-programs">DEMO PROGRAMS</h2>
 <p>There are demo programs extracted from the man pages in the example/
 directory.</p>
-<h2 id="build-with-make">BUILD WITH MAKE <img alt="gmake" src="docs/images/gnu.gif"></h2>
+<hr>
+<h2 id="_4"><img alt="gmake" src="docs/images/gnu.gif"></h2>
+<h2 id="build-with-make">BUILD WITH MAKE</h2>
 <div class="codehilite"><pre><span></span><code><span class="nv">git</span> <span class="nv">clone</span> <span class="nv">https</span>:<span class="o">//</span><span class="nv">github</span>.<span class="nv">com</span><span class="o">/</span><span class="nv">urbanjost</span><span class="o">/</span><span class="nv">M_io</span>.<span class="nv">git</span>
 <span class="nv">cd</span> <span class="nv">M_io</span><span class="o">/</span><span class="nv">src</span>
 # <span class="nv">change</span> <span class="nv">Makefile</span> <span class="k">if</span> <span class="nv">not</span> <span class="nv">using</span> <span class="nv">one</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">listed</span> <span class="nv">compilers</span>
@@ -184,7 +166,9 @@ directory.</p>
 
 <p>This will compile the M_io module and build all the example programs from
 the document pages in the <code>example/</code> sub-directory.</p>
-<h2 id="build-with-fpm">BUILD WITH FPM <img alt="fpm" src="docs/images/fpm_logo.gif"></h2>
+<hr>
+<h2 id="_5"><img alt="fpm" src="docs/images/fpm_logo.gif"></h2>
+<h2 id="build-with-fpm">BUILD WITH FPM</h2>
 <p>Alternatively, download the github repository and build it with 
 fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Package Manager</a> )</p>
 <div class="codehilite"><pre><span></span><code>     git clone https://github.com/urbanjost/M_io.git
@@ -193,239 +177,72 @@ fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Pack
 </code></pre></div>
 
 <p>or just list it as a dependency in your fpm.toml project file.</p>
-<div class="codehilite"><pre><span></span><code>     <span class="k">[dependencies]</span>
-     <span class="n">M_io</span>        <span class="o">=</span> <span class="p">{</span> <span class="n">git</span> <span class="o">=</span> <span class="s">&quot;https://github.com/urbanjost/M_io.git&quot;</span> <span class="p">}</span>
+<div class="codehilite"><pre><span></span><code><span class="w">     </span><span class="k">[dependencies]</span><span class="w"></span>
+<span class="w">     </span><span class="n">M_io</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;https://github.com/urbanjost/M_io.git&quot;</span><span class="w"> </span><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 
 <hr>
         </div>
-		  
         <div class="col-md-4">
 	  <div class="well">
           <h2>Developer Info</h2>
           <h4>John Doe</h4>
           
-          
-			   
             <div class="text-center"><div class="btn-group" role="group">
-              
-              
-              
               <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/easy"><i class="fa fa-github fa-lg"></i></a>
-				  
-				  
-              
-              
-              
-              
             </div></div>
-            
        </div>
        </div>
-       
       </div>
-      
-      
-      
-      
-		
       <div class="row">
         <div class="col-xs-6 col-sm-4">
               <h3>Source Files</h3>
-              <ul>
-                
-                  
-                    <li><a href='./sourcefile/demo_basename.f90.html'>demo_basename.f90</a></li>
-                  
-                
-                  
+              <ul>                    <li><a href='./sourcefile/demo_basename.f90.html'>demo_basename.f90</a></li>
                     <li><a href='./sourcefile/demo_dirname.f90.html'>demo_dirname.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_fileclose.f90.html'>demo_fileclose.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_filedelete.f90.html'>demo_filedelete.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_fileopen.f90.html'>demo_fileopen.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_filewrite.f90.html'>demo_filewrite.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_get_env.f90.html'>demo_get_env.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_get_next_char.f90.html'>demo_get_next_char.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_get_tmp.f90.html'>demo_get_tmp.f90</a></li>
-                  
-                
-                  
                     <li><a href='./sourcefile/demo_getline.f90.html'>demo_getline.f90</a></li>
-                  
-                
-                  
-                    <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-              </ul>
+</ul>
           </div>
-          
 		  <div class="col-xs-6 col-sm-4">
               <h3>Modules</h3>
-              <ul>
-                
-                  
-                    <li><a href='./module/m_io.html'>M_io</a></li>
-                  
-                
-              </ul>
+              <ul>                    <li><a href='./module/m_io.html'>M_io</a></li>
+</ul>
           </div>
-          
-          
 		  <div class="col-xs-6 col-sm-4">
               <h3>Procedures</h3>
-              <ul>
-                
-                  
-                    <li><a href='./proc/basename.html'>basename</a></li>
-                  
-                
-                  
+              <ul>                    <li><a href='./proc/basename.html'>basename</a></li>
                     <li><a href='./proc/dirname.html'>dirname</a></li>
-                  
-                
-                  
                     <li><a href='./proc/fileclose.html'>fileclose</a></li>
-                  
-                
-                  
                     <li><a href='./interface/filedelete.html'>filedelete</a></li>
-                  
-                
-                  
                     <li><a href='./proc/fileopen.html'>fileopen</a></li>
-                  
-                
-                  
                     <li><a href='./proc/filewrite.html'>filewrite</a></li>
-                  
-                
-                  
                     <li><a href='./proc/get_env.html'>get_env</a></li>
-                  
-                
-                  
                     <li><a href='./proc/get_next_char.html'>get_next_char</a></li>
-                  
-                
-                  
                     <li><a href='./proc/get_tmp.html'>get_tmp</a></li>
-                  
-                
-                  
                     <li><a href='./proc/getline.html'>getline</a></li>
-                  
-                
-                  
-                    <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-                  
-                
-              </ul>
+</ul>
           </div>
-          
-          
       </div>
-
     <hr>    
     </div> <!-- /container -->
     <footer>
       <div class="container">
       <div class="row">
-        <div class="col-xs-6 col-md-4"><p>&copy; 2022 
-                                          </p></div>
-        <div class="col-xs-6 col-md-4 col-md-push-4">
+        <div class="col-xs-6 col-md-6"><p>easy was developed by John Doe<br>&copy; 2023 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
           <p class="text-right">
             Documentation generated by 
-            <a href="https://github.com/cmacmackin/ford">FORD</a>
-             on 2022-05-05 23:33  
-          </p>
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2023-01-06 11:55            </p>
         </div>
-        <div class="col-xs-12 col-md-4 col-md-pull-4"><p class="text-center"> easy was developed by John Doe</p></div>
       </div>
       <br>
       </div> <!-- /container -->    
@@ -451,14 +268,11 @@ fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Pack
         extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
       });
     </script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
     
     <script src="./tipuesearch/tipuesearch_content.js"></script>
     <script src="./tipuesearch/tipuesearch_set.js"></script>
     <script src="./tipuesearch/tipuesearch.js"></script>
-    
     
   </body>
 </html>

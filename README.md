@@ -19,7 +19,11 @@ but note that it requires a POSIX system at the time of this writing, and
  The procedures collected into M_io are hopefully very portable, unlike
  in M_system(3f).
 
-## DOCUMENTATION   ![docs](docs/images/docs.gif)
+---
+![docs](docs/images/docs.gif)
+---
+
+## DOCUMENTATION
 ### USER 
 
 In the docs/ directory there is
@@ -31,17 +35,38 @@ In the docs/ directory there is
    of the man-pages is at
    [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
-### real man-pages ![gmake](docs/images/manpages.gif)
+---
+![manpages](docs/images/manpages.gif)
+---
+
+### real man-pages
  - man-pages are in archive files that can be installed on ULS (Unix-like systems)
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
     + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
+
+ - [CHANGELOG](docs/CHANGELOG.md) provides a history of significant changes
+
+### DEVELOPER 
+
+ - The code was run through [ford(1)](https://politicalphysicist.github.io/ford-fortran-documentation.html)
+   to produce a [developers' document](https://urbanjost.github.io/M_strings/fpm-ford/index.html).
+
+ - [github action status](docs/STATUS.md)
+
+---
+![demos](docs/images/demo.gif)
+---
 
 ## DEMO PROGRAMS
 
 There are demo programs extracted from the man pages in the example/
 directory.
 
-## BUILD WITH MAKE ![gmake](docs/images/gnu.gif)
+---
+![gmake](docs/images/gnu.gif)
+---
+
+## BUILD WITH MAKE
 
     git clone https://github.com/urbanjost/M_io.git
     cd M_io/src
@@ -58,7 +83,11 @@ directory.
 This will compile the M_io module and build all the example programs from
 the document pages in the `example/` sub-directory.
 
-## BUILD WITH FPM ![fpm](docs/images/fpm_logo.gif)
+---
+![fpm](docs/images/fpm_logo.gif)
+---
+
+## BUILD WITH FPM
 
 Alternatively, download the github repository and build it with 
 fpm ( as described at [Fortran Package Manager](https://github.com/fortran-lang/fpm) )
