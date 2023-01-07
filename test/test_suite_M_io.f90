@@ -1,22 +1,19 @@
-program runtest
-use M_msg
-use M_verify
-use :: M_verify,   only : unit_check_stop
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
-   call test_suite_M_io()
-   call unit_check_stop()
-end program runtest
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_M_io()
+program runtest
+use M_msg
 use M_io
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+use :: M_verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
+use :: M_verify, only : unit_check_stop
+use :: M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
+use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
+use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 
 !! setup
+   unit_check_command=''
+   unit_check_keep_going=.true.
    unit_check_level=0
 
    call test_dirname()
@@ -48,6 +45,7 @@ use M_verify, only : unit_check_level
    call test_getname()
    call test_lookfor()
 !! teardown
+   call unit_check_stop()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dirname()
@@ -133,6 +131,7 @@ integer :: i, ierr
    ! create test file
    open(file='inputfile',unit=10,action='write')
    write(10,'(a)') [character(len=80):: &
+       '#2345678901234567890123456789012345678901234567890123456789012345678901234567890', &
        '# a comment number 10   ', &
        ' #test                  ', &
        '  # table               ', &
@@ -142,7 +141,7 @@ integer :: i, ierr
        '| 4   | 2.0 | 6   |     ', &
        '.-----.-----.-----.     ', &
        '                        ', &
-       '                        ']
+       '# Original sample file: VEALYL_5mm_50um_pH2p50_12p5mM_NewFreezeT30.0384.DAT     ']
    close(unit=10)
    ! read file as a table
    call read_table('inputfile',array,ierr,comment='#')
@@ -228,8 +227,24 @@ subroutine test_fileclose()
 end subroutine test_fileclose
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filewrite()
+integer :: ierr
+character(len=:),allocatable :: data(:), data2(:)
    call unit_check_start('filewrite',msg='')
-   !!call unit_check('filewrite', 0 == 0, 'checking',100)
+   data=[ character(len=80) :: &
+   &'This is the text to write  ', &
+   &'into the file. It will be  ', &
+   &'trimmed on the right side. ', &
+   &'                           ', &
+   &'     That is all Folks!    ']
+   ierr=filewrite('_scratch.txt',data)
+   ! allocate character array and copy file into it
+   call gulp('_scratch.txt',data2)
+   if(.not.allocated(data2))then
+      call unit_check_bad('filewrite','failed to load file','_scratch.txt') 
+   else
+      call unit_check('filewrite', all(data==data2) , 'check read back file written')
+   endif
+   ierr=filedelete('_scratch.txt')
    call unit_check_done('filewrite',msg='')
 end subroutine test_filewrite
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -321,4 +336,31 @@ end subroutine test_get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end subroutine test_suite_M_io
+end program runtest
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!function read_line(line,lun,ios) result(ier)
+!character(len=:),allocatable,intent(out) :: line
+!integer,intent(in),optional              :: lun
+!integer,optional                         :: ios
+!integer                                  :: ier
+!DESCRIPTION
+!  The input file must have a PAD attribute of YES for the function to work
+!  properly, which is typically true but can be set on an open file.
+!  •  Append lines that end in a backslash with next line
+!  •  Expand tabs
+!  •  Replace unprintable characters with spaces
+!  •  Remove trailing carriage return characters and white space
+!character (len =: ), allocatable :: line
+!integer                          :: stat
+!integer                          :: icount=0
+!         open(unit=stdin,pad='yes')
+!         INFINITE: do while (read_line(line,ios=stat) == 0)
+!            icount=icount
+!            write (*, '(*(g0))') icount,' [',line,']'
+!         enddo INFINITE
+!         if ( .not.is_iostat_end(stat) ) then
+!            write (stderr, '(*(g0))') &
+!            & 'error: line ',icount,'==>',trim (line)
+!         endif

@@ -1914,7 +1914,7 @@ end function fileclose
 !!   FILENAME   file to create or write. If the name ends
 !!              in ">" the default for STATUS changes to
 !!              "REPLACE". If it ends ">>" STATUS changes to
-!!              "UNKNOWN" and the default POSTION changes to "APPEND".
+!!              "UNKNOWN" and the default POSITION changes to "APPEND".
 !!   DATA       CHARACTER array to write to file
 !!   STATUS     STATUS to use on OPEN(7f). Defaults to "NEW"
 !!              allowed values are  NEW|REPLACE|OLD|SCRATCH|UNKNOWN
@@ -2023,15 +2023,14 @@ end function filewrite
 !!
 !!    function filedelete(lun) result(ios)
 !!
-!!     integer,intent(in)    :: lun
+!!     integer,intent(in)          :: lun
 !!       or
-!!     character(len=*),intent(in)    :: filename
-!!     integer               :: ios
+!!     character(len=*),intent(in) :: filename
+!!     integer                     :: ios
 !!
 !!##DESCRIPTION
 !!   A convenience command for deleting an OPEN(3f) file that leaves an
-!!   error message in the current journal file if active or a file by
-!!   filename.
+!!   error message in the current journal file if active
 !!##OPTION
 !!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
@@ -2964,7 +2963,7 @@ end function rd_integer
 !!      program demo_getname
 !!      use M_io, only : getname
 !!      implicit none
-!!         write(*,*)'Running ',getname()
+!!         write(*,'(*(a))')'Running ',getname()
 !!      end program demo_getname
 !!
 !!##AUTHOR
