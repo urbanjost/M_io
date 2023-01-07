@@ -12,8 +12,6 @@ integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 public uniq
 public print_inquire
 public notopen
-public slurp
-public gulp,swallow,fileread
 public number_of_lines
 public get_next_char
 public dirname
@@ -21,8 +19,10 @@ public basename
 public splitpath
 public joinpath
 public fileopen
-public fileclose
+public filebyte, slurp
+public fileread, gulp, swallow
 public filewrite
+public fileclose
 public filedelete
 public get_tmp
 public read_line
@@ -86,6 +86,9 @@ end interface
 
 interface gulp
    module procedure fileread
+end interface
+interface slurp
+   module procedure filebyte
 end interface
 !-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
@@ -893,7 +896,7 @@ class(*),intent(in)                      :: FILENAME   ! file to read
 character(len=:),allocatable,intent(out) :: pageout(:) ! page to hold file in memory
 character(len=1),allocatable             :: text(:)    ! array to hold file in memory
 
-   call slurp(FILENAME,text) ! allocate character array and copy file into it
+   call filebyte(FILENAME,text) ! allocate character array and copy file into it
 
    if(.not.allocated(text))then
       select type(FILENAME)
@@ -964,11 +967,11 @@ end subroutine fileread
 !===================================================================================================================================
 !>
 !!##NAME
-!!    SLURP(3f) - [M_io:READ] read a file into a character array
+!!    filebyte(3f) - [M_io:READ] read a file into a character array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine slurp(filename,text,length.lines)
+!!   subroutine filebyte(filename,text,length.lines)
 !!
 !!    character(len=*),intent(in) :: filename
 !!     or
@@ -1008,8 +1011,8 @@ end subroutine fileread
 !!
 !!    Sample program, which  creates test input file "inputfile":
 !!
-!!     program demo_slurp
-!!     use M_io, only      : slurp
+!!     program demo_filebyte
+!!     use M_io, only      : filebyte
 !!     implicit none
 !!     character(len=1),allocatable :: text(:) ! array to hold file in memory
 !!     character(len=*),parameter :: FILENAME='inputfile' ! file to read
@@ -1021,7 +1024,7 @@ end subroutine fileread
 !!     write(10,'(a)') 'elif elpmas a si sihT'
 !!     close(unit=10)
 !!
-!!     call slurp(FILENAME,text) ! allocate character array and copy file into it
+!!     call filebyte(FILENAME,text) ! allocate character array and copy file into it
 !!
 !!     if(.not.allocated(text))then
 !!        write(*,*)'*rever* failed to load file '//FILENAME
@@ -1031,7 +1034,7 @@ end subroutine fileread
 !!        deallocate(text)  ! release memory
 !!     endif
 !!
-!!     end program demo_slurp
+!!     end program demo_filebyte
 !!
 !!    Expected output:
 !!
@@ -1042,10 +1045,10 @@ end subroutine fileread
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine slurp(filename,text,length,lines)
+subroutine filebyte(filename,text,length,lines)
 implicit none
 
-! ident_6="@(#) M_io slurp(3f) allocate text array and read file filename into it"
+! ident_6="@(#) M_io filebyte(3f) allocate text array and read file filename into it"
 
 class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
@@ -1076,7 +1079,7 @@ character(len=4096) :: local_filename
    if(ios == 0)then  ! if file was successfully opened
       inquire(unit=igetunit, size=nchars)
       if(nchars <= 0)then
-         call stderr_local( '*slurp* empty file '//trim(local_filename) )
+         call stderr_local( '*filebyte* empty file '//trim(local_filename) )
          return
       endif
       ! read file into text array
@@ -1084,10 +1087,10 @@ character(len=4096) :: local_filename
       allocate ( text(nchars) )           ! make enough storage to hold file
       read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array
       if(ios /= 0)then
-         call stderr_local( '*slurp* bad read of '//trim(local_filename)//':'//trim(message) )
+         call stderr_local( '*filebyte* bad read of '//trim(local_filename)//':'//trim(message) )
       endif
    else
-      call stderr_local('*slurp* '//message)
+      call stderr_local('*filebyte* '//message)
       allocate ( text(0) )           ! make enough storage to hold file
    endif
 
@@ -1120,7 +1123,7 @@ character(len=*) :: message
    write(stderr,'(a)')trim(message)    ! write message to standard error
 end subroutine stderr_local
 !-----------------------------------------------------------------------------------------------------------------------------------
-end subroutine slurp
+end subroutine filebyte
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3268,9 +3271,9 @@ end function get_env
 !!##SYNTAX
 !!    subroutine get_next_char(fd,c,ios)
 !!
-!!     integer,intent(in)          :: fd
-!!     character,intent(out)       :: c
-!!     integer,intent(out)         :: ios
+!!     integer,intent(in)    :: fd
+!!     character,intent(out) :: c
+!!     integer,intent(out)   :: ios
 !!
 !!
 !!##DESCRIPTION
@@ -3286,8 +3289,8 @@ end function get_env
 !!
 !!##OPTIONS
 !!    FD    A Fortran unit number of a file opened for stream access
-!!    C     the next returned character if IOS=0
-!!    IOS   the error status returned by the last read. It is zero (0) if
+!!    C     The next returned character if IOS=0
+!!    IOS   The error status returned by the last read. It is zero (0) if
 !!          no error occurred
 !!
 !!##EXAMPLE

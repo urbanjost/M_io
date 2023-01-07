@@ -2,6 +2,7 @@ function loadthem(){
 append("M_io.3m_io.html");
 append("basename.3m_io.html");
 append("dirname.3m_io.html");
+append("filebyte.3m_io.html");
 append("fileclose.3m_io.html");
 append("filedelete.3m_io.html");
 append("fileopen.3m_io.html");

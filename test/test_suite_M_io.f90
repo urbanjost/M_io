@@ -23,11 +23,11 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_getline()
    call test_read_line()
    call test_read_table()
-   call test_slurp()
+   call test_filebyte()
    call test_splitpath()
    call test_uniq()
    call test_notopen()
-   call test_gulp()
+   call test_fileread()
    call test_number_of_lines()
    call test_basename()
    call test_joinpath()
@@ -157,18 +157,56 @@ integer :: i, ierr
    call unit_check_done('read_table',msg='')
 end subroutine test_read_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_slurp()
+subroutine test_filebyte()
+character(len=1),allocatable :: data2(:)
+character(len=:),allocatable :: line
+integer :: ierr
+   call unit_check_start('fileread',msg='')
+   ierr=filewrite('_scratch.txt>',[ character(len=10) :: &
+   &'abcdefghij                 ', &
+   &'klmnop                     ', &
+   &'qrstuv                     ', &
+   &'wxyz                       ', &
+   &''])
 
-   call unit_check_start('slurp',msg='')
-   !!call unit_check('slurp', 0 == 0, 'checking',100)
-   call unit_check_done('slurp',msg='')
-end subroutine test_slurp
+   call unit_check_start('filebyte',msg='')
+   call filebyte('_scratch.txt',data2)
+   if(.not.allocated(data2))then
+      call unit_check_bad('filebyte','failed to load file','_scratch.txt')
+   else
+      line=repeat(' ',size(data2))
+      write(line,'(*(a))')pack(data2,index('abcdefghijklmnopqrstuvwxyz',data2).ne.0)
+      call unit_check('filebyte',line.eq.'abcdefghijklmnopqrstuvwxyz','find all the letters',line)
+   endif
+   ierr=filedelete('_scratch.txt')
+   call unit_check_done('filebyte',msg='')
+end subroutine test_filebyte
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-subroutine test_gulp()
-   call unit_check_start('gulp',msg='')
-   !!call unit_check('gulp', 0 == 0, 'checking',100)
-   call unit_check_done('gulp',msg='')
-end subroutine test_gulp
+subroutine test_fileread()
+character(len=:),allocatable :: data(:), data2(:)
+integer :: ierr
+   data=[ character(len=80) :: &
+   &'This is the text to write  ', &
+   &'into the file. It will be  ', &
+   &'trimmed on the right side. ', &
+   &'                           ', &
+   &'     That is all Folks!    ']
+   ierr=filewrite('_scratch.txt',data)
+   call fileread('_scratch.txt',data2)
+   if(.not.allocated(data2))then
+      call unit_check_bad('fileread','failed to load file','_scratch.txt')
+   else
+      call unit_check('fileread', all(data==data2) , 'check read back file written')
+      if(.not.all(data==data2))then
+         write(*,'(a)')'DATA:',size(data)
+         write(*,'(a)')data
+         write(*,'(a)')'DATA2:',size(data2)
+         write(*,'(a)')data2
+      endif
+   endif
+   ierr=filedelete('_scratch.txt')
+   call unit_check_done('fileread',msg='')
+end subroutine test_fileread
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_number_of_lines()
 integer,parameter  :: lun=10
@@ -238,9 +276,9 @@ character(len=:),allocatable :: data(:), data2(:)
    &'     That is all Folks!    ']
    ierr=filewrite('_scratch.txt',data)
    ! allocate character array and copy file into it
-   call gulp('_scratch.txt',data2)
+   call fileread('_scratch.txt',data2)
    if(.not.allocated(data2))then
-      call unit_check_bad('filewrite','failed to load file','_scratch.txt') 
+      call unit_check_bad('filewrite','failed to load file','_scratch.txt')
    else
       call unit_check('filewrite', all(data==data2) , 'check read back file written')
       if(.not.all(data==data2))then
