@@ -20,37 +20,36 @@ but note that it requires a POSIX system at the time of this writing, and
  in M_system(3f).
 
 ### FILE OPS
- + fileopen     - [] A simple open of a sequential file 
- + filewrite    - [WRITE] A simple write of a CHARACTER array to a file 
- + fileread     - [READ] read a file into a string array 
- + read_table   - [READ] read file containing a table of numeric values 
- + filebyte     - [READ] read a file into a character array 
- + fileclose    - [] A simple close of a sequential file 
- + filedelete   - [] A simple close of an open file with STATUS='DELETE' 
+ + **fileopen**     - A simple open of a sequential file 
+ + **filewrite**    - A simple write of a CHARACTER array to a file 
+ + **fileread**     - read a file into a string array 
+ + **read_table**   - read file containing a table of numeric values 
+ + **filebyte**     - read a file into a character array 
+ + **fileclose**    - A simple close of a sequential file 
+ + **filedelete**   - A simple close of an open file with STATUS='DELETE' 
 ### SEQUENTIAL READS
- + rd            - [READ] ask for string from standard input with user-definable prompt 
- + get_next_char - [READ] read from a file one character at a time 
- + getline       - [READ] read a line from specified LUN into allocatable string up to line length limit 
- + read_line     - [READ] read a line from specified LUN into allocatable string up to line length limit cleaning up input line 
+ + **rd**            - ask for string from standard input with user-definable prompt 
+ + **get_next_char** - read from a file one character at a time 
+ + **getline**       - read a line from specified LUN into allocatable string up to line length limit 
+ + **read_line**     - read a line from specified LUN into allocatable string up to line length limit cleaning up input line 
 ### MANIPULATE PATHNAMES
- + joinpath      - [PATHNAMES] join parts of a pathname together 
- + basename      - [PATHNAMES] return last component from filename 
- + splitpath     - [PATHNAMES] split a Unix pathname into components 
- + dirname       - [PATHNAMES] strip last component from filename 
+ + **joinpath**      - join parts of a pathname together 
+ + **basename**      - return last component from filename 
+ + **splitpath**     - split a Unix pathname into components 
+ + **dirname**       - strip last component from filename 
 ### FIND PATHNAMES
- + lookfor       - [SCANNAMES] look for a filename in a number of directories specified by an environment variable 
- + which         - [SCANNAMES] given a command name find the pathname by searching the directories in the environment variable $PATH 
- + getname       - [QUERY] get name of the current executable 
- + get_tmp       - [QUERY] Return the name of the scratch directory 
- + scratch       - [QUERY] Return the name of a scratch file 
- + uniq          - [QUERY] append a number to the end of filename to make a unique name if name exists 
+ + **lookfor**       - look for a filename in a number of directories specified by an environment variable 
+ + **which**         - given a command name find the pathname by searching the directories in the environment variable $PATH 
+ + **getname**       - get name of the current executable 
+ + **get_tmp**       - Return the name of the scratch directory 
+ + **scratch**       - Return the name of a scratch file 
+ + **uniq**          - append a number to the end of filename to make a unique name if name exists 
 ### OTHER
- + get_env          - [QUERY] a function returning the value of an environment variable 
- + print_inquire    - [QUERY] Do INQUIRE on file by name/number and print results 
- + notopen          - [QUERY] Find a FUN/LUN (Fortran-unit-number) that is not in use 
- + number_of_lines  - [QUERY] read an open sequential file to get number of lines 
- + separator        - [QUERY] try to determine pathname directory separator character 
-
+ + **get_env**          - a function returning the value of an environment variable 
+ + **print_inquire**    - Do INQUIRE on file by name/number and print results 
+ + **notopen**          - Find a FUN/LUN (Fortran-unit-number) that is not in use 
+ + **number_of_lines**  - read an open sequential file to get number of lines 
+ + **separator**        - try to determine pathname directory separator character 
 ---
 ![docs](docs/images/docs.gif)
 ---
