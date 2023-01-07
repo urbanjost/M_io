@@ -13,7 +13,7 @@ public uniq
 public print_inquire
 public notopen
 public slurp
-public gulp,swallow
+public gulp,swallow,fileread
 public number_of_lines
 public get_next_char
 public dirname
@@ -51,11 +51,6 @@ interface read_table
    module procedure read_table_r
    module procedure read_table_d
 end interface
-
-interface swallow
-   module procedure gulp
-end interface
-
 interface filedelete
    module procedure filedelete_filename
    module procedure filedelete_lun
@@ -83,6 +78,16 @@ end interface journal
 interface str
    module procedure msg_scalar, msg_one
 end interface str
+!-----------------------------------
+! old names
+interface swallow
+   module procedure fileread
+end interface
+
+interface gulp
+   module procedure fileread
+end interface
+!-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
 
 CONTAINS
@@ -111,8 +116,6 @@ CONTAINS
 !!    try again up to the value 9999999. By default an empty file is created
 !!    if an unused name is found.
 !!
-!!    o relatively non-generic;
-!!    o does not try to detect io errors
 !!
 !!##OPTIONS
 !!    name     base input name used to create output filename
@@ -120,8 +123,8 @@ CONTAINS
 !!    istart   number to start with as a suffix. Default is 1. Must be a
 !!             positive integer less than 9999999.
 !!    verbose  writes extra messages to stdout. Defaults to .false.
-!!    create   create file if new name is successfully found. Defaults
-!!             to .true. .
+!!    create   create file if a new unused name is successfully
+!!             found. Defaults to .true. .
 !!
 !!##RETURNS
 !!    uniq     A unique filename that is the same as the NAME input parameter
@@ -138,10 +141,10 @@ CONTAINS
 !!       character(len=4096) :: myname
 !!       integer             :: i
 !!          myname=uniq('does_not_exist')
+!!          write(*,*)'name stays the same   :',trim(myname)
 !!          open(unit=10,file='does_exist')
-!!          write(*,*)'name stays the same ',trim(myname)
 !!          myname=uniq('does_exist')
-!!          write(*,*)'name has suffix added ',trim(myname)
+!!          write(*,*)'name has suffix added :',trim(myname)
 !!          do i=1,10
 !!             myname=uniq('does_exist')
 !!             write(*,*) 'FILENAME:',trim(myname)
@@ -693,9 +696,9 @@ integer                      :: i
 doubleprecision,allocatable  :: dline(:)
    ierr=0
    ! allocate character array and copy file into it
-   call gulp(FILENAME,page)
+   call fileread(FILENAME,page)
    if(.not.allocated(page))then
-      write(*,*)'*demo_gulp* failed to load file '//FILENAME
+      write(*,*)'*demo_read_table* failed to load file '//FILENAME
       if(allocated(darray))deallocate(darray)
       allocate(darray(0,0))
       ierr=-1
@@ -797,11 +800,11 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    gulp(3f) - [M_io:READ] read a file into a character array line by line
+!!    fileread(3f) - [M_io:READ] read a file into a string array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine gulp(filename,pageout)
+!!   subroutine fileread(filename,pageout)
 !!
 !!    character(len=*),intent(in) :: filename
 !!      or
@@ -838,8 +841,8 @@ end subroutine read_table_r
 !!
 !!   Sample program
 !!
-!!    program demo_gulp
-!!    use M_io,      only : gulp
+!!    program demo_fileread
+!!    use M_io,      only : fileread
 !!    implicit none
 !!    character(len=4096)          :: FILENAME   ! file to read
 !!    character(len=:),allocatable :: pageout(:) ! array to hold file in memory
@@ -848,9 +851,9 @@ end subroutine read_table_r
 !!       ! get a filename
 !!       call get_command_argument(1, FILENAME)
 !!       ! allocate character array and copy file into it
-!!       call gulp(FILENAME,pageout)
+!!       call fileread(FILENAME,pageout)
 !!       if(.not.allocated(pageout))then
-!!          write(*,gen)'*demo_gulp* failed to load file',FILENAME
+!!          write(*,gen)'*demo_fileread* failed to load file',FILENAME
 !!       else
 !!          ! write file from last line to first line
 !!          longest=len(pageout)
@@ -862,7 +865,7 @@ end subroutine read_table_r
 !!          write(*,'(a)')repeat('%',longest+2)
 !!          deallocate(pageout)  ! release memory
 !!       endif
-!!    end program demo_gulp
+!!    end program demo_fileread
 !!
 !!   Given
 !!
@@ -884,7 +887,7 @@ end subroutine read_table_r
 !!    John S. Urban
 !!##LICENSE
 !!    Public Domain
-subroutine gulp(FILENAME,pageout)
+subroutine fileread(FILENAME,pageout)
 implicit none
 class(*),intent(in)                      :: FILENAME   ! file to read
 character(len=:),allocatable,intent(out) :: pageout(:) ! page to hold file in memory
@@ -894,8 +897,8 @@ character(len=1),allocatable             :: text(:)    ! array to hold file in m
 
    if(.not.allocated(text))then
       select type(FILENAME)
-       type is (character(len=*)); write(*,*)'*gulp* failed to load file '//FILENAME
-       type is (integer);          write(*,'(a,i0)')'*gulp* failed to load file unit ',FILENAME
+       type is (character(len=*)); write(*,*)'*fileread* failed to load file '//FILENAME
+       type is (integer);          write(*,'(a,i0)')'*fileread* failed to load file unit ',FILENAME
       end select
    else  ! convert array of characters to array of lines
       pageout=page(text)
@@ -917,43 +920,45 @@ integer                      :: linecount
 integer                      :: position
 integer                      :: sz
 !!character(len=1),parameter   :: nl=new_line('A')
-character(len=1),parameter   :: nl=char(10)
-   lines=0
-   linelength=0
-   length=0
+character(len=1),parameter   :: nl = char(10)
+character(len=1),parameter   :: cr = char(12)
+   lines = 0
+   linelength = 0
+   length = 0
    sz=size(array)
-   do i=1,sz
-      if(array(i) == nl)then
-         linelength=max(linelength,length)
-         lines=lines+1
-         length=0
+   do i = 1,sz
+      if( array(i) == nl )then
+         linelength = max(linelength,length)
+         lines = lines + 1
+         length = 0
       else
-         length=length+1
+         length = length + 1
       endif
    enddo
-   if(sz > 0)then
-      if(array(sz) /= nl)then
-         lines=lines+1
+   if( sz > 0 )then
+      if( array(sz) /= nl )then
+         lines = lines+1
       endif
    endif
 
    if(allocated(table))deallocate(table)
    allocate(character(len=linelength) :: table(lines))
-   table(:)=' '
+   table(:) = ' '
 
-   linecount=1
-   position=1
-   do i=1,sz
-      if(array(i) == nl)then
+   linecount = 1
+   position = 1
+   do i = 1,sz
+      if( array(i) == nl )then
          linecount=linecount+1
          position=1
-      elseif(linelength /= 0)then
-         table(linecount)(position:position)=array(i)
-         position=position+1
+      elseif( array(i) == cr )then
+      elseif( linelength /= 0 )then
+         table(linecount)(position:position) = array(i)
+         position = position+1
       endif
    enddo
 end function page
-end subroutine gulp
+end subroutine fileread
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -963,7 +968,7 @@ end subroutine gulp
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
-!!   subroutine slurp(filename,text)
+!!   subroutine slurp(filename,text,length.lines)
 !!
 !!    character(len=*),intent(in) :: filename
 !!     or
@@ -996,8 +1001,8 @@ end subroutine gulp
 !!                    & status='old',iostat=ios)
 !!
 !!       text       array of characters to hold file
-!!       length     length of longest line read(Optional).
-!!       lines      number of lines read(Optional).
+!!       length     returns length of longest line read(Optional).
+!!       lines      returns number of lines read(Optional).
 !!
 !!##EXAMPLES
 !!
@@ -1913,13 +1918,13 @@ end function fileclose
 !!##OPTION
 !!   FILENAME   file to create or write. If the name ends
 !!              in ">" the default for STATUS changes to
-!!              "REPLACE". If it ends ">>" STATUS changes to
+!!              "REPLACE". If it ends in ">>" STATUS changes to
 !!              "UNKNOWN" and the default POSITION changes to "APPEND".
 !!   DATA       CHARACTER array to write to file
-!!   STATUS     STATUS to use on OPEN(7f). Defaults to "NEW"
-!!              allowed values are  NEW|REPLACE|OLD|SCRATCH|UNKNOWN
-!!   POSITION   POSITION to use of OPEN(7f). Defaults to "REWIND".
-!!              allowed values are  ASIS|REWIND|APPEND
+!!   STATUS     STATUS to use on OPEN(7f). Defaults to "NEW".
+!!              Allowed values are  NEW|REPLACE|OLD|SCRATCH|UNKNOWN
+!!   POSITION   POSITION to use on OPEN(7f). Defaults to "REWIND".
+!!              Allowed values are  ASIS|REWIND|APPEND
 !!##RETURNS
 !!   IERR       status value. Zero indicates no error occurred
 !!##EXAMPLE
@@ -2098,10 +2103,10 @@ end function filedelete_filename
 !!     a1,a2  the first two pathname sections to join. Required
 !!     a3-a9  additional optional sections to join
 !!##RETURNS
-!!     pathname sections joined together with trailing spaces removed from the ends
-!!     of sections and a separator (as returned by separator(3f) placed between
-!!     them, and duplicate adjacent separators removed accept for one beginning the
-!!     joined pathname.
+!!     pathname sections joined together with trailing spaces removed from
+!!     the ends of sections and a separator (as returned by separator(3f)
+!!     ) placed between them, and duplicate adjacent separators removed
+!!     accept for one beginning the joined pathname.
 !!##EXAMPLE
 !!
 !!   Sample program
@@ -2109,8 +2114,15 @@ end function filedelete_filename
 !!      program demo_joinpath
 !!      use M_io, only : joinpath
 !!      implicit none
-!!         write(*,*)joinpath('/share/user','/man/','man3','joinpath.3m_io'//'.gz')
+!!         write(*,*)joinpath(&
+!!         &'/share/user','/man/','man3','joinpath.3m_io'//'.gz' &
+!!         &)
 !!      end program demo_joinpath
+!!
+!! Results:
+!!
+!!      >  /share/user/man/man3/joinpath.3m_io.gz
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -3111,7 +3123,7 @@ end function which
 !!
 !!##OPTIONS
 !!    BASENAME   the file to search for
-!!    ENV        environment variable name. Seperator between directory names is
+!!    ENV        environment variable name. Separator between directory names is
 !!               assumed to be a colon on ULS (Unix-Like Systems) and semi-colon on
 !!               MS-Windows machines.
 !!

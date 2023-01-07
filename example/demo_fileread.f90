@@ -1,5 +1,5 @@
-     program demo_gulp
-     use M_io,      only : gulp
+     program demo_fileread
+     use M_io,      only : fileread
      implicit none
      character(len=4096)          :: FILENAME   ! file to read
      character(len=:),allocatable :: pageout(:) ! array to hold file in memory
@@ -8,9 +8,9 @@
         ! get a filename
         call get_command_argument(1, FILENAME)
         ! allocate character array and copy file into it
-        call gulp(FILENAME,pageout)
+        call fileread(FILENAME,pageout)
         if(.not.allocated(pageout))then
-           write(*,gen)'*demo_gulp* failed to load file',FILENAME
+           write(*,gen)'*demo_fileread* failed to load file',FILENAME
         else
            ! write file from last line to first line
            longest=len(pageout)
@@ -22,4 +22,4 @@
            write(*,'(a)')repeat('%',longest+2)
            deallocate(pageout)  ! release memory
         endif
-     end program demo_gulp
+     end program demo_fileread

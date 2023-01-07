@@ -52,11 +52,11 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    </dd>
    <dt> SYNOPSIS </dt><dd>
       <pre>
-      use M_io, only : slurp, gulp, notopen, print_inquire, read_table
+      use M_io, only : slurp, notopen, print_inquire, read_table
       use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
       use M_io, only : separator, getname, which, lookfor
       use M_io, only : read_line, getline, rd, get_next_char
-      use M_io, only : fileopen, fileclose, filedelete, filewrite
+      use M_io, only : fileopen, fileclose, filedelete, filewrite, fileread
       use M_io, only : number_of_lines
       use M_io, only : get_env
       </pre>
@@ -72,7 +72,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
             <li><a href="rd.3m_io.html">              RD </a> - ask for string from standard input with user-definable prompt </li>
             <li><a href="read_table.3m_io.html">      READ_TABLE </a> - read a file into a numeric array </li>
             <li><a href="slurp.3m_io.html">           SLURP </a> - read a file into a single-character array </li>
-            <li><a href="gulp.3m_io.html">            GULP </a> - read a file into a character array of text lines</li>
+            <li><a href="fileread.3m_io.html">            FILEREAD </a> - read a file into a character array of text lines</li>
             <li><a href="number_of_lines.3m_io.html"> NUMBER_OF_LINES </a> - number of lines in open sequential file</li>
             <li><a href="get_next_char.3m_io.html">   GET_NEXT_CHAR </a> - read character byte by byte</li>
          </ul>
