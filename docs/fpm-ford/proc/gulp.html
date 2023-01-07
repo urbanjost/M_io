@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 5.3% of total for procedures.">63 statements</a>
+               title=" 5.2% of total for procedures.">63 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,8 +153,8 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">gulp</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">character</span><span class="w"> </span><span class="k">array</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>gulp(3f) - [M_io:READ] read a file into a character array line by line
+(LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -202,18 +202,19 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">FILENAME</span><span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">read</span><span class="w"></span>
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="p">:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">pageout</span><span class="p">(:)</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">hold</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
 <span class="n">integer</span><span class="w">                      </span><span class="p">::</span><span class="w"> </span><span class="n">longest</span><span class="p">,</span><span class="w"> </span><span class="n">lines</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">parameter</span><span class="w">   </span><span class="p">::</span><span class="w"> </span><span class="n">gen</span><span class="o">=</span><span class="s1">&#39;(*(g0,1x))&#39;</span><span class="w"></span>
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">get</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
 <span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">FILENAME</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">allocate</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
 <span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">gulp</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="o">.</span><span class="ow">not</span><span class="o">.</span><span class="n">allocated</span><span class="p">(</span><span class="n">pageout</span><span class="p">))</span><span class="n">then</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;*demo_gulp* failed to load file &#39;</span><span class="o">//</span><span class="n">FILENAME</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*demo_gulp* failed to load file&#39;</span><span class="p">,</span><span class="n">FILENAME</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span><span class="w"></span>
 <span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
 <span class="w">      </span><span class="n">longest</span><span class="o">=</span><span class="n">len</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">lines</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;number of lines is &#39;</span><span class="p">,</span><span class="n">lines</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;and length of lines is &#39;</span><span class="p">,</span><span class="n">longest</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;number of lines is&#39;</span><span class="p">,</span><span class="n">lines</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;and length of lines is&#39;</span><span class="p">,</span><span class="n">longest</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(&quot;%&quot;,a,&quot;%&quot;)&#39;</span><span class="p">)(</span><span class="n">trim</span><span class="p">(</span><span class="n">pageout</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
@@ -374,7 +375,7 @@ third line
 <span class="w">   </span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
 <span class="w">   </span><span class="n">sz</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="k">array</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">linelength</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">linelength</span><span class="p">,</span><span class="n">length</span><span class="p">)</span><span class="w"></span>
 <span class="w">         </span><span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
 <span class="w">         </span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
@@ -382,8 +383,8 @@ third line
 <span class="k">         </span><span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
 <span class="w">      </span><span class="k">endif</span>
 <span class="k">   enddo</span>
-<span class="k">   if</span><span class="p">(</span><span class="n">sz</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
-<span class="k">      if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">sz</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
+<span class="k">   if</span><span class="p">(</span><span class="n">sz</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">sz</span><span class="p">)</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">lines</span><span class="o">=</span><span class="n">lines</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
 <span class="w">      </span><span class="k">endif</span>
 <span class="k">   endif</span>
@@ -395,10 +396,10 @@ third line
 <span class="w">   </span><span class="n">linecount</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
 <span class="w">   </span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
 <span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">nl</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">linecount</span><span class="o">=</span><span class="n">linecount</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
 <span class="w">         </span><span class="n">position</span><span class="o">=</span><span class="mi">1</span><span class="w"></span>
-<span class="w">      </span><span class="n">elseif</span><span class="p">(</span><span class="n">linelength</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="n">elseif</span><span class="p">(</span><span class="n">linelength</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">table</span><span class="p">(</span><span class="n">linecount</span><span class="p">)(</span><span class="n">position</span><span class="p">:</span><span class="n">position</span><span class="p">)</span><span class="o">=</span><span class="k">array</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"></span>
 <span class="w">         </span><span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="o">+</span><span class="mi">1</span><span class="w"></span>
 <span class="w">      </span><span class="k">endif</span>
@@ -425,7 +426,7 @@ third line
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 6.7% of total for procedures.">80 statements</a>
+               title=" 6.6% of total for procedures.">80 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,9 +153,9 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="w">  </span><span class="n">uniq</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="n">append</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">end</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">filename</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">make</span><span class="w"></span>
-<span class="w">             </span><span class="n">a</span><span class="w"> </span><span class="k">unique</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="ow">exists</span><span class="w"></span>
-<span class="w">  </span><span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>  <span class="nv">uniq</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="o">-</span> [<span class="nv">M_io</span>:<span class="nv">QUERY</span>] <span class="nv">append</span> <span class="nv">a</span> <span class="nv">number</span> <span class="nv">to</span> <span class="nv">the</span> <span class="k">end</span> <span class="nv">of</span> <span class="nv">filename</span> <span class="nv">to</span> <span class="nv">make</span>
+             <span class="nv">a</span> <span class="nv">unique</span> <span class="nv">name</span> <span class="k">if</span> <span class="nv">name</span> <span class="nv">exists</span>
+  <span class="ss">(</span><span class="nv">LICENSE</span>:<span class="nv">PD</span><span class="ss">)</span>
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -388,7 +388,7 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="w">   </span><span class="n">uniq</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w">                                   </span><span class="c">! the input name will be returned if it passes all the tests</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">lastname</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="n">name</span><span class="p">)</span><span class="k">then</span><span class="w">                          </span><span class="c">! if a different input name than last time called reset icount</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">lastname</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="k">then</span><span class="w">                          </span><span class="c">! if a different input name than last time called reset icount</span>
 <span class="w">      </span><span class="n">lastname</span><span class="o">=</span><span class="n">name</span><span class="w">                                  </span><span class="c">! a new name to keep for subsequent calls</span>
 <span class="w">      </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">                                       </span><span class="c">! icount is used to make a suffix to add to make the file unique</span>
 <span class="w">   </span><span class="k">endif</span><span class="w"></span>
@@ -411,8 +411,8 @@
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
 <span class="w">   </span><span class="n">ilen</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w">                               </span><span class="c">! find last non-blank character in file name</span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ilen</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                                 </span><span class="c">! a blank input name so name will just be a suffix</span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">ilen</span><span class="p">:</span><span class="n">ilen</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="k">then</span><span class="w">                 </span><span class="c">! always append a number to a file ending in .</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ilen</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                                 </span><span class="c">! a blank input name so name will just be a suffix</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">ilen</span><span class="p">:</span><span class="n">ilen</span><span class="p">)</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="k">then</span><span class="w">                 </span><span class="c">! always append a number to a file ending in .</span>
 <span class="w">         </span><span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="n">name</span><span class="p">(:</span><span class="n">ilen</span><span class="p">),</span><span class="n">exist</span><span class="o">=</span><span class="n">around</span><span class="p">)</span><span class="w">      </span><span class="c">! check filename as-is</span>
 <span class="w">         </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">around</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! file name does not exist, can use it as-is</span>
 <span class="w">            </span><span class="n">uniq</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
@@ -430,13 +430,13 @@
 <span class="w">   </span><span class="k">allocate</span><span class="p">(</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ilen</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">uniq</span><span class="p">)</span><span class="w">            </span><span class="c">! make it useable with an internal WRITE(3f) with room for a numeric suffix</span>
 <span class="w">   </span><span class="n">uniq</span><span class="p">(:)</span><span class="o">=</span><span class="n">name</span><span class="w"></span>
 <span class="w">   </span><span class="n">INFINITE</span><span class="p">:</span><span class="w"> </span><span class="k">do</span><span class="w">                                       </span><span class="c">! top of loop trying for a unique name</span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">itimes</span><span class="p">.</span><span class="n">ge</span><span class="p">.</span><span class="mi">9999999</span><span class="p">)</span><span class="k">then</span><span class="w">                       </span><span class="c">! if too many tries to be reasonable give up</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">itimes</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">9999999</span><span class="p">)</span><span class="k">then</span><span class="w">                       </span><span class="c">! if too many tries to be reasonable give up</span>
 <span class="w">         </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;sc&#39;</span><span class="p">,</span><span class="s1">&#39;*uniq* unable to find a unique filename. Too many tries&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="w">         </span><span class="n">uniq</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="w"></span>
 <span class="w">         </span><span class="k">return</span>
 <span class="k">      endif</span>
-<span class="k">      if</span><span class="p">(</span><span class="n">icount</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">9999999</span><span class="p">)</span><span class="w"> </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">                  </span><span class="c">! reset ICOUNT when it hits arbitrary maximum value</span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">icount</span><span class="p">.</span><span class="n">le</span><span class="p">.</span><span class="mi">9999</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      if</span><span class="p">(</span><span class="n">icount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">9999999</span><span class="p">)</span><span class="w"> </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">                  </span><span class="c">! reset ICOUNT when it hits arbitrary maximum value</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">icount</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">9999</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         write</span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">ilen</span><span class="o">+</span><span class="mi">1</span><span class="p">:),</span><span class="s1">&#39;(i4.4)&#39;</span><span class="p">)</span><span class="n">icount</span><span class="w">          </span><span class="c">! create name by adding a numeric string to end</span>
 <span class="w">      </span><span class="k">else</span>
 <span class="k">         write</span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">ilen</span><span class="o">+</span><span class="mi">1</span><span class="p">:),</span><span class="s1">&#39;(i7.7)&#39;</span><span class="p">)</span><span class="n">icount</span><span class="w">          </span><span class="c">! create name by adding a numeric string to end</span>
@@ -478,7 +478,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

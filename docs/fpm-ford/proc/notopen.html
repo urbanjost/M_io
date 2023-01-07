@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 4.2% of total for procedures.">50 statements</a>
+               title=" 4.1% of total for procedures.">50 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,8 +153,8 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">notopen</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="n">Find</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">FUN</span><span class="o">/</span><span class="n">LUN</span><span class="w"> </span><span class="p">(</span><span class="k">Fortran</span><span class="o">-</span><span class="n">unit</span><span class="o">-</span><span class="n">number</span><span class="p">)</span><span class="w"> </span><span class="n">that</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="k">use</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>notopen(3f) - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not in use
+(LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -170,7 +170,7 @@
 <div class="codehilite"><pre><span></span><code><span class="n">A</span> <span class="n">free</span> <span class="n">FORTRAN</span> <span class="n">unit</span> <span class="n">number</span> <span class="n">is</span> <span class="n">needed</span> <span class="n">to</span> <span class="n">OPEN</span> <span class="n">a</span> <span class="n">file</span><span class="p">.</span> <span class="n">NOTOPEN</span><span class="p">()</span> <span class="n">returns</span>
 <span class="n">a</span> <span class="n">FORTRAN</span> <span class="n">unit</span> <span class="n">number</span> <span class="n">from</span> <span class="n">START</span> <span class="n">to</span> <span class="kr">END</span> <span class="n">not</span> <span class="n">currently</span> <span class="n">associated</span> <span class="n">with</span>
 <span class="n">an</span> <span class="n">I</span><span class="o">/</span><span class="n">O</span> <span class="n">unit</span><span class="p">.</span> <span class="n">START</span> <span class="n">and</span> <span class="kr">END</span> <span class="n">are</span> <span class="n">expected</span> <span class="n">to</span> <span class="n">be</span> <span class="n">positive</span> <span class="n">integers</span> <span class="n">where</span>
-<span class="kr">END</span> <span class="p">.</span><span class="n">ge</span><span class="p">.</span> <span class="n">START</span><span class="p">.</span>
+<span class="kr">END</span>  <span class="o">&gt;=</span>  <span class="n">START</span><span class="p">.</span>
 
 <span class="n">If</span> <span class="n">NOTOPEN</span><span class="p">()</span> <span class="n">returns</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">then</span> <span class="n">no</span> <span class="n">free</span> <span class="n">FORTRAN</span> <span class="n">unit</span> <span class="n">could</span> <span class="n">be</span> <span class="n">found</span> <span class="n">in</span>
 <span class="n">the</span> <span class="n">specified</span> <span class="n">range</span><span class="p">.</span>
@@ -223,7 +223,7 @@
 <span class="w"> </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;(5 and 6 always return -1)&#39;</span><span class="w"></span>
 
 <span class="w"> </span><span class="n">do</span><span class="w"> </span><span class="n">ii</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">notopen</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span><span class="w"> </span><span class="o">.</span><span class="n">ne</span><span class="o">.</span><span class="w"> </span><span class="n">ii</span><span class="p">)</span><span class="n">then</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">notopen</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span><span class="w">  </span><span class="o">/=</span><span class="w">  </span><span class="n">ii</span><span class="p">)</span><span class="n">then</span><span class="w"></span>
 <span class="w">       </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;INUSE:&#39;</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="w"> </span><span class="n">notopen</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span><span class="n">ii</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span><span class="w"></span>
 <span class="w">    </span><span class="n">endif</span><span class="w"></span>
 <span class="w"> </span><span class="n">enddo</span><span class="w"></span>
@@ -437,14 +437,14 @@
 <span class="w">      </span><span class="k">endif</span>
 <span class="k">   enddo</span><span class="w"></span>
 <span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
-<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">notopen</span><span class="w"> </span><span class="p">.</span><span class="n">lt</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="k">then</span><span class="w">                                       </span><span class="c">! no valid unit was found in given range</span>
+<span class="w">   </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">notopen</span><span class="w">  </span><span class="o">&lt;</span><span class="w">  </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="k">then</span><span class="w">                                       </span><span class="c">! no valid unit was found in given range</span>
 <span class="w">      </span><span class="n">ierr</span><span class="o">=-</span><span class="mi">1</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span><span class="w">                                                           </span><span class="c">! valid value being returned</span>
 <span class="w">      </span><span class="n">ierr</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span>
 <span class="k">   if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">err</span><span class="p">))</span><span class="k">then</span><span class="w">                                           </span><span class="c">! if error flag is present set it</span>
 <span class="w">      </span><span class="n">err</span><span class="o">=</span><span class="n">ierr</span><span class="w"></span>
-<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="n">ierr</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                                          </span><span class="c">! if error occurred and error flag not present stop program</span>
+<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="n">ierr</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                                          </span><span class="c">! if error occurred and error flag not present stop program</span>
 <span class="w">      </span><span class="k">stop </span><span class="mi">1</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span>
 <span class="k">end function </span><span class="n">notopen</span><span class="w"></span>
@@ -468,7 +468,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

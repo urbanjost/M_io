@@ -1,22 +1,19 @@
-program runtest
-use M_msg
-use M_verify
-use :: M_verify,   only : unit_check_stop
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
-   call test_suite_M_io()
-   call unit_check_stop()
-end program runtest
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
-subroutine test_suite_M_io()
-use M_io, only : dirname, get_tmp, notopen, print_inquire, rd, getline, read_line, read_table, slurp, splitpath, uniq
-use M_verify, only : unit_check_start,unit_check,unit_check_done,unit_check_good,unit_check_bad,unit_check_msg
-use M_verify, only : unit_check_level
+program runtest
+use M_msg
+use M_io
+use :: M_verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
+use :: M_verify, only : unit_check_stop
+use :: M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
+use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
+use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 
 !! setup
+   unit_check_command=''
+   unit_check_keep_going=.true.
    unit_check_level=0
 
    call test_dirname()
@@ -48,21 +45,22 @@ use M_verify, only : unit_check_level
    call test_getname()
    call test_lookfor()
 !! teardown
+   call unit_check_stop()
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dirname()
 
 call unit_check_start('dirname',msg='')
-call unit_check('dirname',  dirname('/usr/bin/') .eq. '/usr', '/usr/bin ==>',dirname('/usr/bin'))
-call unit_check('dirname',  dirname('dir1/str/') .eq. 'dir1', 'dir1/str ==>',dirname('dir1/str/'))
-call unit_check('dirname',  dirname('stdio.h')   .eq. '.',    '/stdio.h ==>',dirname('stdio.h'))
+call unit_check('dirname',  dirname('/usr/bin/')  ==  '/usr', '/usr/bin ==>',dirname('/usr/bin'))
+call unit_check('dirname',  dirname('dir1/str/')  ==  'dir1', 'dir1/str ==>',dirname('dir1/str/'))
+call unit_check('dirname',  dirname('stdio.h')    ==  '.',    '/stdio.h ==>',dirname('stdio.h'))
 call unit_check_done('dirname',msg='')
 end subroutine test_dirname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_tmp()
 
    call unit_check_start('get_tmp',msg='')
-   !!call unit_check('get_tmp', 0.eq.0, 'checking',100)
+   !!call unit_check('get_tmp', 0 == 0, 'checking',100)
    call unit_check_done('get_tmp',msg='')
 end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -75,11 +73,11 @@ integer :: i, ierr, ierr2
    call unit_check_msg('notopen','assume 5 and 6 always return -1')
 
    do i=0,1000
-      if(notopen(i,i,ierr) .ne. i)then
+      if(notopen(i,i,ierr)  /=  i)then
          call unit_check_msg('notopen','INUSE:',i,ierr, notopen(i,i,ierr2) )
       endif
    enddo
-   call unit_check('notopen', notopen(5,6,ierr)           .eq. -1 ,'preassigned')
+   call unit_check('notopen', notopen(5,6,ierr)            ==  -1 ,'preassigned')
 
    do i=10,30,1
      open(unit=i,status="scratch")
@@ -87,11 +85,11 @@ integer :: i, ierr, ierr2
 
    close(25)
    close(28)
-   call unit_check('notopen', notopen(10,30)           .eq. 25 )
-   call unit_check('notopen', notopen()                .eq. 25 )
-   call unit_check('notopen', notopen(start=12,end=30) .eq. 25 )
-   call unit_check('notopen', notopen(26)              .eq. 28 )
-   call unit_check('notopen', notopen(26,99)           .eq. 28 )
+   call unit_check('notopen', notopen(10,30)            ==  25 )
+   call unit_check('notopen', notopen()                 ==  25 )
+   call unit_check('notopen', notopen(start=12,end=30)  ==  25 )
+   call unit_check('notopen', notopen(26)               ==  28 )
+   call unit_check('notopen', notopen(26,99)            ==  28 )
 
    call unit_check_done('notopen',msg='')
 
@@ -100,120 +98,189 @@ end subroutine test_notopen
 subroutine test_print_inquire()
 
    call unit_check_start('print_inquire',msg='')
-   !!call unit_check('print_inquire', 0.eq.0, 'checking',100)
+   !!call unit_check('print_inquire', 0 == 0, 'checking',100)
    call unit_check_done('print_inquire',msg='')
 end subroutine test_print_inquire
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rd()
 
    call unit_check_start('rd',msg='')
-   !!call unit_check('rd_character', 0.eq.0, 'checking',100)
+   !!call unit_check('rd_character', 0 == 0, 'checking',100)
    call unit_check_done('rd',msg='')
 end subroutine test_rd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getline()
 
    call unit_check_start('getline',msg='')
-   !!call unit_check('getline', 0.eq.0, 'checking',100)
+   !!call unit_check('getline', 0 == 0, 'checking',100)
    call unit_check_done('getline',msg='')
 end subroutine test_getline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_line()
 
    call unit_check_start('read_line',msg='')
-   !!call unit_check('read_line', 0.eq.0, 'checking',100)
+   !!call unit_check('read_line', 0 == 0, 'checking',100)
    call unit_check_done('read_line',msg='')
 end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
+doubleprecision,allocatable :: array(:,:)
+integer :: i, ierr
 
    call unit_check_start('read_table',msg='')
-   !!call unit_check('read_table', 0.eq.0, 'checking',100)
+   ! create test file
+   open(file='inputfile',unit=10,action='write')
+   write(10,'(a)') [character(len=80):: &
+       '#2345678901234567890123456789012345678901234567890123456789012345678901234567890', &
+       '# a comment number 10   ', &
+       ' #test                  ', &
+       '  # table               ', &
+       '.-----.-----.-----.     ', &
+       '| 1   | -5  | 3e2 |     ', &
+       '.-----+-----+-----.     ', &
+       '| 4   | 2.0 | 6   |     ', &
+       '.-----.-----.-----.     ', &
+       '                        ', &
+       '# Original sample file: VEALYL_5mm_50um_pH2p50_12p5mM_NewFreezeT30.0384.DAT     ']
+   close(unit=10)
+   ! read file as a table
+   call read_table('inputfile',array,ierr,comment='#')
+      ! print values
+   call unit_check( 'read_table', size(array      )  ==  6,                 'checking size' )
+   call unit_check( 'read_table', size(array,dim=1)  ==  2,                 'checking rows' )
+   call unit_check( 'read_table', size(array,dim=2)  ==  3,                 'checking columns' )
+   call unit_check( 'read_table', sum(nint(array))   ==  308,               'sum' )
+   call unit_check( 'read_table', all([nint(array)]  ==  [1,4,-5,2,300,6]), 'values' )
+   ! remove sample file
+   open(file='inputfile',unit=10)
+   close(unit=10,status='delete')
    call unit_check_done('read_table',msg='')
 end subroutine test_read_table
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_slurp()
 
    call unit_check_start('slurp',msg='')
-   !!call unit_check('slurp', 0.eq.0, 'checking',100)
+   !!call unit_check('slurp', 0 == 0, 'checking',100)
    call unit_check_done('slurp',msg='')
 end subroutine test_slurp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_gulp()
    call unit_check_start('gulp',msg='')
-   !!call unit_check('gulp', 0.eq.0, 'checking',100)
+   !!call unit_check('gulp', 0 == 0, 'checking',100)
    call unit_check_done('gulp',msg='')
 end subroutine test_gulp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_number_of_lines()
+integer,parameter  :: lun=10
+character(len=256) :: iomsg
+integer            :: iostat
    call unit_check_start('number_of_lines',msg='')
-   !!call unit_check('number_of_lines', 0.eq.0, 'checking',100)
+   ! create test file
+   open(file='inputfile',unit=LUN,action='write')
+   write(LUN,'(a)') [character(len=80):: &
+       '1                       ', &
+       '2                       ', &
+       '3                       ', &
+       '4                       ', &
+       '5                       ']
+   call unit_check('number_of_lines', number_of_lines(LUN) == -1, 'expected -1 lines, got', number_of_lines(LUN))
+   close(unit=LUN,iostat=iostat)
+   open(file='inputfile',unit=LUN,action='read')
+   if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 1:',trim(iomsg)
+   call unit_check('number_of_lines', number_of_lines(LUN) == 5, 'expected 5 lines, got', number_of_lines(LUN))
+   close(unit=LUN,iostat=iostat,iomsg=iomsg)
+   if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 2:',trim(iomsg)
+   ! read file as a table
+   open(file='inputfile',unit=LUN)
+   close(unit=LUN,status='delete',iostat=iostat)
+   if(iostat /= 0)write(*,*)'<ERROR>*test_number_of_lines* 3:',trim(iomsg)
    call unit_check_done('number_of_lines',msg='')
 end subroutine test_number_of_lines
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_basename()
+character(len=:),allocatable :: fn
    call unit_check_start('basename',msg='')
-   !!call unit_check('basename', 0.eq.0, 'checking',100)
+   fn='/home/user/src/code.f90'
+   call unit_check('basename', basename(fn) == 'code',            ' leaf with any suffix removed'    ,basename(fn) )
+   call unit_check('basename', basename(fn,'') == 'code.f90',     ' leaf with suffix retained'       ,basename(fn,'') )
+   call unit_check('basename', basename(fn,'.f90') == 'code',     ' with suffix unless it is ".f90"' ,basename(fn,'.f90') )
+   call unit_check('basename', basename(fn,'.F90') == 'code.f90', ' with suffix unless it is ".F90"' ,basename(fn,'.F90') )
    call unit_check_done('basename',msg='')
 end subroutine test_basename
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_joinpath()
    call unit_check_start('joinpath',msg='')
-   !!call unit_check('joinpath', 0.eq.0, 'checking',100)
+   !!call unit_check('joinpath', 0 == 0, 'checking',100)
    call unit_check_done('joinpath',msg='')
 end subroutine test_joinpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileopen()
    call unit_check_start('fileopen',msg='')
-   !!call unit_check('fileopen', 0.eq.0, 'checking',100)
+   !!call unit_check('fileopen', 0 == 0, 'checking',100)
    call unit_check_done('fileopen',msg='')
 end subroutine test_fileopen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileclose()
    call unit_check_start('fileclose',msg='')
-   !!call unit_check('fileclose', 0.eq.0, 'checking',100)
+   !!call unit_check('fileclose', 0 == 0, 'checking',100)
    call unit_check_done('fileclose',msg='')
 end subroutine test_fileclose
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filewrite()
+integer :: ierr
+character(len=:),allocatable :: data(:), data2(:)
    call unit_check_start('filewrite',msg='')
-   !!call unit_check('filewrite', 0.eq.0, 'checking',100)
+   data=[ character(len=80) :: &
+   &'This is the text to write  ', &
+   &'into the file. It will be  ', &
+   &'trimmed on the right side. ', &
+   &'                           ', &
+   &'     That is all Folks!    ']
+   ierr=filewrite('_scratch.txt',data)
+   ! allocate character array and copy file into it
+   call gulp('_scratch.txt',data2)
+   if(.not.allocated(data2))then
+      call unit_check_bad('filewrite','failed to load file','_scratch.txt') 
+   else
+      call unit_check('filewrite', all(data==data2) , 'check read back file written')
+   endif
+   ierr=filedelete('_scratch.txt')
    call unit_check_done('filewrite',msg='')
 end subroutine test_filewrite
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filedelete()
    call unit_check_start('filedelete',msg='')
-   !!call unit_check('filedelete', 0.eq.0, 'checking',100)
+   !!call unit_check('filedelete', 0 == 0, 'checking',100)
    call unit_check_done('filedelete',msg='')
 end subroutine test_filedelete
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_scratch
    call unit_check_start('scratch',msg='')
-   !!call unit_check('scratch', 0.eq.0, 'checking',100)
+   !!call unit_check('scratch', 0 == 0, 'checking',100)
    call unit_check_done('scratch',msg='')
 end subroutine test_scratch
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_separator()
    call unit_check_start('separator',msg='')
-   !!call unit_check('separator', 0.eq.0, 'checking',100)
+   !!call unit_check('separator', 0 == 0, 'checking',100)
    call unit_check_done('separator',msg='')
 end subroutine test_separator
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_which()
    call unit_check_start('which',msg='')
-   !!call unit_check('which', 0.eq.0, 'checking',100)
+   !!call unit_check('which', 0 == 0, 'checking',100)
    call unit_check_done('which',msg='')
 end subroutine test_which
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lookfor()
    call unit_check_start('lookfor',msg='')
-   !!call unit_check('lookfor', 0.eq.0, 'checking',100)
+   !!call unit_check('lookfor', 0 == 0, 'checking',100)
    call unit_check_done('lookfor',msg='')
 end subroutine test_lookfor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getname()
    call unit_check_start('getname',msg='')
-   !!call unit_check('getname', 0.eq.0, 'checking',100)
+   !!call unit_check('getname', 0 == 0, 'checking',100)
    call unit_check_done('getname',msg='')
 end subroutine test_getname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
@@ -249,24 +316,51 @@ end subroutine test_splitpath
 subroutine test_uniq()
 
    call unit_check_start('uniq',msg='')
-   !!call unit_check('uniq', 0.eq.0, 'checking',100)
+   !!call unit_check('uniq', 0 == 0, 'checking',100)
    call unit_check_done('uniq',msg='')
 end subroutine test_uniq
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_env()
 
    call unit_check_start('get_env',msg='')
-   !!call unit_check('get_env', 0.eq.0, 'checking',100)
+   !!call unit_check('get_env', 0 == 0, 'checking',100)
    call unit_check_done('get_env',msg='')
 end subroutine test_get_env
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_next_char()
 
    call unit_check_start('get_next_char',msg='')
-   !!call unit_check('get_next_char', 0.eq.0, 'checking',100)
+   !!call unit_check('get_next_char', 0 == 0, 'checking',100)
    call unit_check_done('get_next_char',msg='')
 end subroutine test_get_next_char
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
-end subroutine test_suite_M_io
+end program runtest
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!function read_line(line,lun,ios) result(ier)
+!character(len=:),allocatable,intent(out) :: line
+!integer,intent(in),optional              :: lun
+!integer,optional                         :: ios
+!integer                                  :: ier
+!DESCRIPTION
+!  The input file must have a PAD attribute of YES for the function to work
+!  properly, which is typically true but can be set on an open file.
+!  •  Append lines that end in a backslash with next line
+!  •  Expand tabs
+!  •  Replace unprintable characters with spaces
+!  •  Remove trailing carriage return characters and white space
+!character (len =: ), allocatable :: line
+!integer                          :: stat
+!integer                          :: icount=0
+!         open(unit=stdin,pad='yes')
+!         INFINITE: do while (read_line(line,ios=stat) == 0)
+!            icount=icount
+!            write (*, '(*(g0))') icount,' [',line,']'
+!         enddo INFINITE
+!         if ( .not.is_iostat_end(stat) ) then
+!            write (stderr, '(*(g0))') &
+!            & 'error: line ',icount,'==>',trim (line)
+!         endif

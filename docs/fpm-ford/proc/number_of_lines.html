@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 1.1% of total for procedures.">13 statements</a>
+               title=" 1.6% of total for procedures.">19 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,9 +153,9 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">number_of_lines</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="k">open</span><span class="w"> </span><span class="n">sequential</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="k">get</span><span class="w"></span>
-<span class="w">                      </span><span class="n">number</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">lines</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>number_of_lines(3f) - [M_io:QUERY] read an open sequential file to get
+                      number of lines
+(LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -166,15 +166,15 @@ integer                     :: nlines
 
 <h2 id="description">DESCRIPTION</h2>
 <div class="codehilite"><pre><span></span><code><span class="nv">Rewind</span> <span class="nv">an</span> <span class="nv">open</span> <span class="nv">sequential</span> <span class="nv">file</span> <span class="nv">and</span> <span class="nv">read</span> <span class="nv">through</span> <span class="nv">it</span> <span class="nv">to</span> <span class="nv">count</span> <span class="nv">the</span> <span class="nv">number</span>
-<span class="nv">of</span> <span class="nv">lines</span>. <span class="nv">The</span> <span class="nv">file</span> <span class="nv">is</span> <span class="nv">rewound</span> <span class="nv">on</span> <span class="k">exit</span>.
+<span class="nv">of</span> <span class="nv">lines</span>. <span class="nv">The</span> <span class="nv">file</span> <span class="nv">is</span> <span class="nv">rewound</span> <span class="nv">on</span> <span class="k">exit</span>. <span class="k">If</span> <span class="nv">it</span> <span class="nv">is</span> <span class="nv">not</span> <span class="nv">readable</span> <span class="o">-</span><span class="mi">1</span> <span class="nv">is</span> <span class="nv">returned</span>.
 </code></pre></div>
 
 <h2 id="options">OPTIONS</h2>
-<div class="codehilite"><pre><span></span><code>lun       logical unit number of open sequential file to count lines in
+<div class="codehilite"><pre><span></span><code>lun       logical unit number of open sequential file to count lines in.
 </code></pre></div>
 
 <h2 id="returns">RETURNS</h2>
-<div class="codehilite"><pre><span></span><code>nlines    number of lines read
+<div class="codehilite"><pre><span></span><code><span class="nv">nlines</span>    <span class="nv">number</span> <span class="nv">of</span> <span class="nv">lines</span> <span class="nv">read</span>. <span class="k">If</span> <span class="nv">it</span> <span class="nv">is</span> <span class="nv">not</span> <span class="nv">readable</span> <span class="o">-</span><span class="mi">1</span> <span class="nv">is</span> <span class="nv">returned</span>.
 </code></pre></div>
 
 <h2 id="examples">EXAMPLES</h2>
@@ -185,7 +185,7 @@ integer                     :: nlines
 <span class="nv">integer</span> :: <span class="nv">ios</span>
 <span class="nv">integer</span> :: <span class="nv">lun</span>
    <span class="nv">lun</span><span class="o">=</span><span class="k">fileopen</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">test.txt</span><span class="s1">&#39;</span>,<span class="s1">&#39;</span><span class="s">r</span><span class="s1">&#39;</span>,<span class="nv">ios</span><span class="ss">)</span>
-   <span class="k">if</span><span class="ss">(</span><span class="nv">ios</span>.<span class="nv">eq</span>.<span class="mi">0</span><span class="ss">)</span><span class="k">then</span>
+   <span class="k">if</span><span class="ss">(</span><span class="nv">ios</span> <span class="o">==</span> <span class="mi">0</span><span class="ss">)</span><span class="k">then</span>
       <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span> <span class="nv">number_of_lines</span><span class="ss">(</span><span class="nv">lun</span><span class="ss">)</span>
    <span class="k">else</span>
       <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">ERROR: IOS=</span><span class="s1">&#39;</span>,<span class="nv">ios</span>
@@ -285,16 +285,28 @@ integer                     :: nlines
     <div class="highlight"><pre><span></span><span class="k">function </span><span class="n">number_of_lines</span><span class="p">(</span><span class="n">lun</span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">nlines</span><span class="p">)</span><span class="w"></span>
 <span class="c">!@(#) determine number or lines in file given a LUN to the open file</span>
 <span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">lun</span><span class="w"></span>
+
 <span class="kt">integer</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">ios</span><span class="w"></span>
 <span class="kt">integer</span><span class="w">            </span><span class="kd">::</span><span class="w"> </span><span class="n">nlines</span><span class="w"></span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">lun</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="n">stdin</span><span class="p">)</span><span class="k">rewind</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iomsg</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">lun</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">stdin</span><span class="p">)</span><span class="k">rewind</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">iomsg</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="n">nlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
+
 <span class="w">   </span><span class="k">do</span>
-<span class="k">      read</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">exit</span>
+<span class="k">   read</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;(A)&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">end</span><span class="o">=</span><span class="mi">99</span><span class="p">,</span><span class="w"> </span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">iomsg</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*number_of_lines*:&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">iomsg</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">nlines</span><span class="o">=-</span><span class="mi">1</span><span class="w"></span>
+<span class="w">         </span><span class="k">exit</span>
+<span class="k">      endif</span>
 <span class="k">      </span><span class="n">nlines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">nlines</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"></span>
 <span class="w">   </span><span class="k">enddo</span>
-<span class="k">   if</span><span class="p">(</span><span class="n">lun</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="n">stdin</span><span class="p">)</span><span class="k">rewind</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"></span>
+
+<span class="mi">99</span><span class="w"> </span><span class="k">continue</span>
+
+<span class="k">   if</span><span class="p">(</span><span class="n">lun</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">stdin</span><span class="p">)</span><span class="k">rewind</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">iomsg</span><span class="p">)</span><span class="w"></span>
+
 <span class="k">end function </span><span class="n">number_of_lines</span><span class="w"></span>
 </pre></div>
 
@@ -316,7 +328,7 @@ integer                     :: nlines
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="100.0% of total for modules and submodules.">2388 statements</a>
+               title="100.0% of total for modules and submodules.">2398 statements</a>
           </li>
 
             <li id="source-file">
@@ -370,16 +370,15 @@
 <h2 id="synopsis">SYNOPSIS</h2>
 <div class="codehilite"><pre><span></span><code><span class="k">function</span><span class="w"> </span><span class="nf">filedelete(lun) result</span><span class="p">(</span>ios<span class="p">)</span><span class="w"></span>
 
-<span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="p">::</span><span class="w"> </span><span class="n">lun</span><span class="w"></span>
+<span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">lun</span><span class="w"></span>
 <span class="w">   </span><span class="n">or</span><span class="w"></span>
-<span class="w"> </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="p">::</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
-<span class="w"> </span><span class="n">integer</span><span class="w">               </span><span class="p">::</span><span class="w"> </span><span class="n">ios</span><span class="w"></span>
+<span class="w"> </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
+<span class="w"> </span><span class="n">integer</span><span class="w">                     </span><span class="p">::</span><span class="w"> </span><span class="n">ios</span><span class="w"></span>
 </code></pre></div>
 
 <h2 id="description">DESCRIPTION</h2>
 <p>A convenience command for deleting an OPEN(3f) file that leaves an
-   error message in the current journal file if active or a file by
-   filename.</p>
+   error message in the current journal file if active</p>
 <h2 id="option">OPTION</h2>
 <p>LUN  unit number of open file to delete or filename.</p>
 <h2 id="returns">RETURNS</h2>
@@ -733,7 +732,7 @@
 
     </h3>
   <h2 id="name">NAME</h2>
-<p>rd(3f) - [M_io] ask for string from standard input with user-definable prompt
+<p>rd(3f) - [M_io:READ] ask for string from standard input with user-definable prompt
  (LICENSE:PD)</p>
 <p>function rd(prompt,default) result(out)</p>
 <div class="codehilite"><pre><span></span><code>character(len=*),intent(in)              :: prompt
@@ -791,7 +790,7 @@ logical,intent(out)                      :: out
 
 <span class="nv">INFINITE</span>: <span class="k">do</span>
    <span class="nv">mystring</span><span class="o">=</span><span class="nv">rd</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Enter string or &quot;STOP&quot;:</span><span class="s1">&#39;</span>,<span class="nv">default</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">Today</span><span class="s1">&#39;</span><span class="ss">)</span>
-   <span class="k">if</span><span class="ss">(</span><span class="nv">mystring</span>.<span class="nv">eq</span>.<span class="s1">&#39;</span><span class="s">STOP</span><span class="s1">&#39;</span><span class="ss">)</span><span class="nv">stop</span>
+   <span class="k">if</span><span class="ss">(</span><span class="nv">mystring</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="s">STOP</span><span class="s1">&#39;</span><span class="ss">)</span><span class="nv">stop</span>
    <span class="nv">i</span><span class="o">=</span><span class="nv">rd</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Enter integer:</span><span class="s1">&#39;</span>,<span class="nv">default</span><span class="o">=</span><span class="nv">huge</span><span class="ss">(</span><span class="mi">0</span><span class="ss">))</span>
    <span class="nv">r</span><span class="o">=</span><span class="nv">rd</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Enter real:</span><span class="s1">&#39;</span>,<span class="nv">default</span><span class="o">=</span><span class="nv">huge</span><span class="ss">(</span><span class="mi">0</span>.<span class="mi">0</span><span class="ss">))</span>
    <span class="nv">d</span><span class="o">=</span><span class="nv">rd</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">Enter double:</span><span class="s1">&#39;</span>,<span class="nv">default</span><span class="o">=</span><span class="nv">huge</span><span class="ss">(</span><span class="mi">0</span>.<span class="mi">0</span><span class="nv">d0</span><span class="ss">))</span>
@@ -875,7 +874,7 @@ logical,intent(out)                      :: out
     <ul class="list-group">
           <li class="list-group-item">
                 <h3>
-    private  subroutine read_table_i(FILENAME, array, ierr)  
+    private  subroutine read_table_i(FILENAME, array, ierr, comment)  
 
     </h3>
   
@@ -936,6 +935,21 @@ logical,intent(out)                      :: out
                 
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=1),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>comment</strong></td>
+            <td>
+                
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -943,7 +957,7 @@ logical,intent(out)                      :: out
           </li>
           <li class="list-group-item">
                 <h3>
-    private  subroutine read_table_r(FILENAME, array, ierr)  
+    private  subroutine read_table_r(FILENAME, array, ierr, comment)  
 
     </h3>
   
@@ -1004,6 +1018,21 @@ logical,intent(out)                      :: out
                 
             </td>
         </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=1),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>comment</strong></td>
+            <td>
+                
+            </td>
+        </tr>
     </tbody>
   </table>
 
@@ -1015,16 +1044,16 @@ logical,intent(out)                      :: out
 
     </h3>
   <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">read_table</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="n">containing</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nc">table</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="nc">numeric</span><span class="w"> </span><span class="k">values</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>read_table(3f) - [M_io:READ] read file containing a table of numeric values
+(LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
-<p>subroutine read_table(filename,array,ierr)</p>
+<p>subroutine read_table(filename,array,ierr,comment)</p>
 <div class="codehilite"><pre><span></span><code>character(len=*),intent(in)          :: filename
 TYPE,allocatable,intent(out)         :: array(:,:)
-character(len=1,intent(in),optional  :: comment
 integer,intent(out)                  :: ierr
+character(len=1,intent(in),optional  :: comment
 </code></pre></div>
 
 <p>where TYPE may be REAL, INTEGER, or DOUBLEPRECISION</p>
@@ -1040,9 +1069,9 @@ be copied into memory.
 <h2 id="options">OPTIONS</h2>
 <div class="codehilite"><pre><span></span><code><span class="nv">filename</span>   <span class="nv">filename</span> <span class="nv">to</span> <span class="nv">read</span>
 <span class="nv">array</span>      <span class="nv">array</span> <span class="nv">to</span> <span class="nv">create</span>. <span class="nv">May</span> <span class="nv">be</span> <span class="nv">INTEGER</span>, <span class="nv">REAL</span>, <span class="nv">or</span> <span class="nv">DOUBLEPRECISION</span>
+<span class="nv">ierr</span>       <span class="nv">zero</span> <span class="k">if</span> <span class="nv">no</span> <span class="nv">error</span> <span class="nv">occurred</span>.
 <span class="nv">comment</span>    <span class="nv">ignore</span> <span class="nv">lines</span> <span class="nv">which</span> <span class="nv">contain</span> <span class="nv">this</span> <span class="nv">as</span> <span class="nv">the</span> <span class="nv">first</span> <span class="nv">non</span><span class="o">-</span><span class="nv">blank</span>
            <span class="nv">character</span>. <span class="nv">Ignore</span> <span class="nv">it</span> <span class="nv">and</span> <span class="nv">subsequent</span> <span class="nv">characters</span> <span class="nv">on</span> <span class="nv">any</span> <span class="nv">line</span>.
-<span class="nv">ierr</span>       <span class="nv">zero</span> <span class="k">if</span> <span class="nv">no</span> <span class="nv">error</span> <span class="nv">occurred</span>.
 </code></pre></div>
 
 <h2 id="examples">EXAMPLES</h2>
@@ -1057,7 +1086,18 @@ be copied into memory.
 <span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="nt">create</span><span class="w"> </span><span class="nt">test</span><span class="w"> </span><span class="nt">file</span><span class="w"></span>
 <span class="w"> </span><span class="nt">open</span><span class="o">(</span><span class="nt">file</span><span class="o">=</span><span class="s1">&#39;inputfile&#39;</span><span class="o">,</span><span class="nt">unit</span><span class="o">=</span><span class="nt">10</span><span class="o">,</span><span class="nt">action</span><span class="o">=</span><span class="s1">&#39;write&#39;</span><span class="o">)</span><span class="w"></span>
 <span class="w"> </span><span class="nt">write</span><span class="o">(</span><span class="nt">10</span><span class="o">,</span><span class="s1">&#39;(a)&#39;</span><span class="o">)</span><span class="w"> </span><span class="cp">[</span><span class="nx">character</span><span class="p">(</span><span class="nx">len</span><span class="o">=</span><span class="mi">80</span><span class="p">)::</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
-<span class="w">  </span><span class="s1">&#39;#---#---#---#                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39; ___.___.___                           &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;| 1 | 5 | 3 |                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;|---+---+---|                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;| 4 | 2 | 6 |                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39; -----------                           &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;    #-----#-----#------#               &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;|   | 1   | 3e2 | 4    |               &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;|   #-----#-----#------#               &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;|   | 2.0 | -5  | +2.2 |               &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;    #-----#-----#------#               &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;                                       &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
+<span class="w">  </span><span class="s1">&#39;#___#___#___#                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
 <span class="w">  </span><span class="s1">&#39;| 1 | 5 | 3 |                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
 <span class="w">  </span><span class="s1">&#39;#---#---#---#                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
 <span class="w">  </span><span class="s1">&#39;| 4 | 2 | 6 |                          &#39;</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="w"></span>
@@ -1095,20 +1135,24 @@ be copied into memory.
 </code></pre></div>
 
 <p>Results:</p>
-<div class="codehilite"><pre><span></span><code> size=                 33
- size(dim=1)=          11
+<div class="codehilite"><pre><span></span><code> size=                 45
+ size(dim=1)=          15
  size=(dim=2)           3
-   1.00000000000000        5.00000000000000        3.00000000000000
-   4.00000000000000        2.00000000000000        6.00000000000000
-   1.00000000000000        10.0000000000000        45.0000000000000
-   10.0000000000000        20.0000000000000        45.0000000000000
-   2.00000000000000        20.0000000000000        15.0000000000000
-   20.3450000000000        20.0000000000000        15.0000000000000
-   30.0000000000000        30000.0000000000       0.000000000000000E+000
-   4.00000000000000        30.0444000000000       -10.0000000000000
-   40.0000000000000        30.5555000000000       -10.0000000000000
-   4.00000000000000        30.0444000000000       -10.0000000000000
-   40.0000000000000        30.5555000000000       -10.0000000000000
+   1.000000000000000      5.000000000000000      3.000000000000000
+   4.000000000000000      2.000000000000000      6.000000000000000
+   1.000000000000000      300.0000000000000      4.000000000000000
+   2.000000000000000     -5.000000000000000      2.200000000000000
+   1.000000000000000      5.000000000000000      3.000000000000000
+   4.000000000000000      2.000000000000000      6.000000000000000
+   1.000000000000000      10.00000000000000      45.00000000000000
+   10.00000000000000      20.00000000000000      45.00000000000000
+   2.000000000000000      20.00000000000000      15.00000000000000
+   20.34499999999999      20.00000000000000      15.00000000000000
+   30.00000000000000      30000.00000000000      0.000000000000000
+   4.000000000000000      30.04440000000000     -10.00000000000000
+   40.00000000000000      30.55549999999999     -10.00000000000000
+   4.000000000000000      30.04440000000000     -10.00000000000000
+   40.00000000000000      30.55549999999999     -10.00000000000000
 </code></pre></div>
 
 <h2 id="author">AUTHOR</h2>
@@ -1212,8 +1256,8 @@ be copied into memory.
     </h3>
     
   <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">gulp</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="k">read</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">file</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">character</span><span class="w"> </span><span class="k">array</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code>gulp(3f) - [M_io:READ] read a file into a character array line by line
+(LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -1261,18 +1305,19 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">FILENAME</span><span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">read</span><span class="w"></span>
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="p">:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">pageout</span><span class="p">(:)</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">hold</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
 <span class="n">integer</span><span class="w">                      </span><span class="p">::</span><span class="w"> </span><span class="n">longest</span><span class="p">,</span><span class="w"> </span><span class="n">lines</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">parameter</span><span class="w">   </span><span class="p">::</span><span class="w"> </span><span class="n">gen</span><span class="o">=</span><span class="s1">&#39;(*(g0,1x))&#39;</span><span class="w"></span>
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">get</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
 <span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">FILENAME</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">allocate</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
 <span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">gulp</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="o">.</span><span class="ow">not</span><span class="o">.</span><span class="n">allocated</span><span class="p">(</span><span class="n">pageout</span><span class="p">))</span><span class="n">then</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;*demo_gulp* failed to load file &#39;</span><span class="o">//</span><span class="n">FILENAME</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*demo_gulp* failed to load file&#39;</span><span class="p">,</span><span class="n">FILENAME</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span><span class="w"></span>
 <span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
 <span class="w">      </span><span class="n">longest</span><span class="o">=</span><span class="n">len</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">lines</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;number of lines is &#39;</span><span class="p">,</span><span class="n">lines</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;and length of lines is &#39;</span><span class="p">,</span><span class="n">longest</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;number of lines is&#39;</span><span class="p">,</span><span class="n">lines</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;and length of lines is&#39;</span><span class="p">,</span><span class="n">longest</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(&quot;%&quot;,a,&quot;%&quot;)&#39;</span><span class="p">)(</span><span class="n">trim</span><span class="p">(</span><span class="n">pageout</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
@@ -2798,7 +2843,7 @@ third line
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

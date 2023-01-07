@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 7.5% of total for procedures.">89 statements</a>
+               title=" 7.4% of total for procedures.">89 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,8 +153,8 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">splitpath</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="n">split</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">Unix</span><span class="w"> </span><span class="n">pathname</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">components</span><span class="w"></span>
-<span class="w"> </span><span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code> splitpath(3f) - [M_io:PATHNAMES] split a Unix pathname into components
+ (LICENSE:PD)
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -449,13 +449,13 @@
 <span class="w">   </span><span class="n">iend</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">path_local</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="n">LOCAL</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="k">block</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! blank input path</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! blank input path</span>
 <span class="w">      </span><span class="n">dir_local</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="k">exit </span><span class="n">LOCAL</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="n">iend</span><span class="p">:</span><span class="n">iend</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span><span class="k">then</span><span class="w">      </span><span class="c">! assume entire name is a directory if it ends in a slash</span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span><span class="k">then</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="n">iend</span><span class="p">:</span><span class="n">iend</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">sep</span><span class="p">)</span><span class="k">then</span><span class="w">      </span><span class="c">! assume entire name is a directory if it ends in a slash</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">dir_local</span><span class="o">=</span><span class="n">path_local</span><span class="p">(:</span><span class="n">iend</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="k">else</span><span class="w">                                   </span><span class="c">! if just a slash it means root directory so leave it as slash</span>
 <span class="w">         </span><span class="n">dir_local</span><span class="o">=</span><span class="n">path_local</span><span class="w"></span>
@@ -464,7 +464,7 @@
 <span class="w">   </span><span class="k">endif</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
 <span class="w">   </span><span class="n">TRIMSLASHES</span><span class="p">:</span><span class="w"> </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="n">iend</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="w">               </span><span class="c">! trim off trailing slashes even if duplicates</span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">sep</span><span class="p">)</span><span class="k">then</span>
 <span class="k">         </span><span class="n">path_local</span><span class="p">(</span><span class="n">i</span><span class="p">:</span><span class="n">i</span><span class="p">)</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="w"></span>
 <span class="w">         </span><span class="n">iend</span><span class="o">=</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
 <span class="w">      </span><span class="k">else</span>
@@ -473,13 +473,13 @@
 <span class="w">      </span><span class="k">endif</span>
 <span class="k">   enddo </span><span class="n">TRIMSLASHES</span><span class="w"></span>
 
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! path composed entirely of slashes.</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">iend</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! path composed entirely of slashes.</span>
 <span class="w">      </span><span class="n">dir_local</span><span class="o">=</span><span class="n">sep</span><span class="w"></span>
 <span class="w">      </span><span class="k">exit </span><span class="n">LOCAL</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
 <span class="w">   </span><span class="k">where</span><span class="o">=</span><span class="nb">INDEX</span><span class="p">(</span><span class="n">path_local</span><span class="p">,</span><span class="n">sep</span><span class="p">,</span><span class="n">BACK</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="w">   </span><span class="c">! find any right-most slash in remaining non-null name_local after trimming trailing slashes</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">where</span><span class="p">.</span><span class="n">le</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                        </span><span class="c">! no slash in path so everything left is name_local</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">where</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                        </span><span class="c">! no slash in path so everything left is name_local</span>
 <span class="w">      </span><span class="n">name_local</span><span class="o">=</span><span class="n">path_local</span><span class="p">(:</span><span class="n">iend</span><span class="p">)</span><span class="w">                 </span><span class="c">! this is name_local unless &#39;.&#39; or &#39;..&#39;</span>
 <span class="w">   </span><span class="k">else</span><span class="w">                                      </span><span class="c">! last slash found</span>
 <span class="w">      </span><span class="n">dir_local</span><span class="o">=</span><span class="n">path_local</span><span class="p">(:</span><span class="k">where</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w">               </span><span class="c">! split into directory</span>
@@ -491,8 +491,8 @@
 <span class="w">      </span><span class="n">dir_local</span><span class="o">=</span><span class="n">path_local</span><span class="w"></span>
 <span class="w">      </span><span class="n">name_local</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="w"></span>
 <span class="w">   </span><span class="k">case</span><span class="p">(</span><span class="s1">&#39;.. &#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">dir_local</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="k">then</span>
-<span class="k">         if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="n">sep</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">dir_local</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         if</span><span class="p">(</span><span class="n">path_local</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">sep</span><span class="p">)</span><span class="k">then</span>
 <span class="k">            </span><span class="n">dir_local</span><span class="o">=</span><span class="n">sep</span><span class="w"></span>
 <span class="w">         </span><span class="k">endif</span>
 <span class="k">      else</span>
@@ -502,13 +502,13 @@
 <span class="w">   </span><span class="k">case </span><span class="n">default</span><span class="w"></span>
 <span class="w">   </span><span class="k">end select</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">name_local</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">name_local</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      </span><span class="n">name_local</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span><span class="w"></span>
 <span class="c">!===================================================================================================================================</span>
 <span class="w">   </span><span class="n">iend</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">name_local</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">where</span><span class="o">=</span><span class="nb">INDEX</span><span class="p">(</span><span class="n">name_local</span><span class="p">,</span><span class="s1">&#39;.&#39;</span><span class="p">,</span><span class="n">BACK</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.)</span><span class="w">         </span><span class="c">! find any extension</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">where</span><span class="p">.</span><span class="n">gt</span><span class="p">.</span><span class="mf">0.</span><span class="nb">and</span><span class="p">.</span><span class="k">where</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">1</span><span class="p">)</span><span class="k">then</span><span class="w">         </span><span class="c">! only consider a non-blank extension name_local</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">where</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.</span><span class="nb">and</span><span class="p">.</span><span class="k">where</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="k">then</span><span class="w">         </span><span class="c">! only consider a non-blank extension name_local</span>
 <span class="w">      </span><span class="n">ext_local</span><span class="o">=</span><span class="n">name_local</span><span class="p">(</span><span class="k">where</span><span class="p">:)</span><span class="w"></span>
 <span class="w">      </span><span class="n">basename_local</span><span class="o">=</span><span class="n">name_local</span><span class="p">(:</span><span class="k">where</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span>
@@ -541,7 +541,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

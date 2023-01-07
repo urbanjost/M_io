@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 5.5% of total for procedures.">65 statements</a>
+               title=" 5.4% of total for procedures.">65 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,8 +153,8 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code><span class="n">filewrite</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="o">[</span><span class="n">M_io</span><span class="o">]</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">simple</span><span class="w"> </span><span class="k">write</span><span class="w"> </span><span class="k">of</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">CHARACTER</span><span class="w"> </span><span class="k">array</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="k">file</span><span class="w"></span>
-<span class="p">(</span><span class="nl">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="k">filewrite</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="o">-</span> [<span class="nv">M_io</span>:<span class="nv">WRITE</span>] <span class="nv">A</span> <span class="nv">simple</span> <span class="nv">write</span> <span class="nv">of</span> <span class="nv">a</span> <span class="nv">CHARACTER</span> <span class="nv">array</span> <span class="nv">to</span> <span class="nv">a</span> <span class="nv">file</span>
+<span class="ss">(</span><span class="nv">LICENSE</span>:<span class="nv">PD</span><span class="ss">)</span>
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
@@ -174,7 +174,7 @@
 <p>FILENAME   file to create or write. If the name ends
               in &ldquo;&gt;&rdquo; the default for STATUS changes to
               &ldquo;REPLACE&rdquo;. If it ends &ldquo;&gt;&gt;&rdquo; STATUS changes to
-              &ldquo;UNKNOWN&rdquo; and the default POSTION changes to &ldquo;APPEND&rdquo;.
+              &ldquo;UNKNOWN&rdquo; and the default POSITION changes to &ldquo;APPEND&rdquo;.
    DATA       CHARACTER array to write to file
    STATUS     STATUS to use on OPEN(7f). Defaults to &ldquo;NEW&rdquo;
               allowed values are  NEW|REPLACE|OLD|SCRATCH|UNKNOWN
@@ -353,12 +353,12 @@
 <span class="w">   </span><span class="n">default_position</span><span class="o">=</span><span class="s1">&#39;REWIND&#39;</span><span class="w"></span>
 <span class="w">   </span><span class="k">file</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="nb">adjustl</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span><span class="o">//</span><span class="s1">&#39;  &#39;</span><span class="w"></span>
 <span class="w">   </span><span class="n">ilen</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="nb">len_trim</span><span class="p">(</span><span class="k">file</span><span class="p">),</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">file</span><span class="p">(</span><span class="n">ilen</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">ilen</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="k">file</span><span class="p">(</span><span class="n">ilen</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">ilen</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;&gt;&gt;&#39;</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      </span><span class="n">ilen</span><span class="o">=</span><span class="n">ilen</span><span class="o">-</span><span class="mi">2</span><span class="w"></span>
 <span class="w">      </span><span class="k">file</span><span class="o">=</span><span class="k">file</span><span class="p">(:</span><span class="n">ilen</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">default_status</span><span class="o">=</span><span class="s1">&#39;UNKNOWN&#39;</span><span class="w"></span>
 <span class="w">      </span><span class="n">default_position</span><span class="o">=</span><span class="s1">&#39;APPEND&#39;</span><span class="w"></span>
-<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="k">file</span><span class="p">(</span><span class="n">ilen</span><span class="p">:</span><span class="n">ilen</span><span class="p">).</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="w">   </span><span class="n">elseif</span><span class="p">(</span><span class="k">file</span><span class="p">(</span><span class="n">ilen</span><span class="p">:</span><span class="n">ilen</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">&#39;&gt;&#39;</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      </span><span class="n">ilen</span><span class="o">=</span><span class="n">ilen</span><span class="o">-</span><span class="mi">1</span><span class="w"></span>
 <span class="w">      </span><span class="k">file</span><span class="o">=</span><span class="k">file</span><span class="p">(:</span><span class="n">ilen</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">default_status</span><span class="o">=</span><span class="s1">&#39;REPLACE&#39;</span><span class="w"></span>
@@ -367,7 +367,7 @@
 <span class="w">   </span><span class="k">endif</span>
 <span class="k">   if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">position</span><span class="p">))</span><span class="k">then</span><span class="p">;</span><span class="w"> </span><span class="n">local_position</span><span class="o">=</span><span class="n">position</span><span class="p">;</span><span class="w"> </span><span class="k">else</span><span class="p">;</span><span class="w"> </span><span class="n">local_position</span><span class="o">=</span><span class="n">default_position</span><span class="p">;</span><span class="w"> </span><span class="k">endif</span>
 <span class="k">   if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">status</span><span class="p">))</span><span class="k">then</span><span class="p">;</span><span class="w">   </span><span class="n">local_status</span><span class="o">=</span><span class="n">status</span><span class="p">;</span><span class="w">     </span><span class="k">else</span><span class="p">;</span><span class="w"> </span><span class="n">local_status</span><span class="o">=</span><span class="n">default_status</span><span class="p">;</span><span class="w">     </span><span class="k">endif</span>
-<span class="k">   if</span><span class="p">(</span><span class="k">file</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="k">then</span>
+<span class="k">   if</span><span class="p">(</span><span class="k">file</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39; &#39;</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      open</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="k">file</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
 <span class="w">      </span><span class="p">&amp;</span><span class="w"> </span><span class="n">newunit</span><span class="o">=</span><span class="n">lun</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
 <span class="w">      </span><span class="p">&amp;</span><span class="w"> </span><span class="n">form</span><span class="o">=</span><span class="s1">&#39;formatted&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w">         </span><span class="c">!  FORM      =  FORMATTED   |  UNFORMATTED</span>
@@ -381,13 +381,13 @@
 <span class="k">      </span><span class="n">lun</span><span class="o">=</span><span class="n">stdout</span><span class="w"></span>
 <span class="w">      </span><span class="n">ios</span><span class="o">=</span><span class="mi">0</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span>
-<span class="k">   if</span><span class="p">(</span><span class="n">ios</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">   if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(*(a,1x))&#39;</span><span class="p">)</span><span class="s1">&#39;*filewrite* error:&#39;</span><span class="p">,</span><span class="k">file</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">ierr</span><span class="o">=</span><span class="n">ios</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span>
 <span class="k">      do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">filedata</span><span class="p">)</span><span class="w">                                                    </span><span class="c">! write file</span>
 <span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="n">lun</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">filedata</span><span class="p">(</span><span class="n">i</span><span class="p">))</span><span class="w"></span>
-<span class="w">         </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="w">         </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
 <span class="k">            write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(*(a,1x))&#39;</span><span class="p">)</span><span class="s1">&#39;*filewrite* error:&#39;</span><span class="p">,</span><span class="k">file</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"></span>
 <span class="w">            </span><span class="n">ierr</span><span class="o">=</span><span class="n">ios</span><span class="w"></span>
 <span class="w">            </span><span class="k">exit</span>
@@ -395,7 +395,7 @@
 <span class="k">      enddo</span>
 <span class="k">   endif</span>
 <span class="k">   close</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">lun</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span><span class="w">                                 </span><span class="c">! close file</span>
-<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
 <span class="k">      write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(*(a,1x))&#39;</span><span class="p">)</span><span class="s1">&#39;*filewrite* error:&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">ierr</span><span class="o">=</span><span class="n">ios</span><span class="w"></span>
 <span class="w">   </span><span class="k">endif</span>
@@ -420,7 +420,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>

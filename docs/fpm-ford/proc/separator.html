@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 2.9% of total for procedures.">34 statements</a>
+               title=" 2.8% of total for procedures.">34 statements</a>
           </li>
 
             <li id="source-file">
@@ -153,7 +153,7 @@
     
 
     <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code>separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory
+<div class="codehilite"><pre><span></span><code>separator(3f) - [M_io:QUERY] try to determine pathname directory
                 separator character
 (LICENSE:PD)
 </code></pre></div>
@@ -192,7 +192,7 @@
 </code></pre></div>
 
 <h2 id="name_1">NAME</h2>
-<div class="codehilite"><pre><span></span><code>separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory separator character
+<div class="codehilite"><pre><span></span><code>separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
 (LICENSE:PD)
 </code></pre></div>
 
@@ -279,7 +279,7 @@
     <div class="highlight"><pre><span></span><span class="k">function </span><span class="n">separator</span><span class="p">()</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span><span class="w"></span>
 <span class="c">!&gt;</span>
 <span class="c">!!##NAME</span>
-<span class="c">!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory separator character</span>
+<span class="c">!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character</span>
 <span class="c">!!    (LICENSE:PD)</span>
 <span class="c">!!</span>
 <span class="c">!!##SYNOPSIS</span>
@@ -320,11 +320,11 @@
 <span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">envnames</span><span class="p">(:)</span><span class="w"></span>
 
 <span class="w">    </span><span class="c">! NOTE:  A parallel code might theoretically use multiple OS</span>
-<span class="w">    </span><span class="c">!*!FORT BUG:if(sep_cache.ne.&#39; &#39;)then  ! use cached value.</span>
+<span class="w">    </span><span class="c">!*!FORT BUG:if(sep_cache /= &#39; &#39;)then  ! use cached value.</span>
 <span class="w">    </span><span class="c">!*!FORT BUG:    sep=sep_cache</span>
 <span class="w">    </span><span class="c">!*!FORT BUG:    return</span>
 <span class="w">    </span><span class="c">!*!FORT BUG:endif</span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">isep</span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="k">then</span><span class="w">  </span><span class="c">! use cached value.</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">isep</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="k">then</span><span class="w">  </span><span class="c">! use cached value.</span>
 <span class="w">        </span><span class="n">sep</span><span class="o">=</span><span class="nb">char</span><span class="p">(</span><span class="n">isep</span><span class="p">)</span><span class="w"></span>
 <span class="w">        </span><span class="k">return</span>
 <span class="k">    endif</span>
@@ -333,7 +333,7 @@
 <span class="w">    </span><span class="c">! most MSWindows environments see to work with backslash even when</span>
 <span class="w">    </span><span class="c">! using POSIX filenames to do not rely on &#39;\.&#39;.</span>
 <span class="w">    </span><span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;/.&#39;</span><span class="p">,</span><span class="n">exist</span><span class="o">=</span><span class="n">existing</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
-<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">existing</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">ios</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">existing</span><span class="p">.</span><span class="nb">and</span><span class="p">.</span><span class="n">ios</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
 <span class="k">        </span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="w"></span>
 <span class="w">        </span><span class="k">exit </span><span class="n">FOUND</span><span class="w"></span>
 <span class="w">    </span><span class="k">endif</span><span class="w"></span>
@@ -344,10 +344,10 @@
 <span class="w">    </span><span class="c">! POSIX filenames in the environment.</span>
 <span class="w">    </span><span class="n">envnames</span><span class="o">=</span><span class="p">[</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="s1">&#39;PATH&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;HOME&#39;</span><span class="p">]</span><span class="w"></span>
 <span class="w">    </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">envnames</span><span class="p">)</span><span class="w"></span>
-<span class="w">       </span><span class="k">if</span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="n">get_env</span><span class="p">(</span><span class="n">envnames</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="s1">&#39;\&#39;).ne.0)then</span>
+<span class="w">       </span><span class="k">if</span><span class="p">(</span><span class="nb">index</span><span class="p">(</span><span class="n">get_env</span><span class="p">(</span><span class="n">envnames</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="s1">&#39;\&#39;) /= 0)then</span>
 <span class="s1">          sep=&#39;</span><span class="err">\</span><span class="s1">&#39;</span>
 <span class="s1">          exit FOUND</span>
-<span class="s1">       elseif(index(get_env(envnames(i)),&#39;</span><span class="o">/</span><span class="s1">&#39;).ne.0)then</span>
+<span class="s1">       elseif(index(get_env(envnames(i)),&#39;</span><span class="o">/</span><span class="s1">&#39;) /= 0)then</span>
 <span class="s1">          sep=&#39;</span><span class="o">/</span><span class="s1">&#39;</span>
 <span class="s1">          exit FOUND</span>
 <span class="s1">       endif</span>
@@ -379,7 +379,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-06 11:55            </p>
+ on 2023-01-07 06:58            </p>
         </div>
       </div>
       <br>
