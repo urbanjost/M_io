@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 1.2% of total for procedures.">15 statements</a>
+               title=" 1.7% of total for procedures.">21 statements</a>
           </li>
 
             <li id="source-file">
@@ -125,9 +125,9 @@
       </div>
       <div id="vars-0" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data">data</a>
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data2">data2</a>
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-ierr~5">ierr</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data~2">data</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data2~3">data2</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-ierr~7">ierr</a>
         </div>
       </div>
     </div>
@@ -183,9 +183,9 @@
       </div>
       <div id="vars-1" class="panel-collapse collapse">
         <div class="list-group">
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data">data</a>
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data2">data2</a>
-            <a class="list-group-item" href="../proc/test_filewrite.html#variable-ierr~5">ierr</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data~2">data</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-data2~3">data2</a>
+            <a class="list-group-item" href="../proc/test_filewrite.html#variable-ierr~7">ierr</a>
         </div>
       </div>
     </div>
@@ -233,7 +233,7 @@
     <tbody>
         <tr>
             <td>
-              <span class="anchor" id="variable-data"></span>
+              <span class="anchor" id="variable-data~2"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -250,7 +250,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-data2"></span>
+              <span class="anchor" id="variable-data2~3"></span>
               character(len=:),
             </td>
               <td>public,</td>
@@ -267,7 +267,7 @@
         </tr>
         <tr>
             <td>
-              <span class="anchor" id="variable-ierr~5"></span>
+              <span class="anchor" id="variable-ierr~7"></span>
               integer,
             </td>
               <td>public</td>
@@ -309,12 +309,18 @@
 <span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;     That is all Folks!    &#39;</span><span class="p">]</span><span class="w"></span>
 <span class="w">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filewrite</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="c">! allocate character array and copy file into it</span>
-<span class="w">   </span><span class="k">call </span><span class="n">gulp</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">fileread</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">data2</span><span class="p">))</span><span class="k">then</span>
-<span class="k">      call </span><span class="n">unit_check_bad</span><span class="p">(</span><span class="s1">&#39;filewrite&#39;</span><span class="p">,</span><span class="s1">&#39;failed to load file&#39;</span><span class="p">,</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">)</span><span class="w"> </span>
+<span class="k">      call </span><span class="n">unit_check_bad</span><span class="p">(</span><span class="s1">&#39;filewrite&#39;</span><span class="p">,</span><span class="s1">&#39;failed to load file&#39;</span><span class="p">,</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span>
 <span class="k">      call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;filewrite&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">all</span><span class="p">(</span><span class="k">data</span><span class="o">==</span><span class="n">data2</span><span class="p">)</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;check read back file written&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">endif</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="k">all</span><span class="p">(</span><span class="k">data</span><span class="o">==</span><span class="n">data2</span><span class="p">))</span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="s1">&#39;DATA:&#39;</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="k">data</span>
+<span class="k">         write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="s1">&#39;DATA2:&#39;</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">data2</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">data2</span><span class="w"></span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">   endif</span>
 <span class="k">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filedelete</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;filewrite&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="k">end subroutine </span><span class="n">test_filewrite</span><span class="w"></span>
@@ -338,7 +344,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-07 06:58            </p>
+ on 2023-01-07 18:45            </p>
         </div>
       </div>
       <br>

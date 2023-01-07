@@ -22,7 +22,6 @@ append("rd.3m_io.html");
 append("read_line.3m_io.html");
 append("read_table.3m_io.html");
 append("separator.3m_io.html");
-append("slurp.3m_io.html");
 append("splitpath.3m_io.html");
 append("uniq.3m_io.html");
 append("which.3m_io.html");

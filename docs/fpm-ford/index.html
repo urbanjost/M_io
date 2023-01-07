@@ -102,6 +102,47 @@ but note that it requires a POSIX system at the time of this writing, and
  of functions for pure string manipulation.
  The procedures collected into M_io are hopefully very portable, unlike
  in M_system(3f).</p>
+<h3 id="file-ops">FILE OPS</h3>
+<ul>
+<li><strong>fileopen</strong>     - A simple open of a sequential file </li>
+<li><strong>filewrite</strong>    - A simple write of a CHARACTER array to a file </li>
+<li><strong>fileread</strong>     - read a file into a string array </li>
+<li><strong>read_table</strong>   - read file containing a table of numeric values </li>
+<li><strong>filebyte</strong>     - read a file into a character array </li>
+<li><strong>fileclose</strong>    - A simple close of a sequential file </li>
+<li><strong>filedelete</strong>   - A simple close of an open file with STATUS=&rsquo;DELETE&rsquo; </li>
+</ul>
+<h3 id="sequential-reads">SEQUENTIAL READS</h3>
+<ul>
+<li><strong>rd</strong>            - ask for string from standard input with user-definable prompt </li>
+<li><strong>get_next_char</strong> - read from a file one character at a time </li>
+<li><strong>getline</strong>       - read a line from specified LUN into allocatable string up to line length limit </li>
+<li><strong>read_line</strong>     - read a line from specified LUN into allocatable string up to line length limit cleaning up input line </li>
+</ul>
+<h3 id="manipulate-pathnames">MANIPULATE PATHNAMES</h3>
+<ul>
+<li><strong>joinpath</strong>      - join parts of a pathname together </li>
+<li><strong>basename</strong>      - return last component from filename </li>
+<li><strong>splitpath</strong>     - split a Unix pathname into components </li>
+<li><strong>dirname</strong>       - strip last component from filename </li>
+</ul>
+<h3 id="find-pathnames">FIND PATHNAMES</h3>
+<ul>
+<li><strong>lookfor</strong>       - look for a filename in a number of directories specified by an environment variable </li>
+<li><strong>which</strong>         - given a command name find the pathname by searching the directories in the environment variable $PATH </li>
+<li><strong>getname</strong>       - get name of the current executable </li>
+<li><strong>get_tmp</strong>       - Return the name of the scratch directory </li>
+<li><strong>scratch</strong>       - Return the name of a scratch file </li>
+<li><strong>uniq</strong>          - append a number to the end of filename to make a unique name if name exists </li>
+</ul>
+<h3 id="other">OTHER</h3>
+<ul>
+<li><strong>get_env</strong>          - a function returning the value of an environment variable </li>
+<li><strong>print_inquire</strong>    - Do INQUIRE on file by name/number and print results </li>
+<li><strong>notopen</strong>          - Find a FUN/LUN (Fortran-unit-number) that is not in use </li>
+<li><strong>number_of_lines</strong>  - read an open sequential file to get number of lines </li>
+<li><strong>separator</strong>        - try to determine pathname directory separator character </li>
+</ul>
 <hr>
 <h2 id="_1"><img alt="docs" src="docs/images/docs.gif"></h2>
 <h2 id="documentation">DOCUMENTATION</h2>
@@ -199,14 +240,14 @@ fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Pack
               <h3>Source Files</h3>
               <ul>                    <li><a href='./sourcefile/demo_basename.f90.html'>demo_basename.f90</a></li>
                     <li><a href='./sourcefile/demo_dirname.f90.html'>demo_dirname.f90</a></li>
+                    <li><a href='./sourcefile/demo_filebyte.f90.html'>demo_filebyte.f90</a></li>
                     <li><a href='./sourcefile/demo_fileclose.f90.html'>demo_fileclose.f90</a></li>
                     <li><a href='./sourcefile/demo_filedelete.f90.html'>demo_filedelete.f90</a></li>
                     <li><a href='./sourcefile/demo_fileopen.f90.html'>demo_fileopen.f90</a></li>
+                    <li><a href='./sourcefile/demo_fileread.f90.html'>demo_fileread.f90</a></li>
                     <li><a href='./sourcefile/demo_filewrite.f90.html'>demo_filewrite.f90</a></li>
                     <li><a href='./sourcefile/demo_get_env.f90.html'>demo_get_env.f90</a></li>
                     <li><a href='./sourcefile/demo_get_next_char.f90.html'>demo_get_next_char.f90</a></li>
-                    <li><a href='./sourcefile/demo_get_tmp.f90.html'>demo_get_tmp.f90</a></li>
-                    <li><a href='./sourcefile/demo_getline.f90.html'>demo_getline.f90</a></li>
 </ul>
           </div>
 		  <div class="col-xs-6 col-sm-4">
@@ -218,14 +259,14 @@ fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Pack
               <h3>Procedures</h3>
               <ul>                    <li><a href='./proc/basename.html'>basename</a></li>
                     <li><a href='./proc/dirname.html'>dirname</a></li>
+                    <li><a href='./proc/filebyte.html'>filebyte</a></li>
                     <li><a href='./proc/fileclose.html'>fileclose</a></li>
                     <li><a href='./interface/filedelete.html'>filedelete</a></li>
                     <li><a href='./proc/fileopen.html'>fileopen</a></li>
+                    <li><a href='./proc/fileread.html'>fileread</a></li>
                     <li><a href='./proc/filewrite.html'>filewrite</a></li>
                     <li><a href='./proc/get_env.html'>get_env</a></li>
                     <li><a href='./proc/get_next_char.html'>get_next_char</a></li>
-                    <li><a href='./proc/get_tmp.html'>get_tmp</a></li>
-                    <li><a href='./proc/getline.html'>getline</a></li>
 </ul>
           </div>
       </div>
@@ -241,7 +282,7 @@ fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Pack
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-07 06:58            </p>
+ on 2023-01-07 18:45            </p>
         </div>
       </div>
       <br>

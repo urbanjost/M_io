@@ -80,16 +80,9 @@ interface str
 end interface str
 !-----------------------------------
 ! old names
-interface swallow
-   module procedure fileread
-end interface
-
-interface gulp
-   module procedure fileread
-end interface
-interface slurp
-   module procedure filebyte
-end interface
+interface swallow;  module procedure fileread;  end interface
+interface gulp;     module procedure fileread;  end interface
+interface slurp;    module procedure filebyte;  end interface
 !-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
 

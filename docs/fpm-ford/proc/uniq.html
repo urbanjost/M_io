@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title=" 6.6% of total for procedures.">80 statements</a>
+               title=" 6.4% of total for procedures.">80 statements</a>
           </li>
 
             <li id="source-file">
@@ -174,9 +174,6 @@
 <span class="nv">test</span> <span class="k">if</span> <span class="nv">the</span> <span class="nv">new</span> <span class="nv">name</span> <span class="nv">exists</span>. <span class="k">If</span> <span class="nv">necessary</span>, <span class="nv">increment</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">and</span>
 <span class="nv">try</span> <span class="nv">again</span> <span class="nv">up</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">value</span> <span class="mi">9999999</span>. <span class="nv">By</span> <span class="nv">default</span> <span class="nv">an</span> <span class="nv">empty</span> <span class="nv">file</span> <span class="nv">is</span> <span class="nv">created</span>
 <span class="k">if</span> <span class="nv">an</span> <span class="nv">unused</span> <span class="nv">name</span> <span class="nv">is</span> <span class="nv">found</span>.
-
-<span class="nv">o</span> <span class="nv">relatively</span> <span class="nv">non</span><span class="o">-</span><span class="nv">generic</span><span class="c1">;</span>
-<span class="nv">o</span> <span class="nv">does</span> <span class="nv">not</span> <span class="nv">try</span> <span class="nv">to</span> <span class="nv">detect</span> <span class="nv">io</span> <span class="nv">errors</span>
 </code></pre></div>
 
 <h2 id="options">OPTIONS</h2>
@@ -185,8 +182,8 @@
 <span class="nv">istart</span>   <span class="nv">number</span> <span class="nv">to</span> <span class="nv">start</span> <span class="nv">with</span> <span class="nv">as</span> <span class="nv">a</span> <span class="nv">suffix</span>. <span class="nv">Default</span> <span class="nv">is</span> <span class="mi">1</span>. <span class="nv">Must</span> <span class="nv">be</span> <span class="nv">a</span>
          <span class="nv">positive</span> <span class="nv">integer</span> <span class="nv">less</span> <span class="nv">than</span> <span class="mi">9999999</span>.
 <span class="nv">verbose</span>  <span class="nv">writes</span> <span class="nv">extra</span> <span class="nv">messages</span> <span class="nv">to</span> <span class="nv">stdout</span>. <span class="nv">Defaults</span> <span class="nv">to</span> .<span class="nv">false</span>.
-<span class="nv">create</span>   <span class="nv">create</span> <span class="nv">file</span> <span class="k">if</span> <span class="nv">new</span> <span class="nv">name</span> <span class="nv">is</span> <span class="nv">successfully</span> <span class="nv">found</span>. <span class="nv">Defaults</span>
-         <span class="nv">to</span> .<span class="nv">true</span>. .
+<span class="nv">create</span>   <span class="nv">create</span> <span class="nv">file</span> <span class="k">if</span> <span class="nv">a</span> <span class="nv">new</span> <span class="nv">unused</span> <span class="nv">name</span> <span class="nv">is</span> <span class="nv">successfully</span>
+         <span class="nv">found</span>. <span class="nv">Defaults</span> <span class="nv">to</span> .<span class="nv">true</span>. .
 </code></pre></div>
 
 <h2 id="returns">RETURNS</h2>
@@ -204,10 +201,10 @@
    <span class="nv">character</span><span class="ss">(</span><span class="nv">len</span><span class="o">=</span><span class="mi">4096</span><span class="ss">)</span> :: <span class="nv">myname</span>
    <span class="nv">integer</span>             :: <span class="nv">i</span>
       <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_not_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name stays the same   :</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
       <span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="mi">10</span>,<span class="nv">file</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
-      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name stays the same </span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
       <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
-      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name has suffix added </span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name has suffix added :</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
       <span class="k">do</span> <span class="nv">i</span><span class="o">=</span><span class="mi">1</span>,<span class="mi">10</span>
          <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
          <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span> <span class="s1">&#39;</span><span class="s">FILENAME:</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
@@ -478,7 +475,7 @@
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-07 06:58            </p>
+ on 2023-01-07 18:45            </p>
         </div>
       </div>
       <br>

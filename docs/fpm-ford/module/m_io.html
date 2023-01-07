@@ -88,7 +88,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="100.0% of total for modules and submodules.">2398 statements</a>
+               title="100.0% of total for modules and submodules.">2406 statements</a>
           </li>
 
             <li id="source-file">
@@ -132,8 +132,10 @@
       <div id="inters-0" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../module/m_io.html#interface-filedelete">filedelete</a>
+            <a class="list-group-item" href="../module/m_io.html#interface-gulp">gulp</a>
             <a class="list-group-item" href="../module/m_io.html#interface-rd">rd</a>
             <a class="list-group-item" href="../module/m_io.html#interface-read_table">read_table</a>
+            <a class="list-group-item" href="../module/m_io.html#interface-slurp">slurp</a>
             <a class="list-group-item" href="../module/m_io.html#interface-swallow">swallow</a>
         </div>
       </div>
@@ -178,10 +180,10 @@
       </div>
       <div id="subs-0" class="panel-collapse collapse">
         <div class="list-group">
+            <a class="list-group-item" href="../module/m_io.html#proc-filebyte">filebyte</a>
+            <a class="list-group-item" href="../module/m_io.html#proc-fileread">fileread</a>
             <a class="list-group-item" href="../module/m_io.html#proc-get_next_char">get_next_char</a>
-            <a class="list-group-item" href="../module/m_io.html#proc-gulp">gulp</a>
             <a class="list-group-item" href="../module/m_io.html#proc-print_inquire">print_inquire</a>
-            <a class="list-group-item" href="../module/m_io.html#proc-slurp">slurp</a>
             <a class="list-group-item" href="../module/m_io.html#proc-splitpath">splitpath</a>
         </div>
       </div>
@@ -236,8 +238,10 @@
       <div id="inters-1" class="panel-collapse collapse">
         <div class="list-group">
             <a class="list-group-item" href="../module/m_io.html#interface-filedelete">filedelete</a>
+            <a class="list-group-item" href="../module/m_io.html#interface-gulp">gulp</a>
             <a class="list-group-item" href="../module/m_io.html#interface-rd">rd</a>
             <a class="list-group-item" href="../module/m_io.html#interface-read_table">read_table</a>
+            <a class="list-group-item" href="../module/m_io.html#interface-slurp">slurp</a>
             <a class="list-group-item" href="../module/m_io.html#interface-swallow">swallow</a>
         </div>
       </div>
@@ -282,10 +286,10 @@
       </div>
       <div id="subs-1" class="panel-collapse collapse">
         <div class="list-group">
+            <a class="list-group-item" href="../module/m_io.html#proc-filebyte">filebyte</a>
+            <a class="list-group-item" href="../module/m_io.html#proc-fileread">fileread</a>
             <a class="list-group-item" href="../module/m_io.html#proc-get_next_char">get_next_char</a>
-            <a class="list-group-item" href="../module/m_io.html#proc-gulp">gulp</a>
             <a class="list-group-item" href="../module/m_io.html#proc-print_inquire">print_inquire</a>
-            <a class="list-group-item" href="../module/m_io.html#proc-slurp">slurp</a>
             <a class="list-group-item" href="../module/m_io.html#proc-splitpath">splitpath</a>
         </div>
       </div>
@@ -437,6 +441,163 @@
     <small>integer</small>
     </h4>
     
+
+          </li>
+    </ul>
+  </div>
+
+       <div class="panel panel-default">
+    <div class="panel-heading codesum">
+      <span class="anchor" id="interface-gulp"></span>
+      <h3>public        interface <a href='../interface/gulp.html'>gulp</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    public  subroutine <a href='../proc/fileread.html'>fileread</a>(FILENAME, pageout)  
+
+    </h3>
+    
+  <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">fileread</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="o">-</span> [<span class="nv">M_io</span>:<span class="nv">READ</span>] <span class="nv">read</span> <span class="nv">a</span> <span class="nv">file</span> <span class="nv">into</span> <span class="nv">a</span> <span class="nv">string</span> <span class="nv">array</span>
+<span class="ss">(</span><span class="nv">LICENSE</span>:<span class="nv">PD</span><span class="ss">)</span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>subroutine fileread(filename,pageout)</p>
+<div class="codehilite"><pre><span></span><code>character(len=*),intent(in) :: filename
+  or
+integer,intent(in)          :: io
+
+character(len=:),allocatable,intent(out) :: pageout(:)
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">Read</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="n">one</span><span class="w"> </span><span class="n">character</span><span class="w"></span>
+<span class="n">variable</span><span class="w"> </span><span class="n">per</span><span class="w"> </span><span class="n">line</span><span class="o">.</span><span class="w"></span>
+
+<span class="n">NOTE</span><span class="p">:</span><span class="w"></span>
+
+<span class="n">Do</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">casually</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
+<span class="n">per</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">smaller</span><span class="w"> </span><span class="n">units</span><span class="p">;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">large</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">consume</span><span class="w"> </span><span class="n">unreasonable</span><span class="w"></span>
+<span class="n">amounts</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">memory</span><span class="o">.</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">filename</span>   <span class="nv">filename</span> <span class="nv">to</span> <span class="nv">read</span> <span class="nv">into</span> <span class="nv">memory</span>, <span class="nv">or</span> <span class="nv">LUN</span> <span class="ss">(</span><span class="nv">Fortran</span> <span class="nv">Logical</span>
+           <span class="nv">Unit</span> <span class="nv">Number</span><span class="ss">)</span>.  <span class="k">If</span> <span class="nv">filename</span> <span class="nv">is</span> <span class="nv">a</span> <span class="nv">LUN</span>, <span class="nv">file</span> <span class="nv">must</span> <span class="nv">be</span> <span class="nv">opened</span>
+           <span class="nv">with</span>
+
+              <span class="nv">form</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">unformatted</span><span class="s1">&#39;</span>,<span class="nv">access</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">stream</span><span class="s1">&#39;</span>
+
+           <span class="nv">as</span> <span class="nv">in</span>
+
+             <span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="nv">igetunit</span>, <span class="nv">file</span><span class="o">=</span><span class="nv">filename</span>,     <span class="o">&amp;</span>
+             <span class="o">&amp;</span> <span class="nv">action</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">read</span><span class="s2">&quot;</span>, <span class="nv">iomsg</span><span class="o">=</span><span class="nv">message</span>,        <span class="o">&amp;</span>
+             <span class="o">&amp;</span> <span class="nv">form</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">unformatted</span><span class="s2">&quot;</span>, <span class="nv">access</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">stream</span><span class="s2">&quot;</span>, <span class="o">&amp;</span>
+             <span class="o">&amp;</span> <span class="nv">status</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">old</span><span class="s1">&#39;</span>,<span class="nv">iostat</span><span class="o">=</span><span class="nv">ios</span><span class="ss">)</span>
+
+<span class="nv">pageout</span>    <span class="nv">array</span> <span class="nv">of</span> <span class="nv">characters</span> <span class="nv">to</span> <span class="nv">hold</span> <span class="nv">file</span>
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<p>Sample program</p>
+<div class="codehilite"><pre><span></span><code><span class="n">program</span><span class="w"> </span><span class="n">demo_fileread</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">M_io</span><span class="p">,</span><span class="w">      </span><span class="n">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">fileread</span><span class="w"></span>
+<span class="n">implicit</span><span class="w"> </span><span class="n">none</span><span class="w"></span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">FILENAME</span><span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">read</span><span class="w"></span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="p">:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">pageout</span><span class="p">(:)</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">hold</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
+<span class="n">integer</span><span class="w">                      </span><span class="p">::</span><span class="w"> </span><span class="n">longest</span><span class="p">,</span><span class="w"> </span><span class="n">lines</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="w"></span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">parameter</span><span class="w">   </span><span class="p">::</span><span class="w"> </span><span class="n">gen</span><span class="o">=</span><span class="s1">&#39;(*(g0,1x))&#39;</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">get</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
+<span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">FILENAME</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">allocate</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
+<span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">fileread</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="o">.</span><span class="ow">not</span><span class="o">.</span><span class="n">allocated</span><span class="p">(</span><span class="n">pageout</span><span class="p">))</span><span class="n">then</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*demo_fileread* failed to load file&#39;</span><span class="p">,</span><span class="n">FILENAME</span><span class="w"></span>
+<span class="w">   </span><span class="k">else</span><span class="w"></span>
+<span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
+<span class="w">      </span><span class="n">longest</span><span class="o">=</span><span class="n">len</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">lines</span><span class="o">=</span><span class="n">size</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;number of lines is&#39;</span><span class="p">,</span><span class="n">lines</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;and length of lines is&#39;</span><span class="p">,</span><span class="n">longest</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(&quot;%&quot;,a,&quot;%&quot;)&#39;</span><span class="p">)(</span><span class="n">trim</span><span class="p">(</span><span class="n">pageout</span><span class="p">(</span><span class="n">i</span><span class="p">)),</span><span class="n">i</span><span class="o">=</span><span class="n">lines</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
+<span class="w">      </span><span class="n">deallocate</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w">  </span><span class="o">!</span><span class="w"> </span><span class="n">release</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
+<span class="w">   </span><span class="n">endif</span><span class="w"></span>
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">demo_fileread</span><span class="w"></span>
+</code></pre></div>
+
+<p>Given</p>
+<div class="codehilite"><pre><span></span><code>first line
+second line
+third line
+</code></pre></div>
+
+<p>Expected output</p>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">3</span><span class="w"></span>
+<span class="w"> </span><span class="n">and</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">is</span><span class="w"> </span><span class="mi">11</span><span class="w"></span>
+<span class="o">%%%%%%%%%%%%%</span><span class="w"></span>
+<span class="nf">%third</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">%</span><span class="w"></span>
+<span class="nf">%second</span><span class="w"> </span><span class="n">line</span><span class="o">%</span><span class="w"></span>
+<span class="nf">%first</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="o">%</span><span class="w"></span>
+<span class="o">%%%%%%%%%%%%%</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>FILENAME</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=:),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>pageout</strong>(:)</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
 
           </li>
     </ul>
@@ -1244,6 +1405,186 @@ be copied into memory.
 
        <div class="panel panel-default">
     <div class="panel-heading codesum">
+      <span class="anchor" id="interface-slurp"></span>
+      <h3>public        interface <a href='../interface/slurp.html'>slurp</a> 
+      </h3>
+    </div>
+    <ul class="list-group">
+          <li class="list-group-item">
+                <h3>
+    public  subroutine <a href='../proc/filebyte.html'>filebyte</a>(filename, text, length, lines)  
+
+    </h3>
+    
+  <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code>filebyte(3f) - [M_io:READ] read a file into a character array
+(LICENSE:PD)
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>subroutine filebyte(filename,text,length.lines)</p>
+<div class="codehilite"><pre><span></span><code><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="ow">in</span><span class="p">)</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
+<span class="w"> </span><span class="ow">or</span><span class="w"></span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="ow">in</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">filenumber</span><span class="w"></span>
+
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">allocatable</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">text</span><span class="p">(:)</span><span class="w"></span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="n">optional</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">length</span><span class="w"></span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="n">optional</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">lines</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nt">Read</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">entire</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">a</span><span class="w"> </span><span class="nt">stream</span><span class="w"> </span><span class="nt">into</span><span class="w"> </span><span class="nt">memory</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">array</span><span class="w"> </span><span class="nt">of</span><span class="w"> </span><span class="nt">single</span><span class="w"></span>
+<span class="nt">characters</span><span class="o">,</span><span class="w"> </span><span class="nt">retaining</span><span class="w"> </span><span class="nt">line</span><span class="w"> </span><span class="nt">end</span><span class="w"> </span><span class="nt">terminators</span><span class="o">.</span><span class="w"></span>
+
+<span class="nt">NOTE</span><span class="o">:</span><span class="w"></span>
+
+<span class="nt">Never</span><span class="w"> </span><span class="nt">casually</span><span class="w"> </span><span class="nt">read</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">entire</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">into</span><span class="w"> </span><span class="nt">memory</span><span class="w"> </span><span class="nt">if</span><span class="w"> </span><span class="nt">you</span><span class="w"> </span><span class="nt">can</span><span class="w"> </span><span class="nt">process</span><span class="w"> </span><span class="nt">it</span><span class="w"></span>
+<span class="nt">per</span><span class="w"> </span><span class="nt">line</span><span class="w"> </span><span class="nt">or</span><span class="w"> </span><span class="nt">in</span><span class="w"> </span><span class="nt">smaller</span><span class="w"> </span><span class="nt">units</span><span class="o">;</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">large</span><span class="w"> </span><span class="nt">files</span><span class="w"> </span><span class="nt">can</span><span class="w"> </span><span class="nt">consume</span><span class="w"> </span><span class="nt">unreasonable</span><span class="w"></span>
+<span class="nt">amounts</span><span class="w"> </span><span class="nt">of</span><span class="w"> </span><span class="nt">memory</span><span class="o">.</span><span class="w"></span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code>   <span class="nv">filename</span>   <span class="nv">filename</span> <span class="nv">to</span> <span class="nv">read</span> <span class="nv">into</span> <span class="nv">memory</span> <span class="nv">or</span> <span class="nv">LUN</span> <span class="ss">(</span><span class="nv">Fortran</span> <span class="nv">Logical</span>
+              <span class="nv">Unit</span> <span class="nv">Number</span><span class="ss">)</span> <span class="k">If</span> <span class="nv">a</span> <span class="nv">LUN</span>, <span class="nv">file</span> <span class="nv">must</span> <span class="nv">be</span> <span class="nv">opened</span> <span class="nv">with</span>
+
+                 <span class="nv">form</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">unformatted</span><span class="s1">&#39;</span>,<span class="nv">access</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">stream</span><span class="s1">&#39;</span>
+
+              <span class="nv">as</span> <span class="nv">in</span>
+
+                <span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="nv">igetunit</span>, <span class="nv">file</span><span class="o">=</span><span class="nv">filename</span>,     <span class="o">&amp;</span>
+                <span class="o">&amp;</span> <span class="nv">action</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">read</span><span class="s2">&quot;</span>, <span class="nv">iomsg</span><span class="o">=</span><span class="nv">message</span>,        <span class="o">&amp;</span>
+                <span class="o">&amp;</span> <span class="nv">form</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">unformatted</span><span class="s2">&quot;</span>, <span class="nv">access</span><span class="o">=</span><span class="s2">&quot;</span><span class="s">stream</span><span class="s2">&quot;</span>, <span class="o">&amp;</span>
+                <span class="o">&amp;</span> <span class="nv">status</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">old</span><span class="s1">&#39;</span>,<span class="nv">iostat</span><span class="o">=</span><span class="nv">ios</span><span class="ss">)</span>
+
+   <span class="nv">text</span>       <span class="nv">array</span> <span class="nv">of</span> <span class="nv">characters</span> <span class="nv">to</span> <span class="nv">hold</span> <span class="nv">file</span>
+   <span class="nv">length</span>     <span class="nv">returns</span> <span class="nv">length</span> <span class="nv">of</span> <span class="nv">longest</span> <span class="nv">line</span> <span class="nv">read</span><span class="ss">(</span><span class="nv">Optional</span><span class="ss">)</span>.
+   <span class="nv">lines</span>      <span class="nv">returns</span> <span class="nv">number</span> <span class="nv">of</span> <span class="nv">lines</span> <span class="nv">read</span><span class="ss">(</span><span class="nv">Optional</span><span class="ss">)</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">Sample</span> <span class="s s-Atom">program</span><span class="p">,</span> <span class="s s-Atom">which</span>  <span class="s s-Atom">creates</span> <span class="s s-Atom">test</span> <span class="s s-Atom">input</span> <span class="s s-Atom">file</span> <span class="s2">&quot;inputfile&quot;</span><span class="o">:</span>
+
+ <span class="s s-Atom">program</span> <span class="s s-Atom">demo_filebyte</span>
+ <span class="s s-Atom">use</span> <span class="nv">M_io</span><span class="p">,</span> <span class="s s-Atom">only</span>      <span class="o">:</span> <span class="s s-Atom">filebyte</span>
+ <span class="s s-Atom">implicit</span> <span class="s s-Atom">none</span>
+ <span class="nf">character</span><span class="p">(</span><span class="s s-Atom">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="s s-Atom">allocatable</span> <span class="o">::</span> <span class="nf">text</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">!</span> <span class="s s-Atom">array</span> <span class="s s-Atom">to</span> <span class="s s-Atom">hold</span> <span class="s s-Atom">file</span> <span class="s s-Atom">in</span> <span class="s s-Atom">memory</span>
+ <span class="nf">character</span><span class="p">(</span><span class="s s-Atom">len=*</span><span class="p">),</span><span class="s s-Atom">parameter</span> <span class="o">::</span> <span class="nv">FILENAME</span><span class="s s-Atom">=&#39;inputfile&#39;</span> <span class="p">!</span> <span class="s s-Atom">file</span> <span class="s s-Atom">to</span> <span class="s s-Atom">read</span>
+
+ <span class="p">!</span> <span class="s s-Atom">create</span> <span class="s s-Atom">test</span> <span class="s s-Atom">file</span>
+ <span class="nf">open</span><span class="p">(</span><span class="s s-Atom">file</span><span class="o">=</span><span class="nv">FILENAME</span><span class="p">,</span><span class="s s-Atom">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">action=&#39;write&#39;</span><span class="p">)</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="nf">new_line</span><span class="p">(</span><span class="s s-Atom">&#39;A&#39;</span><span class="p">)</span><span class="s s-Atom">//&#39;esrever lliw&#39;</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="s s-Atom">&#39;margorp elpmas eht taht&#39;</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="s s-Atom">&#39;elif elpmas a si sihT&#39;</span>
+ <span class="nf">close</span><span class="p">(</span><span class="s s-Atom">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+ <span class="s s-Atom">call</span> <span class="nf">filebyte</span><span class="p">(</span><span class="nv">FILENAME</span><span class="p">,</span><span class="s s-Atom">text</span><span class="p">)</span> <span class="p">!</span> <span class="s s-Atom">allocate</span> <span class="s s-Atom">character</span> <span class="s s-Atom">array</span> <span class="s s-Atom">and</span> <span class="s s-Atom">copy</span> <span class="s s-Atom">file</span> <span class="s s-Atom">into</span> <span class="s s-Atom">it</span>
+
+ <span class="nf">if</span><span class="p">(.</span><span class="o">not</span><span class="p">.</span><span class="nf">allocated</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">))</span><span class="s s-Atom">then</span>
+    <span class="nf">write</span><span class="p">(</span><span class="s s-Atom">*</span><span class="p">,</span><span class="s s-Atom">*</span><span class="p">)</span><span class="s s-Atom">&#39;*rever* failed to load file &#39;</span><span class="o">//</span><span class="nv">FILENAME</span>
+ <span class="s s-Atom">else</span>
+    <span class="p">!</span> <span class="s s-Atom">write</span> <span class="s s-Atom">file</span> <span class="s s-Atom">reversed</span> <span class="s s-Atom">to</span> <span class="s s-Atom">stdout</span>
+    <span class="nf">write</span><span class="p">(</span><span class="s s-Atom">*</span><span class="p">,</span><span class="s s-Atom">&#39;(*(a:))&#39;</span><span class="p">,</span><span class="s s-Atom">advance=&#39;no&#39;</span><span class="p">)</span><span class="nf">text</span><span class="p">(</span><span class="nf">size</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">)</span><span class="o">:</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nf">deallocate</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">)</span>  <span class="p">!</span> <span class="s s-Atom">release</span> <span class="s s-Atom">memory</span>
+ <span class="s s-Atom">endif</span>
+
+ <span class="s s-Atom">end</span> <span class="s s-Atom">program</span> <span class="s s-Atom">demo_filebyte</span>
+
+<span class="nv">Expected</span> <span class="s s-Atom">output</span><span class="p">:</span>
+
+ <span class="o">&gt;</span><span class="nv">This</span> <span class="o">is</span> <span class="s s-Atom">a</span> <span class="s s-Atom">sample</span> <span class="s s-Atom">file</span>
+ <span class="o">&gt;</span><span class="s s-Atom">that</span> <span class="s s-Atom">the</span> <span class="s s-Atom">sample</span> <span class="s s-Atom">program</span>
+ <span class="o">&gt;</span><span class="s s-Atom">will</span> <span class="s s-Atom">reverse</span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=1),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>text</strong>(:)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>length</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lines</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+          </li>
+    </ul>
+  </div>
+
+       <div class="panel panel-default">
+    <div class="panel-heading codesum">
       <span class="anchor" id="interface-swallow"></span>
       <h3>public        interface <a href='../interface/swallow.html'>swallow</a> 
       </h3>
@@ -1251,17 +1592,17 @@ be copied into memory.
     <ul class="list-group">
           <li class="list-group-item">
                 <h3>
-    public  subroutine <a href='../proc/gulp.html'>gulp</a>(FILENAME, pageout)  
+    public  subroutine <a href='../proc/fileread.html'>fileread</a>(FILENAME, pageout)  
 
     </h3>
     
   <h2 id="name">NAME</h2>
-<div class="codehilite"><pre><span></span><code>gulp(3f) - [M_io:READ] read a file into a character array line by line
-(LICENSE:PD)
+<div class="codehilite"><pre><span></span><code><span class="k">fileread</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="o">-</span> [<span class="nv">M_io</span>:<span class="nv">READ</span>] <span class="nv">read</span> <span class="nv">a</span> <span class="nv">file</span> <span class="nv">into</span> <span class="nv">a</span> <span class="nv">string</span> <span class="nv">array</span>
+<span class="ss">(</span><span class="nv">LICENSE</span>:<span class="nv">PD</span><span class="ss">)</span>
 </code></pre></div>
 
 <h2 id="synopsis">SYNOPSIS</h2>
-<p>subroutine gulp(filename,pageout)</p>
+<p>subroutine fileread(filename,pageout)</p>
 <div class="codehilite"><pre><span></span><code>character(len=*),intent(in) :: filename
   or
 integer,intent(in)          :: io
@@ -1275,7 +1616,7 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 
 <span class="n">NOTE</span><span class="p">:</span><span class="w"></span>
 
-<span class="n">Never</span><span class="w"> </span><span class="n">casually</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
+<span class="n">Do</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">casually</span><span class="w"> </span><span class="n">read</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">entire</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">memory</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">you</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">process</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
 <span class="n">per</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">smaller</span><span class="w"> </span><span class="n">units</span><span class="p">;</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">large</span><span class="w"> </span><span class="n">files</span><span class="w"> </span><span class="n">can</span><span class="w"> </span><span class="n">consume</span><span class="w"> </span><span class="n">unreasonable</span><span class="w"></span>
 <span class="n">amounts</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">memory</span><span class="o">.</span><span class="w"></span>
 </code></pre></div>
@@ -1299,8 +1640,8 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 
 <h2 id="examples">EXAMPLES</h2>
 <p>Sample program</p>
-<div class="codehilite"><pre><span></span><code><span class="n">program</span><span class="w"> </span><span class="n">demo_gulp</span><span class="w"></span>
-<span class="n">use</span><span class="w"> </span><span class="n">M_io</span><span class="p">,</span><span class="w">      </span><span class="n">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">gulp</span><span class="w"></span>
+<div class="codehilite"><pre><span></span><code><span class="n">program</span><span class="w"> </span><span class="n">demo_fileread</span><span class="w"></span>
+<span class="n">use</span><span class="w"> </span><span class="n">M_io</span><span class="p">,</span><span class="w">      </span><span class="n">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">fileread</span><span class="w"></span>
 <span class="n">implicit</span><span class="w"> </span><span class="n">none</span><span class="w"></span>
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">FILENAME</span><span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">read</span><span class="w"></span>
 <span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="p">:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">pageout</span><span class="p">(:)</span><span class="w"> </span><span class="o">!</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">hold</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
@@ -1309,9 +1650,9 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">get</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">filename</span><span class="w"></span>
 <span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">get_command_argument</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">FILENAME</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="o">!</span><span class="w"> </span><span class="n">allocate</span><span class="w"> </span><span class="n">character</span><span class="w"> </span><span class="n">array</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">copy</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">into</span><span class="w"> </span><span class="n">it</span><span class="w"></span>
-<span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">gulp</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="n">call</span><span class="w"> </span><span class="n">fileread</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">,</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="o">.</span><span class="ow">not</span><span class="o">.</span><span class="n">allocated</span><span class="p">(</span><span class="n">pageout</span><span class="p">))</span><span class="n">then</span><span class="w"></span>
-<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*demo_gulp* failed to load file&#39;</span><span class="p">,</span><span class="n">FILENAME</span><span class="w"></span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">gen</span><span class="p">)</span><span class="s1">&#39;*demo_fileread* failed to load file&#39;</span><span class="p">,</span><span class="n">FILENAME</span><span class="w"></span>
 <span class="w">   </span><span class="k">else</span><span class="w"></span>
 <span class="w">      </span><span class="o">!</span><span class="w"> </span><span class="n">write</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="n">last</span><span class="w"> </span><span class="n">line</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">first</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
 <span class="w">      </span><span class="n">longest</span><span class="o">=</span><span class="n">len</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w"></span>
@@ -1323,7 +1664,7 @@ character(len=:),allocatable,intent(out) :: pageout(:)
 <span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;%&#39;</span><span class="p">,</span><span class="n">longest</span><span class="o">+</span><span class="mi">2</span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="n">deallocate</span><span class="p">(</span><span class="n">pageout</span><span class="p">)</span><span class="w">  </span><span class="o">!</span><span class="w"> </span><span class="n">release</span><span class="w"> </span><span class="n">memory</span><span class="w"></span>
 <span class="w">   </span><span class="n">endif</span><span class="w"></span>
-<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">demo_gulp</span><span class="w"></span>
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">demo_fileread</span><span class="w"></span>
 </code></pre></div>
 
 <p>Given</p>
@@ -2459,6 +2800,146 @@ third line
     <section>
     <h2>Subroutines</h2>
       <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-filebyte"></span><h3>public  subroutine <a href='../proc/filebyte.html'>filebyte</a>(filename, text, length, lines)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>subroutine filebyte(filename,text,length.lines)</p><a href="../proc/filebyte.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=1),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>text</strong>(:)</td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>length</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lines</strong></td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+      <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-fileread"></span><h3>public  subroutine <a href='../proc/fileread.html'>fileread</a>(FILENAME, pageout)  
+</h3></div>
+    <div class="panel-body">
+          
+  <p>subroutine fileread(filename,pageout)</p><a href="../proc/fileread.html" class="pull-right"><emph>Read more&hellip;</emph></a>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>FILENAME</strong></td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" ></span>
+              character(len=:),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>pageout</strong>(:)</td>
+            <td>
+
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    </div>
+  </div>
+
+      <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-get_next_char"></span><h3>public  subroutine <a href='../proc/get_next_char.html'>get_next_char</a>(fd, c, ios)  
 </h3></div>
     <div class="panel-body">
@@ -2529,61 +3010,6 @@ third line
   </div>
 
       <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-gulp"></span><h3>public  subroutine <a href='../proc/gulp.html'>gulp</a>(FILENAME, pageout)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>subroutine gulp(filename,pageout)</p><a href="../proc/gulp.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>FILENAME</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              character(len=:),
-            </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              allocatable
-            </td>
-            <td>::</td>
-            <td><strong>pageout</strong>(:)</td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-      <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-print_inquire"></span><h3>public  subroutine <a href='../proc/print_inquire.html'>print_inquire</a>(lun_in, namein_in)  
 </h3></div>
     <div class="panel-body">
@@ -2627,91 +3053,6 @@ third line
             </td>
             <td>::</td>
             <td><strong>namein_in</strong></td>
-            <td>
-
-            </td>
-        </tr>
-    </tbody>
-  </table>
-
-
-    </div>
-  </div>
-
-      <div class="panel panel-default">
-    <div class="panel-heading codesum"><span class="anchor" id="proc-slurp"></span><h3>public  subroutine <a href='../proc/slurp.html'>slurp</a>(filename, text, length, lines)  
-</h3></div>
-    <div class="panel-body">
-          
-  <p>subroutine slurp(filename,text)</p><a href="../proc/slurp.html" class="pull-right"><emph>Read more&hellip;</emph></a>
-
-  <h4>Arguments</h4>
-      <table class="table table-striped varlist">
-    <thead>
-      <tr>
-        <th>Type</th>
-<th>Intent</th><th>Optional</th>        <th>Attributes</th>
-        <th></th>
-        <th>Name</th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              class(*),
-            </td>
-<td>intent(in)</td>
-              <td></td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>filename</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              character(len=1),
-            </td>
-<td>intent(out),</td>
-              <td></td>            <td>
-              allocatable
-            </td>
-            <td>::</td>
-            <td><strong>text</strong>(:)</td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              integer,
-            </td>
-<td>intent(out),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>length</strong></td>
-            <td>
-
-            </td>
-        </tr>
-        <tr>
-            <td>
-              <span class="anchor" ></span>
-              integer,
-            </td>
-<td>intent(out),</td>
-              <td>optional</td>            <td>
-              
-            </td>
-            <td>::</td>
-            <td><strong>lines</strong></td>
             <td>
 
             </td>
@@ -2843,7 +3184,7 @@ third line
           <p class="text-right">
             Documentation generated by 
             <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-07 06:58            </p>
+ on 2023-01-07 18:45            </p>
         </div>
       </div>
       <br>
