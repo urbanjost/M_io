@@ -243,6 +243,12 @@ character(len=:),allocatable :: data(:), data2(:)
       call unit_check_bad('filewrite','failed to load file','_scratch.txt') 
    else
       call unit_check('filewrite', all(data==data2) , 'check read back file written')
+      if(.not.all(data==data2))then
+         write(*,'(a)')'DATA:'
+         write(*,'(a)')data
+         write(*,'(a)')'DATA2:'
+         write(*,'(a)')data2
+      endif
    endif
    ierr=filedelete('_scratch.txt')
    call unit_check_done('filewrite',msg='')
