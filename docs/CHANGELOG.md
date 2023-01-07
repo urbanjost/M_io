@@ -22,6 +22,12 @@ checked ...
    - [x] registered in fpm(1) repository
 
 ---
+**2022-01-07**  John S. Urban  <https://github.com/urbanjost>
+
+### :orange_circle: DIFF:
+     + deprecated names SLURP and GULP for preferred FILEREAD and
+       FILEBYTE names.
+---
 **2022-01-06**  John S. Urban  <https://github.com/urbanjost>
 
 ### :red_circle: FIX:
