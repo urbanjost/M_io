@@ -244,9 +244,9 @@ character(len=:),allocatable :: data(:), data2(:)
    else
       call unit_check('filewrite', all(data==data2) , 'check read back file written')
       if(.not.all(data==data2))then
-         write(*,'(a)')'DATA:'
+         write(*,'(a)')'DATA:',size(data)
          write(*,'(a)')data
-         write(*,'(a)')'DATA2:'
+         write(*,'(a)')'DATA2:',size(data2)
          write(*,'(a)')data2
       endif
    endif

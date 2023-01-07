@@ -814,7 +814,7 @@ end subroutine read_table_r
 !!
 !!    NOTE:
 !!
-!!    Never casually read an entire file into memory if you can process it
+!!    Do not casually read an entire file into memory if you can process it
 !!    per line or in smaller units; as large files can consume unreasonable
 !!    amounts of memory.
 !!
