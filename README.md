@@ -37,8 +37,6 @@ In the docs/ directory there is
 
 ---
 ![manpages](docs/images/manpages.gif)
----
-
 ### real man-pages
  - man-pages are in archive files that can be installed on ULS (Unix-like systems)
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 

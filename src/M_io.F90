@@ -91,7 +91,7 @@ CONTAINS
 !===================================================================================================================================
 !>
 !!##NAME
-!!      uniq(3f) - [M_io] append a number to the end of filename to make
+!!      uniq(3f) - [M_io:QUERY] append a number to the end of filename to make
 !!                 a unique name if name exists
 !!      (LICENSE:PD)
 !!##SYNOPSIS
@@ -268,7 +268,7 @@ end function uniq
 !===================================================================================================================================
 !>
 !!##NAME
-!!    print_inquire(3f) - [M_io] Do INQUIRE on file by name/number and
+!!    print_inquire(3f) - [M_io:QUERY] Do INQUIRE on file by name/number and
 !!                        print results
 !!    (LICENSE:PD)
 !!
@@ -435,7 +435,7 @@ end subroutine print_inquire
 !===================================================================================================================================
 !>
 !!##NAME
-!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory
+!!    separator(3f) - [M_io:QUERY] try to determine pathname directory
 !!                    separator character
 !!    (LICENSE:PD)
 !!
@@ -478,7 +478,7 @@ end subroutine print_inquire
 function separator() result(sep)
 !>
 !!##NAME
-!!    separator(3f) - [M_io:ENVIRONMENT] try to determine pathname directory separator character
+!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -563,7 +563,7 @@ end function separator
 !===================================================================================================================================
 !>
 !!##NAME
-!!    read_table(3f) - [M_io] read file containing a table of numeric values
+!!    read_table(3f) - [M_io:READ] read file containing a table of numeric values
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -797,7 +797,7 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    gulp(3f) - [M_io] read a file into a character array line by line
+!!    gulp(3f) - [M_io:READ] read a file into a character array line by line
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -959,7 +959,7 @@ end subroutine gulp
 !===================================================================================================================================
 !>
 !!##NAME
-!!    SLURP(3f) - [M_io] read a file into a character array
+!!    SLURP(3f) - [M_io:READ] read a file into a character array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -1121,7 +1121,7 @@ end subroutine slurp
 !===================================================================================================================================
 !>
 !!##NAME
-!!    number_of_lines(3f) - [M_io] read an open sequential file to get
+!!    number_of_lines(3f) - [M_io:QUERY] read an open sequential file to get
 !!                          number of lines
 !!    (LICENSE:PD)
 !!
@@ -1195,7 +1195,7 @@ end function number_of_lines
 !===================================================================================================================================
 !>
 !!##NAME
-!!    notopen(3f) - [M_io] Find a FUN/LUN (Fortran-unit-number) that is not in use
+!!    notopen(3f) - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not in use
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -1376,7 +1376,7 @@ end function notopen
 !===================================================================================================================================
 !>
 !!##NAME
-!!    dirname(3f) - [M_io] strip last component from filename
+!!    dirname(3f) - [M_io:PATHNAMES] strip last component from filename
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1483,7 +1483,7 @@ end function dirname
 !===================================================================================================================================
 !>
 !!##NAME
-!!    basename(3f) - [M_io] return last component from filename
+!!    basename(3f) - [M_io:PATHNAMES] return last component from filename
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -1895,7 +1895,7 @@ end function fileclose
 !===================================================================================================================================
 !>
 !!##NAME
-!!    filewrite(3f) - [M_io] A simple write of a CHARACTER array to a file
+!!    filewrite(3f) - [M_io:WRITE] A simple write of a CHARACTER array to a file
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2084,7 +2084,7 @@ end function filedelete_filename
 !===================================================================================================================================
 !>
 !!##NAME
-!!    joinpath(3f) - [M_io] join parts of a pathname together
+!!    joinpath(3f) - [M_io:PATHNAMES] join parts of a pathname together
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2147,7 +2147,7 @@ end function joinpath
 !===================================================================================================================================
 !>
 !!##NAME
-!!     splitpath(3f) - [M_io] split a Unix pathname into components
+!!     splitpath(3f) - [M_io:PATHNAMES] split a Unix pathname into components
 !!     (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -2380,7 +2380,7 @@ end subroutine splitpath
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getline(3f) - [M_io] read a line from specified LUN into allocatable
+!!    getline(3f) - [M_io:READ] read a line from specified LUN into allocatable
 !!                  string up to line length limit
 !!    (LICENSE:PD)
 !!
@@ -2478,7 +2478,7 @@ end function getline
 !===================================================================================================================================
 !>
 !!##NAME
-!!     read_line(3f) - [M_io] read a line from specified LUN into allocatable
+!!     read_line(3f) - [M_io:READ] read a line from specified LUN into allocatable
 !!                     string up to line length limit cleaning up input line
 !!     (LICENSE:PD)
 !!
@@ -2609,7 +2609,7 @@ end function read_line
 !===================================================================================================================================
 !>
 !!##NAME
-!!      get_tmp(3f) - [M_io] Return the name of the scratch directory
+!!      get_tmp(3f) - [M_io:QUERY] Return the name of the scratch directory
 !!      (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -2685,7 +2685,7 @@ end function get_tmp
 !===================================================================================================================================
 !>
 !!##NAME
-!! rd(3f) - [M_io] ask for string from standard input with user-definable prompt
+!! rd(3f) - [M_io:READ] ask for string from standard input with user-definable prompt
 !! (LICENSE:PD)
 !!
 !!   function rd(prompt,default) result(out)
@@ -2944,7 +2944,7 @@ end function rd_integer
 !===================================================================================================================================
 !>
 !!##NAME
-!!    getname(3f) - [M_io:ENVIRONMENT] get name of the current executable
+!!    getname(3f) - [M_io:QUERY] get name of the current executable
 !!    (LICENSE:PD)
 !!
 !!##SYNOPSIS
@@ -3007,7 +3007,7 @@ end function getname
 !===================================================================================================================================
 !>
 !!##NAME
-!!     which(3f) - [M_io:ENVIRONMENT] given a command name find the pathname
+!!     which(3f) - [M_io:SCANNAMES] given a command name find the pathname
 !!                 by searching the directories in the environment variable
 !!                 $PATH
 !!     (LICENSE:PD)
@@ -3040,6 +3040,9 @@ end function getname
 !!        write(*,*)'dir is ',which('dir')
 !!        write(*,*)'install is ',which('install')
 !!     end program demo_which
+!!
+!!##SEE ALSO
+!!    M_system:system_dir(3f)
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -3092,7 +3095,7 @@ end function which
 !===================================================================================================================================
 !>
 !!##NAME
-!!     lookfor(3f) - [M_io:ENVIRONMENT] look for a filename in a number
+!!     lookfor(3f) - [M_io:SCANNAMES] look for a filename in a number
 !!                   of directories specified by an environment variable
 !!     (LICENSE:PD)
 !!
@@ -3131,6 +3134,9 @@ end function which
 !!        write(*,*)'dir is ',returned
 !!     end program demo_lookfor
 !!
+!!##SEE ALSO
+!!    M_system:system_dir(3f)
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -3160,7 +3166,7 @@ end function lookfor
 !===================================================================================================================================
 !>
 !!##NAME
-!!     get_env(3f) - [M_io:ENVIRONMENT] a function returning the value of
+!!     get_env(3f) - [M_io:QUERY] a function returning the value of
 !!                   an environment variable
 !!     (LICENSE:PD)
 !!
@@ -3245,7 +3251,7 @@ end function get_env
 !===================================================================================================================================
 !>
 !!##NAME
-!!     get_next_char(3f) - [M_io] read from a file one character at a time
+!!     get_next_char(3f) - [M_io:READ] read from a file one character at a time
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
