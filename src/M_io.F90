@@ -921,7 +921,7 @@ integer                      :: position
 integer                      :: sz
 !!character(len=1),parameter   :: nl=new_line('A')
 character(len=1),parameter   :: nl = char(10)
-character(len=1),parameter   :: cr = char(12)
+character(len=1),parameter   :: cr = char(13)
    lines = 0
    linelength = 0
    length = 0
