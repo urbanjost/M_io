@@ -66,7 +66,7 @@ end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_notopen()
 
-integer :: i, ierr, ierr2
+integer :: i, bug, ierr, ierr2
 
    call unit_check_start('notopen',msg='')
    call unit_check_msg('notopen','check for preassigned files from unit 0 to unit 1000')
@@ -74,7 +74,8 @@ integer :: i, ierr, ierr2
 
    do i=0,1000
       if(notopen(i,i,ierr)  /=  i)then
-         call unit_check_msg('notopen','INUSE:',i,ierr, notopen(i,i,ierr2) )
+         bug=notopen(i,i,ierr2) ! gfortran 11 bug; OK in 9, 10
+         call unit_check_msg('notopen','INUSE:',i,ierr,bug )
       endif
    enddo
    call unit_check('notopen', notopen(5,6,ierr)            ==  -1 ,'preassigned')

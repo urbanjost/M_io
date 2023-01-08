@@ -8,16 +8,22 @@
 
 This package is a self-contained version of the M_io library from the GPF
 (General Purpose Fortran) package that has been extracted for those just
-interested in a library of IO-related functions. In the GPF package
-this library is intertwined with several other large modules.
+interested in a library of IO-related functions. In the GPF package this
+library is intertwined with several other large modules.
 
-There are a lot of related functions in 
+The procedures collected into M_io do not depend on interfacing to
+system-dependent functionality such as POSIX functions. They are
+self-contained standard Fortran.
+
+There are related functions in 
  [M_system](https://urbanjost.github.io/M_system/man3.html) 
-but note that it requires a POSIX system at the time of this writing, and
- [M_strings](https://urbanjost.github.io/M_strings/man3.html) has a lot
- of functions for pure string manipulation.
- The procedures collected into M_io are hopefully very portable, unlike
- in M_system(3f).
+that require a POSIX system.
+
+ [M_display](https://urbanjost.github.io/M_display/man3.html) is
+ a collection of routines for writing tables.
+
+ [M_strings](https://urbanjost.github.io/M_strings/man3.html) has 
+ functions for pure string manipulation.
 
 ### FILE OPS
  + **fileopen**     - A simple open of a sequential file 

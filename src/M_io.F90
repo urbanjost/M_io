@@ -871,13 +871,13 @@ end subroutine read_table_r
 !!
 !!   Expected output
 !!
-!!     number of lines is 3
-!!     and length of lines is 11
-!!    %%%%%%%%%%%%%
-!!    %third line %
-!!    %second line%
-!!    %first line %
-!!    %%%%%%%%%%%%%
+!!    >  number of lines is 3
+!!    >  and length of lines is 11
+!!    > %%%%%%%%%%%%%
+!!    > %third line %
+!!    > %second line%
+!!    > %first line %
+!!    > %%%%%%%%%%%%%
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1418,7 +1418,6 @@ end function notopen
 !!       allocate(character(len=filename_length) :: filename)
 !!       call get_command_argument (i , value=filename)
 !!       write(*,'(a)')dirname(filename)
-!!       deallocate(filename)
 !!    enddo
 !!    end program demo_dirname
 !!
@@ -1531,7 +1530,6 @@ end function dirname
 !!       ! leaf with suffix retained
 !!       ! with suffix unless it is ".f90"
 !!       write(*,'(*(a,1x))') basename(fn), basename(fn,''), basename(fn,'.f90')
-!!       deallocate(fn)
 !!    enddo
 !!    end program demo_basename
 !!
@@ -2651,7 +2649,11 @@ end function read_line
 !!
 !!   Sample Results:
 !!
-!!     result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
+!!     > result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
+!!     >
+!!     > the file /cygdrive/c/Users/JSU/AppData/Local/Temp/_scratch
+!!     > was a good scratch file name, at least a moment ago
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -2961,7 +2963,7 @@ end function rd_integer
 !!     character(len=:),allocatable         :: getname
 !!
 !!##DESCRIPTION
-!!    The getname() returns the name of the current executable using
+!!    getname(3f) returns the name of the current executable using
 !!    get_command_argument(3f) and inquire(3f).
 !!
 !!##EXAMPLE
