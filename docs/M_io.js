@@ -5,6 +5,7 @@ append("dirname.3m_io.html");
 append("filebyte.3m_io.html");
 append("fileclose.3m_io.html");
 append("filedelete.3m_io.html");
+append("filename_generator.3m_io.html");
 append("fileopen.3m_io.html");
 append("fileread.3m_io.html");
 append("filewrite.3m_io.html");

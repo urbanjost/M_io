@@ -12,6 +12,7 @@ integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 public uniq
 public print_inquire
 public notopen
+public filename_generator
 public number_of_lines
 public get_next_char
 public dirname
@@ -3381,6 +3382,98 @@ end select
    exit
 enddo
 end subroutine get_next_char
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    notopen(3f) - [M_io:FILENAME] generate a filename containing a number
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    Usage
+!!
+!!       function filename_generator(head,tail,num,lenlimit) result(filename)
+!!       character(len=*),intent(in)  :: head
+!!       character(len=*),intent(in)  :: tail
+!!       integer,intent(in) :: num
+!!       integer,intent(in) :: lenlimit
+!!       character(len=:),allocatable :: filename
+!!
+!!##DESCRIPTION
+!!
+!!    Generate a filename containing a representation of the specified
+!!    whole number.  This is useful for generating a series of filenames
+!!    differing by a number such as "file1.txt", "file2.txt",
+!!    ... .
+!!
+!!##OPTIONS
+!!
+!!    head      filename prefix.
+!!    tail      filename suffix.
+!!    num       number to represent as a string between HEAD and TAIL.
+!!    lenlimit  number of digits up to which to zero-pad the string
+!!              representing NUM.
+!!
+!!
+!!##EXAMPLE
+!!
+!!
+!!    Sample program:
+!!
+!!       program demo_filename_generator
+!!       use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
+!!       use M_io, only : filename_generator
+!!       implicit none
+!!
+!!           ! no zero-fill
+!!           write(*,*) filename_generator("file_",".dat",11)
+!!           ! zero-fill till 3 digits
+!!           write(*,*) filename_generator("file_",".dat",11,3)
+!!           ! zero-fill till 9 digits
+!!           write(*,*) filename_generator("file_",".dat",11,9)
+!!           ! same as default (no zero-fill)
+!!           write(*,*) filename_generator("file_",".dat",11,0)
+!!
+!!       end program demo_filename_generator
+!!
+!!    Results
+!!
+!!       > file_11.dat
+!!       > file_011.dat
+!!       > file_000000011.dat
+!!       > file_11.dat
+!!
+!!##AUTHOR
+!!    Zh, Niu; with modifications by John S. Urban
+!!##LICENSE
+!!    Public Domain
+
+function filename_generator(head, tail, num, lenlimit) result(filename)
+character(*),intent(in)      :: head
+character(*),intent(in)      :: tail
+integer,intent(in)           :: num
+integer,intent(in),optional  :: lenlimit
+character(len=:),allocatable :: filename
+
+character(30)                :: fmt
+integer                      :: local_lenlimit
+
+   if ( present(lenlimit) ) then
+      local_lenlimit = lenlimit
+   else
+      local_lenlimit = 0
+   endif
+
+   fmt = ""
+   write(fmt, '("(a,i0.",i2.2,",a)")' ) local_lenlimit
+   filename=repeat(' ', len(head) + len(tail) + max(19,local_lenlimit) )
+   write(filename(:),fmt) trim(adjustl(head)), num, trim(adjustl(tail))
+   filename=trim(filename)
+end function filename_generator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

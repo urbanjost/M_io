@@ -27,6 +27,7 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_splitpath()
    call test_uniq()
    call test_notopen()
+   call test_filename_generator()
    call test_fileread()
    call test_number_of_lines()
    call test_basename()
@@ -63,6 +64,20 @@ subroutine test_get_tmp()
    !!call unit_check('get_tmp', 0 == 0, 'checking',100)
    call unit_check_done('get_tmp',msg='')
 end subroutine test_get_tmp
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_filename_generator()
+
+integer :: i, bug, ierr, ierr2
+
+   call unit_check_start('filename_generator',msg='')
+   call unit_check_msg('filename_generator','generate a filename containing a whole number')
+
+   call unit_check('filename_generator', filename_generator('head','.tail',100) ==  'head100.tail' )
+   call unit_check('filename_generator', filename_generator('head','.tail',1,3) ==  'head001.tail' )
+
+   call unit_check_done('filename_generator',msg='')
+
+end subroutine test_filename_generator
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_notopen()
 
