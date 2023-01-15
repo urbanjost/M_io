@@ -51,11 +51,12 @@ that require a POSIX system.
  + **scratch**       - Return the name of a scratch file 
  + **uniq**          - append a number to the end of filename to make a unique name if name exists 
 ### OTHER
- + **get_env**          - a function returning the value of an environment variable 
- + **print_inquire**    - Do INQUIRE on file by name/number and print results 
- + **notopen**          - Find a FUN/LUN (Fortran-unit-number) that is not in use 
- + **number_of_lines**  - read an open sequential file to get number of lines 
- + **separator**        - try to determine pathname directory separator character 
+ + **get_env**           - a function returning the value of an environment variable 
+ + **print_inquire**     - Do INQUIRE on file by name/number and print results 
+ + **notopen**           - Find a FUN/LUN (Fortran-unit-number) that is not in use 
+ + **number_of_lines**   - read an open sequential file to get number of lines 
+ + **separator**         - try to determine pathname directory separator character 
+ + **generate_filename** - generate a filename containing the specified whole number
 ---
 ![docs](docs/images/docs.gif)
 ---

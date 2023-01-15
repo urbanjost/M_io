@@ -52,7 +52,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
    </dd>
    <dt> SYNOPSIS </dt><dd>
       <pre>
-      use M_io, only : notopen, print_inquire, read_table
+      use M_io, only : notopen, print_inquire, read_table, filename_generator
       use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, basename
       use M_io, only : separator, getname, which, lookfor
       use M_io, only : read_line, getline, rd, get_next_char
@@ -113,7 +113,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
          <li> MISCELLANEOUS
          <ul>
-            <li><a href="notopen.3m_io.html">       NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+            <li><a href="notopen.3m_io.html"> NOTOPEN </a> - find unused FUN/LUN file-unit-number</li>
+            <li><a href="filename_generator.3m_io.html"> FILENAME_GENERATOR </a> - create filename containing a whole number</li>
             <li><a href="print_inquire.3m_io.html"> PRINT_INQUIRE </a> - run INQUIRE(3f) on a file by name or number and print results</li>
          </ul>
          </li>

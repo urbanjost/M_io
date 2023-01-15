@@ -22,6 +22,11 @@ checked ...
    - [x] registered in fpm(1) repository
 
 ---
+**2023-01-15**  John S. Urban  <https://github.com/urbanjost>
+
+### :green: ADD:
+     + added GENERATE_FILENAME(3f).
+---
 **2022-01-07**  John S. Urban  <https://github.com/urbanjost>
 
 ### :orange_circle: DIFF:
