@@ -72,9 +72,9 @@ In the docs/ directory there is
    of the man-pages is at
    [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
-![manpages](docs/images/manpages.gif)
-#### man-pages
- - man-pages are in archive files that can be installed on ULS (Unix-like systems)
+ - ![manpages](docs/images/manpages.gif)
+
+   man-pages are in archive files that can be installed on ULS (Unix-like systems)
     + [manpages.zip](https://urbanjost.github.io/M_io/manpages.zip) 
     + [manpages.tgz](https://urbanjost.github.io/M_io/manpages.tgz) 
 
