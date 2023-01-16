@@ -57,9 +57,8 @@ that require a POSIX system.
  + **number_of_lines**   - read an open sequential file to get number of lines 
  + **separator**         - try to determine pathname directory separator character 
  + **generate_filename** - generate a filename containing the specified whole number
----
+
 ![docs](docs/images/docs.gif)
----
 
 ## Documentation
 ### User 
@@ -73,7 +72,6 @@ In the docs/ directory there is
    of the man-pages is at
    [BOOK_M_io](https://urbanjost.github.io/M_io/BOOK_M_io.html).
 
----
 ![manpages](docs/images/manpages.gif)
 ### man-pages
  - man-pages are in archive files that can be installed on ULS (Unix-like systems)
@@ -89,18 +87,14 @@ In the docs/ directory there is
 
  - [github action status](docs/STATUS.md)
 
----
 ![demos](docs/images/demo.gif)
----
 
 ## Demo Programs
 
 There are demo programs extracted from the man pages in the [example/](example/)
 directory.
 
----
 ![gmake](docs/images/gnu.gif)
----
 
 ## Build with make
 
@@ -119,9 +113,7 @@ directory.
 This will compile the M_io module and build all the example programs from
 the document pages in the `example/` sub-directory.
 
----
 ![fpm](docs/images/fpm_logo.gif)
----
 
 ## Build with fpm
 
