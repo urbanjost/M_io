@@ -126,17 +126,55 @@ subroutine test_rd()
 end subroutine test_rd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getline()
-
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
+character(len=:),allocatable :: line, last, expected
+integer                      :: lun, ierr, stat, icount
    call unit_check_start('getline',msg='')
-   !!call unit_check('getline', 0 == 0, 'checking',100)
+   ierr=filewrite('_scratch_getline.txt>',[ character(len=80) :: &
+   &achar(9)//'abcdefghij\ ', &
+   &'klmnop'//achar(8)//'\' , &
+   &'qrstuv\               ', &
+   &'wxyz'])
+   open(newunit=lun,file='_scratch_getline.txt',pad='yes')
+   icount=0
+   INFINITE: do while (getline(line,lun,stat) == 0)
+      icount=icount+1
+      last=line
+      if(unit_check_level.gt.0.or..true.) write (*, '(*(g0))') 'getline>>>>',icount,' [',line,']'
+   enddo INFINITE
+   expected='wxyz'
+   call unit_check('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_check('getline',icount.eq.4,'expected ',4,'lines got',icount)
+   call unit_check('getline',last.eq.expected,'expected',expected,'got',last)
+   ierr=filedelete('_scratch_getline.txt')
    call unit_check_done('getline',msg='')
+
 end subroutine test_getline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_line()
-
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
+character(len=:),allocatable :: line, last, expected
+integer                      :: lun, ierr, stat, icount
    call unit_check_start('read_line',msg='')
-   !!call unit_check('read_line', 0 == 0, 'checking',100)
+   ierr=filewrite('_scratch_read_line.txt>',[ character(len=80) :: &
+   &achar(9)//'abcdefghij\ ', &
+   &'klmnop'//achar(8)//'\' , &
+   &'qrstuv\               ', &
+   &'wxyz'])
+   open(newunit=lun,file='_scratch_read_line.txt',pad='yes')
+   icount=0
+   INFINITE: do while (read_line(line,lun,ios=stat) == 0)
+      icount=icount+1
+      last=line
+      if(unit_check_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
+   enddo INFINITE
+   expected='        abcdefghijklmnop qrstuvwxyz'
+   call unit_check('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_check('read_line',icount.eq.1,'expected ',1,'lines got',icount)
+   call unit_check('read_line',last.eq.expected,'expected',expected,'got',last)
+   ierr=filedelete('_scratch_read_line.txt')
    call unit_check_done('read_line',msg='')
+
 end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
@@ -179,10 +217,10 @@ character(len=:),allocatable :: line
 integer :: ierr
    call unit_check_start('fileread',msg='')
    ierr=filewrite('_scratch.txt>',[ character(len=10) :: &
-   &'abcdefghij                 ', &
-   &'klmnop                     ', &
-   &'qrstuv                     ', &
-   &'wxyz                       ', &
+   &'abcdefghij', &
+   &'klmnop    ', &
+   &'qrstuv    ', &
+   &'wxyz      ', &
    &''])
 
    call unit_check_start('filebyte',msg='')

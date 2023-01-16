@@ -22,6 +22,14 @@ checked ...
    - [x] registered in fpm(1) repository
 
 ---
+**2023-01-16**  John S. Urban  <https://github.com/urbanjost>
+
+### :green: ADD:
+     + added IOSTAT option to GETLINE(3f)
+### :red_circle: FIX:
+     + READ_LINE(3f) said it replaced non-printable characters
+       with a space but it did not. Now it does.
+---
 **2023-01-15**  John S. Urban  <https://github.com/urbanjost>
 
 ### :green: ADD:

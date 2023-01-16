@@ -2391,11 +2391,12 @@ end subroutine splitpath
 !!    (LICENSE:PD)
 !!
 !!##SYNTAX
-!!   function getline(line,lun) result(ier)
+!!   function getline(line,lun,iostat) result(ier)
 !!
 !!    character(len=:),allocatable,intent(out) :: line
 !!    integer,intent(in),optional              :: lun
-!!    integer,intent(out)                      :: ier
+!!    integer,intent(out),optional             :: iostat
+!!    integer                                  :: ier
 !!
 !!##DESCRIPTION
 !!    Read a line of any length up to programming environment maximum
@@ -2414,12 +2415,16 @@ end subroutine splitpath
 !!    the output string with each buffer read.
 !!
 !!##OPTIONS
-!!    LINE   line read
-!!    LUN    optional LUN (Fortran logical I/O unit) number. Defaults
-!!           to stdin.
+!!    LINE    line read
+!!    LUN     optional LUN (Fortran logical I/O unit) number. Defaults
+!!            to stdin.
+!!    IOSTAT  status returned by READ(IOSTAT=IOS). If not zero, an error
+!!            occurred or an end-of-file or end-of-record was encountered.
+!!            This is the same value as returned by the function. See the
+!!            example program for a usage case.
 !!##RETURNS
-!!    IER    zero unless an error occurred. If not zero, LINE returns the
-!!           I/O error message.
+!!    IER     zero unless an error occurred. If not zero, LINE returns the
+!!            I/O error message.
 !!
 !!##EXAMPLE
 !!
@@ -2427,13 +2432,18 @@ end subroutine splitpath
 !!
 !!    program demo_getline
 !!    use,intrinsic :: iso_fortran_env, only : stdin=>input_unit
+!!    use,intrinsic :: iso_fortran_env, only : iostat_end
 !!    use M_io, only : getline
 !!    implicit none
+!!    integer :: iostat
 !!    character(len=:),allocatable :: line
 !!       open(unit=stdin,pad='yes')
-!!       INFINITE: do while (getline(line)==0)
+!!       INFINITE: do while (getline(line,iostat=iostat)==0)
 !!          write(*,'(a)')'['//line//']'
 !!       enddo INFINITE
+!!       if(iostat.ne.iostat_end)then
+!!          write(*,*)'error reading input:',trim(line)
+!!       endif
 !!    end program demo_getline
 !!
 !!##AUTHOR
@@ -2441,13 +2451,14 @@ end subroutine splitpath
 !!
 !!##LICENSE
 !!    Public Domain
-function getline(line,lun) result(ier)
+function getline(line,lun,iostat) result(ier)
 implicit none
 
 ! ident_11="@(#) M_io getline(3f) read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
+integer,intent(out),optional             :: iostat
 integer                                  :: ier
 character(len=4096)                      :: message
 
@@ -2478,6 +2489,7 @@ integer                                  :: lun_local
      endif
    enddo INFINITE
    line=line_local                                                   ! trim line
+   if(present(iostat))iostat=ier
 end function getline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2605,6 +2617,7 @@ integer                                  :: lun_local
    if(allocated(line))deallocate(line)
    allocate(character(len=biggest) :: line)
    call notabs(line_local,line,last)                        ! expand tabs, trim carriage returns, remove unprintable characters
+   line=noesc(line)
    line=trim(line(:last))                                   ! trim line
    if(present(ios))then
       ios=ier
@@ -4733,6 +4746,24 @@ INTEGER                       :: iade         ! ADE (ASCII Decimal Equivalent) o
       ilen=LEN_TRIM(outstr(:ipos))            ! trim trailing spaces
 !===================================================================================================================================
 END SUBROUTINE notabs
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+elemental function noesc(INSTR)
+! ident_48="@(#) M_strings noesc(3f) convert non-printable characters to a space"
+character(len=*),intent(in) :: INSTR      ! string that might contain nonprintable characters
+character(len=len(instr))   :: noesc
+integer                     :: ic,i10
+   noesc=''                               ! initialize output string
+   do i10=1,len_trim(INSTR(1:len(INSTR)))
+      ic=iachar(INSTR(i10:i10))
+      if(ic <= 31.or.ic == 127)then       ! find characters with ADE of 0-31, 127
+         noesc(I10:I10)=' '               ! replace non-printable characters with a space
+      else
+         noesc(I10:I10)=INSTR(i10:i10)    ! copy other characters as-is from input string to output string
+      endif
+   enddo
+end function noesc
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
