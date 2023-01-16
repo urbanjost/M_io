@@ -95,7 +95,7 @@ In the docs/ directory there is
 
 ## Demo Programs
 
-There are demo programs extracted from the man pages in the example/
+There are demo programs extracted from the man pages in the [example/](example/)
 directory.
 
 ---
