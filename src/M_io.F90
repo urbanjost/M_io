@@ -1066,7 +1066,7 @@ character(len=4096) :: local_filename
            &form="unformatted", access="stream",status='old',iostat=ios)
           local_filename=filename
        type is (integer)
-          rewind(unit=filename,iostat=ios,iomsg=message)
+          if(filename /= stdin) rewind(unit=filename,iostat=ios,iomsg=message)
           write(local_filename,'("unit ",i0)')filename
           igetunit=filename
       end select
@@ -2441,7 +2441,7 @@ end subroutine splitpath
 !!       INFINITE: do while (getline(line,iostat=iostat)==0)
 !!          write(*,'(a)')'['//line//']'
 !!       enddo INFINITE
-!!       if(iostat.ne.iostat_end)then
+!!       if(iostat /= iostat_end)then
 !!          write(*,*)'error reading input:',trim(line)
 !!       endif
 !!    end program demo_getline

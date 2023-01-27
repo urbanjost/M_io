@@ -9,7 +9,7 @@
         INFINITE: do while (getline(line,iostat=iostat)==0)
            write(*,'(a)')'['//line//']'
         enddo INFINITE
-        if(iostat.ne.iostat_end)then
+        if(iostat /= iostat_end)then
            write(*,*)'error reading input:',trim(line)
         endif
      end program demo_getline

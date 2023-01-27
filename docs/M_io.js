@@ -1,5 +1,4 @@
 function loadthem(){
-append("M_io.3m_io.html");
 append("basename.3m_io.html");
 append("dirname.3m_io.html");
 append("filebyte.3m_io.html");
