@@ -1055,7 +1055,6 @@ integer :: length_local
 integer :: lines_local
 integer :: i
 integer :: icount
-integer :: iostat
 character(len=256)  :: message
 character(len=4096) :: label
 character(len=:),allocatable :: line
@@ -1064,21 +1063,19 @@ character(len=:),allocatable :: line
    message=''
    select type(FILENAME)
     type is (character(len=*))
-       open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
-        &form="unformatted", access="stream",status='old',iostat=ios)
-       label=filename
+       if(filename /= '-') then
+          open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
+           &form="unformatted", access="stream",status='old',iostat=ios)
+          label=filename
+       else ! copy stdin to a scratch file
+          call copystdin()
+       endif
     type is (integer)
        if(filename /= stdin) then
           rewind(unit=filename,iostat=ios,iomsg=message)
           igetunit=filename
        else ! copy stdin to a scratch file
-          open(newunit=igetunit, iomsg=message,&
-           &form="unformatted", access="stream",status='scratch',iostat=ios)
-          open(unit=stdin,pad='yes')
-          INFINITE: do while (getline(line,iostat=iostat)==0)
-             write(igetunit)line//new_line('a')
-          enddo INFINITE
-          rewind(igetunit,iostat=ios,iomsg=message)
+          call copystdin()
        endif
        write(label,'("unit ",i0)')filename
    end select
@@ -1123,6 +1120,17 @@ character(len=:),allocatable :: line
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine copystdin()
+integer :: iostat
+   open(newunit=igetunit, iomsg=message,&
+   &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+   INFINITE: do while (getline(line,iostat=iostat)==0)
+      write(igetunit)line//new_line('a')
+   enddo INFINITE
+   rewind(igetunit,iostat=iostat,iomsg=message)
+end subroutine copystdin
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
