@@ -1055,25 +1055,37 @@ integer :: length_local
 integer :: lines_local
 integer :: i
 integer :: icount
+integer :: iostat
 character(len=256)  :: message
-character(len=4096) :: local_filename
+character(len=4096) :: label
+character(len=:),allocatable :: line
    length_local=0
    lines_local=0
    message=''
-      select type(FILENAME)
-       type is (character(len=*))
-          open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
-           &form="unformatted", access="stream",status='old',iostat=ios)
-          local_filename=filename
-       type is (integer)
-          if(filename /= stdin) rewind(unit=filename,iostat=ios,iomsg=message)
-          write(local_filename,'("unit ",i0)')filename
+   select type(FILENAME)
+    type is (character(len=*))
+       open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
+        &form="unformatted", access="stream",status='old',iostat=ios)
+       label=filename
+    type is (integer)
+       if(filename /= stdin) then
+          rewind(unit=filename,iostat=ios,iomsg=message)
           igetunit=filename
-      end select
+       else ! copy stdin to a scratch file
+          open(newunit=igetunit, iomsg=message,&
+           &form="unformatted", access="stream",status='scratch',iostat=ios)
+          open(unit=stdin,pad='yes')
+          INFINITE: do while (getline(line,iostat=iostat)==0)
+             write(igetunit)line//new_line('a')
+          enddo INFINITE
+          rewind(igetunit,iostat=ios,iomsg=message)
+       endif
+       write(label,'("unit ",i0)')filename
+   end select
    if(ios == 0)then  ! if file was successfully opened
       inquire(unit=igetunit, size=nchars)
       if(nchars <= 0)then
-         call stderr_local( '*filebyte* empty file '//trim(local_filename) )
+         call stderr_local( '*filebyte* empty file '//trim(label) )
          return
       endif
       ! read file into text array
@@ -1081,7 +1093,7 @@ character(len=4096) :: local_filename
       allocate ( text(nchars) )           ! make enough storage to hold file
       read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array
       if(ios /= 0)then
-         call stderr_local( '*filebyte* bad read of '//trim(local_filename)//':'//trim(message) )
+         call stderr_local( '*filebyte* bad read of '//trim(label)//':'//trim(message) )
       endif
    else
       call stderr_local('*filebyte* '//message)
