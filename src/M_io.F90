@@ -36,9 +36,7 @@ public which
 public get_env
 public getname
 
-! ident_1="@(#) M_io read_table(3f) read file containing a table of numeric values"
-
-! ident_2="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
+! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
    module procedure rd_integer
@@ -47,11 +45,13 @@ interface rd
    module procedure rd_logical
 end interface
 
+! ident_2="@(#) M_io read_table(3f) read file containing a table of numeric values"
 interface read_table
    module procedure read_table_i
    module procedure read_table_r
    module procedure read_table_d
 end interface
+
 interface filedelete
    module procedure filedelete_filename
    module procedure filedelete_lun
@@ -677,7 +677,6 @@ end function separator
 !!##LICENSE
 !!    Public Domain
 subroutine read_table_d(filename,darray,ierr,comment)
-implicit none
 ! note the array is allocated as text, and then doubleprecision, and then placed in the output array.
 ! for large files it would be worth it to just determine the file size and allocate and fill the output
 ! array
@@ -759,7 +758,7 @@ contains
        do k=1,size(words)
           read(words(k),*,iostat=ios)value
           if(ios == 0)then
-             line=line//words(k)//' '
+             line=line//crop(words(k))//' '
           endif
        enddo
        if(line /= '')then
