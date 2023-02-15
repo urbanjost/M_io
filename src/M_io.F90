@@ -476,36 +476,6 @@ end subroutine print_inquire
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function separator() result(sep)
-!>
-!!##NAME
-!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    function separator() result(sep)
-!!
-!!     character(len=1) :: sep
-!!
-!!##DESCRIPTION
-!!   First testing for the existence of "/.",  then if that fails a list
-!!   of variable names assumed to contain directory paths {PATH|HOME} are
-!!   examined first for a backslash, then a slash. Assuming basically the
-!!   choice is a ULS or MSWindows system, and users can do weird things like
-!!   put a backslash in a ULS path and break it.
-!!
-!!   Therefore can be very system dependent. If the queries fail the
-!!   default returned is "/".
-!!
-!!##EXAMPLE
-!!
-!!   sample usage
-!!
-!!    program demo_separator
-!!    use M_io, only : separator
-!!    implicit none
-!!       write(*,*)'separator=',separator()
-!!    end program demo_separator
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
@@ -3257,36 +3227,27 @@ end function lookfor
 !!
 !!##LICENSE
 !!    Public Domain
-function get_env(NAME,DEFAULT) result(VALUE)
+function get_env(NAME, DEFAULT) result(VALUE)
 implicit none
-character(len=*),intent(in)          :: NAME
-character(len=*),intent(in),optional :: DEFAULT
-character(len=:),allocatable         :: VALUE
-integer                              :: howbig
-integer                              :: stat
-integer                              :: length
-   ! get length required to hold value
-   length=0
-   if(NAME /= '')then
-      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+character(len=*), intent(in)           :: NAME
+character(len=*), intent(in), optional :: DEFAULT
+character(len=:), allocatable          :: VALUE
+integer                                :: howbig
+integer                                :: stat
+   if (NAME /= '') then
+      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
       select case (stat)
-      case (1)
-         !*!print *, NAME, " is not defined in the environment. Strange..."
-         VALUE=''
-      case (2)
-         !*!print *, "This processor doesn't support environment variables. Boooh!"
-         VALUE=''
+      case (1); VALUE = '' ! NAME is not defined in the environment
+      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
       case default
-         ! make string to hold value of sufficient size
-         allocate(character(len=max(howbig,1)) :: VALUE)
-         ! get value
-         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-         if(stat /= 0)VALUE=''
+         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
+         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
+         if (stat /= 0) VALUE = ''
       end select
    else
-      VALUE=''
-   endif
-   if(VALUE == ''.and.present(DEFAULT))VALUE=DEFAULT
+      VALUE = ''
+   end if
+   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3414,9 +3375,6 @@ end select
    exit
 enddo
 end subroutine get_next_char
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

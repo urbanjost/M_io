@@ -199,9 +199,9 @@ man:
 	: INDEX OF MANPAGES TOPICS
 	@env MANPATH=../man MANWIDTH=256 man -k .|col -b
 	: MANPAGES
-	@env MANPATH=../man MANWIDTH=80  man --regex '.*'|col -b
+	@env MANPATH=../man MANWIDTH=80  man -Tutf8 --regex '.*'|col -b
 	: SPELLING
-	@env MANPATH=../man MANWIDTH=80  man --regex '.*'|col -b|spell|xargs -n 5|column -t
+	@env MANPATH=../man MANWIDTH=80  man -Tutf8 --regex '.*'|col -b|spell|xargs -n 5|column -t
 #-------------------------------------------------------------------------------
 M_ctrper.o: M_mrgrnk.o 
 M_mulcnt.o: M_uniinv.o 
