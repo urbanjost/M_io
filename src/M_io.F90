@@ -250,7 +250,7 @@ logical                     :: create_local
       inquire(file=uniq,exist=around)                 ! see if this filename already exists
       if(.not.around)then                             ! found an unused name
          if(verbose_local)then
-            call journal('c',trim('*uniq* name='//trim(uniq))) ! write out message reporting name used
+            call journal('c','*uniq* name='//trim(uniq)) ! write out message reporting name used
          endif
          if(create_local)then
             open(newunit=iscr,file=uniq,iostat=ios,status='new')
