@@ -10,6 +10,9 @@ categories = ["io"]
 keywords = ["fortran", "files"]
 homepage = "https://github.com/urbanjost/M_io.git"
 
+[build]
+module-naming = true
+
 #[dev-dependencies]
 #M_msg    = { git = "https://github.com/urbanjost/M_msg.git" }
 
@@ -20,3 +23,4 @@ main="test_suite_M_io.f90"
 ##link = ["blas", "lapack"]
 [test.dependencies]
 M_framework = { git = "https://github.com/urbanjost/M_framework.git" }
+
