@@ -2,11 +2,12 @@
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()=
 !===================================================================================================================================
 program runtest
-use M_msg
+use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor 
 use M_io
-use :: M_verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
-use :: M_verify, only : unit_check_stop
-use :: M_verify, only : unit_check_level, unit_check_keep_going, unit_check_command
+use M_framework__msg
+use :: M_framework__verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
+use :: M_framework__verify, only : unit_check_stop
+use :: M_framework__verify, only : unit_check_level, unit_check_keep_going, unit_check_command
 use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
 use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
@@ -27,6 +28,7 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_splitpath()
    call test_uniq()
    call test_notopen()
+   call test_filename_generator()
    call test_fileread()
    call test_number_of_lines()
    call test_basename()
@@ -64,9 +66,21 @@ subroutine test_get_tmp()
    call unit_check_done('get_tmp',msg='')
 end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_filename_generator()
+
+   call unit_check_start('filename_generator',msg='')
+   call unit_check_msg('filename_generator','generate a filename containing a whole number')
+
+   call unit_check('filename_generator', filename_generator('head','.tail',100) ==  'head100.tail' )
+   call unit_check('filename_generator', filename_generator('head','.tail',1,3) ==  'head001.tail' )
+
+   call unit_check_done('filename_generator',msg='')
+
+end subroutine test_filename_generator
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_notopen()
 
-integer :: i, ierr, ierr2
+integer :: i, bug, ierr, ierr2
 
    call unit_check_start('notopen',msg='')
    call unit_check_msg('notopen','check for preassigned files from unit 0 to unit 1000')
@@ -74,7 +88,8 @@ integer :: i, ierr, ierr2
 
    do i=0,1000
       if(notopen(i,i,ierr)  /=  i)then
-         call unit_check_msg('notopen','INUSE:',i,ierr, notopen(i,i,ierr2) )
+         bug=notopen(i,i,ierr2) ! gfortran 11 bug; OK in 9, 10
+         call unit_check_msg('notopen','INUSE:',i,ierr,bug )
       endif
    enddo
    call unit_check('notopen', notopen(5,6,ierr)            ==  -1 ,'preassigned')
@@ -110,22 +125,58 @@ subroutine test_rd()
 end subroutine test_rd
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getline()
-
+character(len=:),allocatable :: line, last, expected
+integer                      :: lun, ierr, stat, icount
    call unit_check_start('getline',msg='')
-   !!call unit_check('getline', 0 == 0, 'checking',100)
+   ierr=filewrite('_scratch_getline.txt>',[ character(len=80) :: &
+   &achar(9)//'abcdefghij\ ', &
+   &'klmnop'//achar(8)//'\' , &
+   &'qrstuv\               ', &
+   &'wxyz'])
+   open(newunit=lun,file='_scratch_getline.txt',pad='yes')
+   icount=0
+   INFINITE: do while (getline(line,lun,stat) == 0)
+      icount=icount+1
+      last=line
+      if(unit_check_level.gt.0.or..true.) write (*, '(*(g0))') 'getline>>>>',icount,' [',line,']'
+   enddo INFINITE
+   expected='wxyz'
+   call unit_check('getline',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_check('getline',icount.eq.4,'expected ',4,'lines got',icount)
+   call unit_check('getline',last.eq.expected,'expected',expected,'got',last)
+   ierr=filedelete('_scratch_getline.txt')
    call unit_check_done('getline',msg='')
+
 end subroutine test_getline
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_line()
-
+character(len=:),allocatable :: line, last, expected
+integer                      :: lun, ierr, stat, icount
    call unit_check_start('read_line',msg='')
-   !!call unit_check('read_line', 0 == 0, 'checking',100)
+   ierr=filewrite('_scratch_read_line.txt>',[ character(len=80) :: &
+   &achar(9)//'abcdefghij\ ', &
+   &'klmnop'//achar(8)//'\' , &
+   &'qrstuv\               ', &
+   &'wxyz'])
+   open(newunit=lun,file='_scratch_read_line.txt',pad='yes')
+   icount=0
+   INFINITE: do while (read_line(line,lun,ios=stat) == 0)
+      icount=icount+1
+      last=line
+      if(unit_check_level.gt.0) write (*, '(*(g0))') 'read_line>>>>',icount,' [',line,']'
+   enddo INFINITE
+   expected='        abcdefghijklmnop qrstuvwxyz'
+   call unit_check('read_line',is_iostat_end(stat),'last status got',stat,'expected',iostat_end)
+   call unit_check('read_line',icount.eq.1,'expected ',1,'lines got',icount)
+   call unit_check('read_line',last.eq.expected,'expected',expected,'got',last)
+   ierr=filedelete('_scratch_read_line.txt')
    call unit_check_done('read_line',msg='')
+
 end subroutine test_read_line
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_read_table()
 doubleprecision,allocatable :: array(:,:)
-integer :: i, ierr
+integer :: ierr
 
    call unit_check_start('read_table',msg='')
    ! create test file
@@ -163,10 +214,10 @@ character(len=:),allocatable :: line
 integer :: ierr
    call unit_check_start('fileread',msg='')
    ierr=filewrite('_scratch.txt>',[ character(len=10) :: &
-   &'abcdefghij                 ', &
-   &'klmnop                     ', &
-   &'qrstuv                     ', &
-   &'wxyz                       ', &
+   &'abcdefghij', &
+   &'klmnop    ', &
+   &'qrstuv    ', &
+   &'wxyz      ', &
    &''])
 
    call unit_check_start('filebyte',msg='')

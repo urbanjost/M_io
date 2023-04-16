@@ -12,6 +12,7 @@ integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
 public uniq
 public print_inquire
 public notopen
+public filename_generator
 public number_of_lines
 public get_next_char
 public dirname
@@ -35,9 +36,7 @@ public which
 public get_env
 public getname
 
-! ident_1="@(#) M_io read_table(3f) read file containing a table of numeric values"
-
-! ident_2="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
+! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
 interface rd
    module procedure rd_character
    module procedure rd_integer
@@ -46,11 +45,13 @@ interface rd
    module procedure rd_logical
 end interface
 
+! ident_2="@(#) M_io read_table(3f) read file containing a table of numeric values"
 interface read_table
    module procedure read_table_i
    module procedure read_table_r
    module procedure read_table_d
 end interface
+
 interface filedelete
    module procedure filedelete_filename
    module procedure filedelete_lun
@@ -80,16 +81,9 @@ interface str
 end interface str
 !-----------------------------------
 ! old names
-interface swallow
-   module procedure fileread
-end interface
-
-interface gulp
-   module procedure fileread
-end interface
-interface slurp
-   module procedure filebyte
-end interface
+interface swallow;  module procedure fileread;  end interface
+interface gulp;     module procedure fileread;  end interface
+interface slurp;    module procedure filebyte;  end interface
 !-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
 
@@ -256,7 +250,7 @@ logical                     :: create_local
       inquire(file=uniq,exist=around)                 ! see if this filename already exists
       if(.not.around)then                             ! found an unused name
          if(verbose_local)then
-            call journal('c',trim('*uniq* name='//trim(uniq))) ! write out message reporting name used
+            call journal('c','*uniq* name='//trim(uniq)) ! write out message reporting name used
          endif
          if(create_local)then
             open(newunit=iscr,file=uniq,iostat=ios,status='new')
@@ -482,36 +476,6 @@ end subroutine print_inquire
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
 function separator() result(sep)
-!>
-!!##NAME
-!!    separator(3f) - [M_io:QUERY] try to determine pathname directory separator character
-!!    (LICENSE:PD)
-!!
-!!##SYNOPSIS
-!!
-!!    function separator() result(sep)
-!!
-!!     character(len=1) :: sep
-!!
-!!##DESCRIPTION
-!!   First testing for the existence of "/.",  then if that fails a list
-!!   of variable names assumed to contain directory paths {PATH|HOME} are
-!!   examined first for a backslash, then a slash. Assuming basically the
-!!   choice is a ULS or MSWindows system, and users can do weird things like
-!!   put a backslash in a ULS path and break it.
-!!
-!!   Therefore can be very system dependent. If the queries fail the
-!!   default returned is "/".
-!!
-!!##EXAMPLE
-!!
-!!   sample usage
-!!
-!!    program demo_separator
-!!    use M_io, only : separator
-!!    implicit none
-!!       write(*,*)'separator=',separator()
-!!    end program demo_separator
 
 ! use the pathname returned as arg0 to determine pathname separator
 implicit none
@@ -683,7 +647,6 @@ end function separator
 !!##LICENSE
 !!    Public Domain
 subroutine read_table_d(filename,darray,ierr,comment)
-implicit none
 ! note the array is allocated as text, and then doubleprecision, and then placed in the output array.
 ! for large files it would be worth it to just determine the file size and allocate and fill the output
 ! array
@@ -765,7 +728,7 @@ contains
        do k=1,size(words)
           read(words(k),*,iostat=ios)value
           if(ios == 0)then
-             line=line//words(k)//' '
+             line=line//crop(words(k))//' '
           endif
        enddo
        if(line /= '')then
@@ -878,13 +841,13 @@ end subroutine read_table_r
 !!
 !!   Expected output
 !!
-!!     number of lines is 3
-!!     and length of lines is 11
-!!    %%%%%%%%%%%%%
-!!    %third line %
-!!    %second line%
-!!    %first line %
-!!    %%%%%%%%%%%%%
+!!    >  number of lines is 3
+!!    >  and length of lines is 11
+!!    > %%%%%%%%%%%%%
+!!    > %third line %
+!!    > %second line%
+!!    > %first line %
+!!    > %%%%%%%%%%%%%
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -1062,24 +1025,33 @@ integer :: lines_local
 integer :: i
 integer :: icount
 character(len=256)  :: message
-character(len=4096) :: local_filename
+character(len=4096) :: label
+character(len=:),allocatable :: line
    length_local=0
    lines_local=0
    message=''
-      select type(FILENAME)
-       type is (character(len=*))
+   select type(FILENAME)
+    type is (character(len=*))
+       if(filename /= '-') then
           open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
            &form="unformatted", access="stream",status='old',iostat=ios)
-          local_filename=filename
-       type is (integer)
+          label=filename
+       else ! copy stdin to a scratch file
+          call copystdin()
+       endif
+    type is (integer)
+       if(filename /= stdin) then
           rewind(unit=filename,iostat=ios,iomsg=message)
-          write(local_filename,'("unit ",i0)')filename
           igetunit=filename
-      end select
+       else ! copy stdin to a scratch file
+          call copystdin()
+       endif
+       write(label,'("unit ",i0)')filename
+   end select
    if(ios == 0)then  ! if file was successfully opened
       inquire(unit=igetunit, size=nchars)
       if(nchars <= 0)then
-         call stderr_local( '*filebyte* empty file '//trim(local_filename) )
+         call stderr_local( '*filebyte* empty file '//trim(label) )
          return
       endif
       ! read file into text array
@@ -1087,7 +1059,7 @@ character(len=4096) :: local_filename
       allocate ( text(nchars) )           ! make enough storage to hold file
       read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array
       if(ios /= 0)then
-         call stderr_local( '*filebyte* bad read of '//trim(local_filename)//':'//trim(message) )
+         call stderr_local( '*filebyte* bad read of '//trim(label)//':'//trim(message) )
       endif
    else
       call stderr_local('*filebyte* '//message)
@@ -1117,6 +1089,17 @@ character(len=4096) :: local_filename
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine copystdin()
+integer :: iostat
+   open(newunit=igetunit, iomsg=message,&
+   &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+   INFINITE: do while (getline(line,iostat=iostat)==0)
+      write(igetunit)line//new_line('a')
+   enddo INFINITE
+   rewind(igetunit,iostat=iostat,iomsg=message)
+end subroutine copystdin
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
@@ -1425,7 +1408,6 @@ end function notopen
 !!       allocate(character(len=filename_length) :: filename)
 !!       call get_command_argument (i , value=filename)
 !!       write(*,'(a)')dirname(filename)
-!!       deallocate(filename)
 !!    enddo
 !!    end program demo_dirname
 !!
@@ -1538,7 +1520,6 @@ end function dirname
 !!       ! leaf with suffix retained
 !!       ! with suffix unless it is ".f90"
 !!       write(*,'(*(a,1x))') basename(fn), basename(fn,''), basename(fn,'.f90')
-!!       deallocate(fn)
 !!    enddo
 !!    end program demo_basename
 !!
@@ -2399,11 +2380,12 @@ end subroutine splitpath
 !!    (LICENSE:PD)
 !!
 !!##SYNTAX
-!!   function getline(line,lun) result(ier)
+!!   function getline(line,lun,iostat) result(ier)
 !!
 !!    character(len=:),allocatable,intent(out) :: line
 !!    integer,intent(in),optional              :: lun
-!!    integer,intent(out)                      :: ier
+!!    integer,intent(out),optional             :: iostat
+!!    integer                                  :: ier
 !!
 !!##DESCRIPTION
 !!    Read a line of any length up to programming environment maximum
@@ -2422,12 +2404,16 @@ end subroutine splitpath
 !!    the output string with each buffer read.
 !!
 !!##OPTIONS
-!!    LINE   line read
-!!    LUN    optional LUN (Fortran logical I/O unit) number. Defaults
-!!           to stdin.
+!!    LINE    line read
+!!    LUN     optional LUN (Fortran logical I/O unit) number. Defaults
+!!            to stdin.
+!!    IOSTAT  status returned by READ(IOSTAT=IOS). If not zero, an error
+!!            occurred or an end-of-file or end-of-record was encountered.
+!!            This is the same value as returned by the function. See the
+!!            example program for a usage case.
 !!##RETURNS
-!!    IER    zero unless an error occurred. If not zero, LINE returns the
-!!           I/O error message.
+!!    IER     zero unless an error occurred. If not zero, LINE returns the
+!!            I/O error message.
 !!
 !!##EXAMPLE
 !!
@@ -2435,13 +2421,18 @@ end subroutine splitpath
 !!
 !!    program demo_getline
 !!    use,intrinsic :: iso_fortran_env, only : stdin=>input_unit
+!!    use,intrinsic :: iso_fortran_env, only : iostat_end
 !!    use M_io, only : getline
 !!    implicit none
+!!    integer :: iostat
 !!    character(len=:),allocatable :: line
 !!       open(unit=stdin,pad='yes')
-!!       INFINITE: do while (getline(line)==0)
+!!       INFINITE: do while (getline(line,iostat=iostat)==0)
 !!          write(*,'(a)')'['//line//']'
 !!       enddo INFINITE
+!!       if(iostat /= iostat_end)then
+!!          write(*,*)'error reading input:',trim(line)
+!!       endif
 !!    end program demo_getline
 !!
 !!##AUTHOR
@@ -2449,13 +2440,14 @@ end subroutine splitpath
 !!
 !!##LICENSE
 !!    Public Domain
-function getline(line,lun) result(ier)
+function getline(line,lun,iostat) result(ier)
 implicit none
 
 ! ident_11="@(#) M_io getline(3f) read a line from specified LUN into allocatable string up to line length limit"
 
 character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
+integer,intent(out),optional             :: iostat
 integer                                  :: ier
 character(len=4096)                      :: message
 
@@ -2486,6 +2478,7 @@ integer                                  :: lun_local
      endif
    enddo INFINITE
    line=line_local                                                   ! trim line
+   if(present(iostat))iostat=ier
 end function getline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2613,6 +2606,7 @@ integer                                  :: lun_local
    if(allocated(line))deallocate(line)
    allocate(character(len=biggest) :: line)
    call notabs(line_local,line,last)                        ! expand tabs, trim carriage returns, remove unprintable characters
+   line=noesc(line)
    line=trim(line(:last))                                   ! trim line
    if(present(ios))then
       ios=ier
@@ -2658,7 +2652,11 @@ end function read_line
 !!
 !!   Sample Results:
 !!
-!!     result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
+!!     > result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
+!!     >
+!!     > the file /cygdrive/c/Users/JSU/AppData/Local/Temp/_scratch
+!!     > was a good scratch file name, at least a moment ago
+!!
 !!##AUTHOR
 !!    John S. Urban
 !!##LICENSE
@@ -2968,7 +2966,7 @@ end function rd_integer
 !!     character(len=:),allocatable         :: getname
 !!
 !!##DESCRIPTION
-!!    The getname() returns the name of the current executable using
+!!    getname(3f) returns the name of the current executable using
 !!    get_command_argument(3f) and inquire(3f).
 !!
 !!##EXAMPLE
@@ -3229,36 +3227,27 @@ end function lookfor
 !!
 !!##LICENSE
 !!    Public Domain
-function get_env(NAME,DEFAULT) result(VALUE)
+function get_env(NAME, DEFAULT) result(VALUE)
 implicit none
-character(len=*),intent(in)          :: NAME
-character(len=*),intent(in),optional :: DEFAULT
-character(len=:),allocatable         :: VALUE
-integer                              :: howbig
-integer                              :: stat
-integer                              :: length
-   ! get length required to hold value
-   length=0
-   if(NAME /= '')then
-      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+character(len=*), intent(in)           :: NAME
+character(len=*), intent(in), optional :: DEFAULT
+character(len=:), allocatable          :: VALUE
+integer                                :: howbig
+integer                                :: stat
+   if (NAME /= '') then
+      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
       select case (stat)
-      case (1)
-         !*!print *, NAME, " is not defined in the environment. Strange..."
-         VALUE=''
-      case (2)
-         !*!print *, "This processor doesn't support environment variables. Boooh!"
-         VALUE=''
+      case (1); VALUE = '' ! NAME is not defined in the environment
+      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
       case default
-         ! make string to hold value of sufficient size
-         allocate(character(len=max(howbig,1)) :: VALUE)
-         ! get value
-         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
-         if(stat /= 0)VALUE=''
+         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
+         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
+         if (stat /= 0) VALUE = ''
       end select
    else
-      VALUE=''
-   endif
-   if(VALUE == ''.and.present(DEFAULT))VALUE=DEFAULT
+      VALUE = ''
+   end if
+   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3386,6 +3375,95 @@ end select
    exit
 enddo
 end subroutine get_next_char
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    notopen(3f) - [M_io:FILENAME] generate a filename containing a number
+!!    (LICENSE:PD)
+!!##SYNOPSIS
+!!
+!!    Usage
+!!
+!!       function filename_generator(head,tail,num,lenlimit) result(filename)
+!!       character(len=*),intent(in)  :: head
+!!       character(len=*),intent(in)  :: tail
+!!       integer,intent(in) :: num
+!!       integer,intent(in) :: lenlimit
+!!       character(len=:),allocatable :: filename
+!!
+!!##DESCRIPTION
+!!
+!!    Generate a filename containing a representation of the specified
+!!    whole number.  This is useful for generating a series of filenames
+!!    differing by a number such as "file1.txt", "file2.txt",
+!!    ... .
+!!
+!!##OPTIONS
+!!
+!!    head      filename prefix.
+!!    tail      filename suffix.
+!!    num       number to represent as a string between HEAD and TAIL.
+!!    lenlimit  number of digits up to which to zero-pad the string
+!!              representing NUM.
+!!
+!!
+!!##EXAMPLE
+!!
+!!
+!!    Sample program:
+!!
+!!       program demo_filename_generator
+!!       use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
+!!       use M_io, only : filename_generator
+!!       implicit none
+!!
+!!           ! no zero-fill
+!!           write(*,*) filename_generator("file_",".dat",11)
+!!           ! zero-fill till 3 digits
+!!           write(*,*) filename_generator("file_",".dat",11,3)
+!!           ! zero-fill till 9 digits
+!!           write(*,*) filename_generator("file_",".dat",11,9)
+!!           ! same as default (no zero-fill)
+!!           write(*,*) filename_generator("file_",".dat",11,0)
+!!
+!!       end program demo_filename_generator
+!!
+!!    Results
+!!
+!!       > file_11.dat
+!!       > file_011.dat
+!!       > file_000000011.dat
+!!       > file_11.dat
+!!
+!!##AUTHOR
+!!    Zh, Niu; with modifications by John S. Urban
+!!##LICENSE
+!!    Public Domain
+
+function filename_generator(head, tail, num, lenlimit) result(filename)
+character(*),intent(in)      :: head
+character(*),intent(in)      :: tail
+integer,intent(in)           :: num
+integer,intent(in),optional  :: lenlimit
+character(len=:),allocatable :: filename
+
+character(30)                :: fmt
+integer                      :: local_lenlimit
+
+   if ( present(lenlimit) ) then
+      local_lenlimit = lenlimit
+   else
+      local_lenlimit = 0
+   endif
+
+   fmt = ""
+   write(fmt, '("(a,i0.",i2.2,",a)")' ) local_lenlimit
+   filename=repeat(' ', len(head) + len(tail) + max(19,local_lenlimit) )
+   write(filename(:),fmt) trim(adjustl(head)), num, trim(adjustl(tail))
+   filename=trim(filename)
+end function filename_generator
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -4648,6 +4726,24 @@ END SUBROUTINE notabs
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
+elemental function noesc(INSTR)
+! ident_48="@(#) M_strings noesc(3f) convert non-printable characters to a space"
+character(len=*),intent(in) :: INSTR      ! string that might contain nonprintable characters
+character(len=len(instr))   :: noesc
+integer                     :: ic,i10
+   noesc=''                               ! initialize output string
+   do i10=1,len_trim(INSTR(1:len(INSTR)))
+      ic=iachar(INSTR(i10:i10))
+      if(ic <= 31.or.ic == 127)then       ! find characters with ADE of 0-31, 127
+         noesc(I10:I10)=' '               ! replace non-printable characters with a space
+      else
+         noesc(I10:I10)=INSTR(i10:i10)    ! copy other characters as-is from input string to output string
+      endif
+   enddo
+end function noesc
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
 subroutine where_write_message(where,msg)
 ! ident_2="@(#)M_journal::where_write_message(3fp): basic message routine used for journal files"
 character(len=*),intent(in)  :: where
@@ -4884,6 +4980,15 @@ integer :: i
 end subroutine print_generic
 
 end function msg_one
+!===================================================================================================================================
+function crop(strin) result (strout)
+
+! ident_19="@(#) M_strings crop(3f) trim leading and trailings spaces from resulting string"
+
+character(len=*),intent(in)  :: strin
+character(len=:),allocatable :: strout
+   strout=trim(adjustl(strin))
+end function crop
 !===================================================================================================================================
 end module m_io
 !===================================================================================================================================

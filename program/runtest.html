@@ -4,26 +4,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-   <meta name="description" content="easy project">
+      <meta name="description" content="Fortran I/O module">
     <meta name="author" content="John Doe" >
     <link rel="icon" href="../favicon.png">
 
-    <title>runtest &ndash; easy</title>
+    <title>runtest &ndash; M_io</title>
 
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <link href="../css/pygments.css" rel="stylesheet">
     <link href="../css/font-awesome.min.css" rel="stylesheet">
     <link href="../css/local.css" rel="stylesheet">
-    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    
-    <script src="../js/jquery-2.1.3.min.js"></script>
-    <script src="../js/svg-pan-zoom.min.js"></script>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+         <script src="../js/jquery-2.1.3.min.js"></script>
+         <script src="../js/svg-pan-zoom.min.js"></script>
 
   </head>
 
@@ -39,37 +39,45 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="../index.html">easy </a>
+          <a class="navbar-brand" href="../index.html">M_io </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
             <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
               <a href="#" class="dropdown-toggle"
-              data-toggle="dropdown" role="button"
-              aria-haspopup="true"
-     aria-expanded="false">Contents <span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="../lists/files.html">Source Files</a></li>
-            <li><a href="../lists/modules.html">Modules</a></li>
-            <li><a href="../lists/procedures.html">Procedures</a></li>
-                   <li><a href="../lists/programs.html">Programs</a></li>
-       
-            </ul>
-        
+                 data-toggle="dropdown" role="button"
+                 aria-haspopup="true"
+                 aria-expanded="false">
+                 Contents <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                    <li><a href="../lists/files.html">Source Files</a></li>
+                  <li><a href="../lists/modules.html">Modules</a></li>
+                  <li><a href="../lists/procedures.html">Procedures</a></li>
+                  <li><a href="../lists/programs.html">Programs</a></li>
+              </ul>
             </li>
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
-<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
-                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+                <li class="visible-xs hidden-sm visible-lg">
+                  <a href="../lists/files.html">Source Files</a>
+                </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/modules.html">Modules</a>
+              </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/procedures.html">Procedures</a>
+              </li>
+              <li class="visible-xs hidden-sm visible-lg">
+                <a href="../lists/programs.html">Programs</a>
+              </li>
           </ul>
-        <form action="../search.html" class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
-        </div>
-<!--
-        <button type="submit" class="btn btn-default">Submit</button>
--->
-        </form>
+            <form action="../search.html" class="navbar-form navbar-right" role="search">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+              </div>
+              <!--
+                  <button type="submit" class="btn btn-default">Submit</button>
+                  -->
+            </form>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -87,7 +95,7 @@
           <li id="statements"><i class="fa fa-list-ol"></i>
             <a data-toggle="tooltip"
                data-placement="bottom" data-html="true"
-               title="43.8% of total for programs.">265 statements</a>
+               title="46.4% of total for programs.">305 statements</a>
           </li>
 
             <li id="source-file">
@@ -139,6 +147,7 @@
             <a class="list-group-item" href="../program/runtest.html#proc-test_filebyte">test_filebyte</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileclose">test_fileclose</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_filedelete">test_filedelete</a>
+            <a class="list-group-item" href="../program/runtest.html#proc-test_filename_generator">test_filename_generator</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileopen">test_fileopen</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileread">test_fileread</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_filewrite">test_filewrite</a>
@@ -190,10 +199,10 @@
       <ul class="list-group">
           <li class="list-group-item">
             <ul class="list-inline">
+                <li>M_framework__verify</li>
                 <li><a href='../module/m_io.html'>M_io</a></li>
-                <li>M_msg</li>
-                <li>M_verify</li>
-                <li><a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a></li>
+                <li><a href='<a href="https://gcc.gnu.org/onlinedocs/gfortran/ISO_005fFORTRAN_005fENV.html">iso_fortran_env</a>'>iso_fortran_env</a></li>
+                <li>M_framework__msg</li>
             </ul>
           </li>
       </ul>
@@ -229,6 +238,7 @@ teardown</p>
             <a class="list-group-item" href="../program/runtest.html#proc-test_filebyte">test_filebyte</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileclose">test_fileclose</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_filedelete">test_filedelete</a>
+            <a class="list-group-item" href="../program/runtest.html#proc-test_filename_generator">test_filename_generator</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileopen">test_fileopen</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_fileread">test_fileread</a>
             <a class="list-group-item" href="../program/runtest.html#proc-test_filewrite">test_filewrite</a>
@@ -347,6 +357,19 @@ teardown</p>
   </div>
 
       <div class="panel panel-default">
+    <div class="panel-heading codesum"><span class="anchor" id="proc-test_filename_generator"></span><h3> subroutine <a href='../proc/test_filename_generator.html'>test_filename_generator</a>()  
+</h3></div>
+    <div class="panel-body">
+          
+  
+
+  <h4>Arguments</h4>
+    <em>None</em>
+
+    </div>
+  </div>
+
+      <div class="panel panel-default">
     <div class="panel-heading codesum"><span class="anchor" id="proc-test_fileopen"></span><h3> subroutine <a href='../proc/test_fileopen.html'>test_fileopen</a>()  
 </h3></div>
     <div class="panel-body">
@@ -429,7 +452,7 @@ teardown</p>
 </h3></div>
     <div class="panel-body">
           
-  <p>call unit_check(&lsquo;getline&rsquo;, 0 == 0, &lsquo;checking&rsquo;,100)</p>
+  
 
   <h4>Arguments</h4>
     <em>None</em>
@@ -533,7 +556,7 @@ teardown</p>
 </h3></div>
     <div class="panel-body">
           
-  <p>call unit_check(&lsquo;read_line&rsquo;, 0 == 0, &lsquo;checking&rsquo;,100)</p>
+  
 
   <h4>Arguments</h4>
     <em>None</em>
@@ -624,11 +647,12 @@ teardown</p>
     <section>
     <h2 id="src">Source Code</h2>
     <div class="highlight"><pre><span></span><span class="k">program </span><span class="n">runtest</span><span class="w"></span>
-<span class="k">use </span><span class="n">M_msg</span><span class="w"></span>
+<span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">iostat_end</span><span class="p">,</span><span class="w"> </span><span class="n">iostat_eor</span><span class="w"> </span>
 <span class="k">use </span><span class="n">M_io</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_start</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_done</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_good</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_bad</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_msg</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_stop</span><span class="w"></span>
-<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_level</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_keep_going</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_command</span><span class="w"></span>
+<span class="k">use </span><span class="n">M_framework__msg</span><span class="w"></span>
+<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_framework__verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_start</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_done</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_good</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_bad</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_msg</span><span class="w"></span>
+<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_framework__verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_stop</span><span class="w"></span>
+<span class="k">use</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">M_framework__verify</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">unit_check_level</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_keep_going</span><span class="p">,</span><span class="w"> </span><span class="n">unit_check_command</span><span class="w"></span>
 <span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">stdin_lun</span><span class="w">  </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">input_unit</span><span class="w"></span>
 <span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">stderr_lun</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">error_unit</span><span class="w"></span>
 <span class="k">use</span><span class="p">,</span><span class="k">intrinsic</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">iostat_end</span><span class="p">,</span><span class="w"> </span><span class="n">iostat_eor</span><span class="w"></span>
@@ -649,6 +673,7 @@ teardown</p>
 <span class="w">   </span><span class="k">call </span><span class="n">test_splitpath</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">test_uniq</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">test_notopen</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">test_filename_generator</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">test_fileread</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">test_number_of_lines</span><span class="p">()</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">test_basename</span><span class="p">()</span><span class="w"></span>
@@ -686,9 +711,21 @@ teardown</p>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;get_tmp&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="k">end subroutine </span><span class="n">test_get_tmp</span><span class="w"></span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="k">subroutine </span><span class="n">test_filename_generator</span><span class="p">()</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;filename_generator&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_check_msg</span><span class="p">(</span><span class="s1">&#39;filename_generator&#39;</span><span class="p">,</span><span class="s1">&#39;generate a filename containing a whole number&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;filename_generator&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">filename_generator</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span><span class="s1">&#39;.tail&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w">  </span><span class="s1">&#39;head100.tail&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;filename_generator&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">filename_generator</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">,</span><span class="s1">&#39;.tail&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w">  </span><span class="s1">&#39;head001.tail&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+
+<span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;filename_generator&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
+
+<span class="k">end subroutine </span><span class="n">test_filename_generator</span><span class="w"></span>
+<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_notopen</span><span class="p">()</span><span class="w"></span>
 
-<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="n">ierr2</span><span class="w"></span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">bug</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="n">ierr2</span><span class="w"></span>
 
 <span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;notopen&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_check_msg</span><span class="p">(</span><span class="s1">&#39;notopen&#39;</span><span class="p">,</span><span class="s1">&#39;check for preassigned files from unit 0 to unit 1000&#39;</span><span class="p">)</span><span class="w"></span>
@@ -696,7 +733,8 @@ teardown</p>
 
 <span class="w">   </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="mi">1000</span><span class="w"></span>
 <span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">notopen</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span><span class="w">  </span><span class="o">/=</span><span class="w">  </span><span class="n">i</span><span class="p">)</span><span class="k">then</span>
-<span class="k">         call </span><span class="n">unit_check_msg</span><span class="p">(</span><span class="s1">&#39;notopen&#39;</span><span class="p">,</span><span class="s1">&#39;INUSE:&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="n">notopen</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ierr2</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
+<span class="k">         </span><span class="n">bug</span><span class="o">=</span><span class="n">notopen</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ierr2</span><span class="p">)</span><span class="w"> </span><span class="c">! gfortran 11 bug; OK in 9, 10</span>
+<span class="w">         </span><span class="k">call </span><span class="n">unit_check_msg</span><span class="p">(</span><span class="s1">&#39;notopen&#39;</span><span class="p">,</span><span class="s1">&#39;INUSE:&#39;</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="n">bug</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
 <span class="w">      </span><span class="k">endif</span>
 <span class="k">   enddo</span>
 <span class="k">   call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;notopen&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">notopen</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="n">ierr</span><span class="p">)</span><span class="w">            </span><span class="o">==</span><span class="w">  </span><span class="o">-</span><span class="mi">1</span><span class="w"> </span><span class="p">,</span><span class="s1">&#39;preassigned&#39;</span><span class="p">)</span><span class="w"></span>
@@ -732,87 +770,123 @@ teardown</p>
 <span class="k">end subroutine </span><span class="n">test_rd</span><span class="w"></span>
 <span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
 <span class="k">subroutine </span><span class="n">test_getline</span><span class="p">()</span><span class="w"></span>
-
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">line</span><span class="p">,</span><span class="w"> </span><span class="n">last</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">lun</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="p">,</span><span class="w"> </span><span class="nb">stat</span><span class="p">,</span><span class="w"> </span><span class="n">icount</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;getline&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">!!call unit_check(&#39;getline&#39;, 0 == 0, &#39;checking&#39;,100)</span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;getline&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_getline</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_read_line</span><span class="p">()</span><span class="w"></span>
+<span class="w">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filewrite</span><span class="p">(</span><span class="s1">&#39;_scratch_getline.txt&gt;&#39;</span><span class="p">,[</span><span class="w"> </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="p">&amp;</span><span class="nb">achar</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;abcdefghij\ &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
+<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;klmnop&#39;</span><span class="o">//</span><span class="nb">achar</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;\&#39; , &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">qrstuv</span><span class="err">\</span><span class="w">               </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">wxyz</span><span class="s1">&#39;])</span>
+<span class="s1">   open(newunit=lun,file=&#39;</span><span class="err">_</span><span class="n">scratch_getline</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;,pad=&#39;</span><span class="n">yes</span><span class="s1">&#39;)</span>
+<span class="s1">   icount=0</span>
+<span class="s1">   INFINITE: do while (getline(line,lun,stat) == 0)</span>
+<span class="s1">      icount=icount+1</span>
+<span class="s1">      last=line</span>
+<span class="s1">      if(unit_check_level.gt.0.or..true.) write (*, &#39;</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">g0</span><span class="p">))</span><span class="s1">&#39;) &#39;</span><span class="n">getline</span><span class="o">&gt;&gt;&gt;&gt;</span><span class="s1">&#39;,icount,&#39;</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;,line,&#39;</span><span class="p">]</span><span class="s1">&#39;</span>
+<span class="s1">   enddo INFINITE</span>
+<span class="s1">   expected=&#39;</span><span class="n">wxyz</span><span class="s1">&#39;</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">getline</span><span class="s1">&#39;,is_iostat_end(stat),&#39;</span><span class="n">last</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="n">got</span><span class="s1">&#39;,stat,&#39;</span><span class="n">expected</span><span class="s1">&#39;,iostat_end)</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">getline</span><span class="s1">&#39;,icount.eq.4,&#39;</span><span class="n">expected</span><span class="w"> </span><span class="s1">&#39;,4,&#39;</span><span class="n">lines</span><span class="w"> </span><span class="n">got</span><span class="s1">&#39;,icount)</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">getline</span><span class="s1">&#39;,last.eq.expected,&#39;</span><span class="n">expected</span><span class="s1">&#39;,expected,&#39;</span><span class="n">got</span><span class="s1">&#39;,last)</span>
+<span class="s1">   ierr=filedelete(&#39;</span><span class="err">_</span><span class="n">scratch_getline</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;)</span>
+<span class="s1">   call unit_check_done(&#39;</span><span class="n">getline</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;read_line&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">!!call unit_check(&#39;read_line&#39;, 0 == 0, &#39;checking&#39;,100)</span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;read_line&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_read_line</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_read_table</span><span class="p">()</span><span class="w"></span>
-<span class="n">doubleprecision</span><span class="p">,</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">array</span><span class="p">(:,:)</span><span class="w"></span>
-<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">ierr</span><span class="w"></span>
+<span class="s1">end subroutine test_getline</span>
+<span class="s1">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="s1">subroutine test_read_line()</span>
+<span class="s1">character(len=:),allocatable :: line, last, expected</span>
+<span class="s1">integer                      :: lun, ierr, stat, icount</span>
+<span class="s1">   call unit_check_start(&#39;</span><span class="n">read_line</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">   ierr=filewrite(&#39;</span><span class="err">_</span><span class="n">scratch_read_line</span><span class="p">.</span><span class="n">txt</span><span class="o">&gt;</span><span class="s1">&#39;,[ character(len=80) :: &amp;</span>
+<span class="s1">   &amp;achar(9)//&#39;</span><span class="n">abcdefghij</span><span class="err">\</span><span class="w"> </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">klmnop</span><span class="s1">&#39;//achar(8)//&#39;</span><span class="err">\</span><span class="s1">&#39; , &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">qrstuv</span><span class="err">\</span><span class="w">               </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">wxyz</span><span class="s1">&#39;])</span>
+<span class="s1">   open(newunit=lun,file=&#39;</span><span class="err">_</span><span class="n">scratch_read_line</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;,pad=&#39;</span><span class="n">yes</span><span class="s1">&#39;)</span>
+<span class="s1">   icount=0</span>
+<span class="s1">   INFINITE: do while (read_line(line,lun,ios=stat) == 0)</span>
+<span class="s1">      icount=icount+1</span>
+<span class="s1">      last=line</span>
+<span class="s1">      if(unit_check_level.gt.0) write (*, &#39;</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">g0</span><span class="p">))</span><span class="s1">&#39;) &#39;</span><span class="n">read_line</span><span class="o">&gt;&gt;&gt;&gt;</span><span class="s1">&#39;,icount,&#39;</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;,line,&#39;</span><span class="p">]</span><span class="s1">&#39;</span>
+<span class="s1">   enddo INFINITE</span>
+<span class="s1">   expected=&#39;</span><span class="w">        </span><span class="n">abcdefghijklmnop</span><span class="w"> </span><span class="n">qrstuvwxyz</span><span class="s1">&#39;</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">read_line</span><span class="s1">&#39;,is_iostat_end(stat),&#39;</span><span class="n">last</span><span class="w"> </span><span class="n">status</span><span class="w"> </span><span class="n">got</span><span class="s1">&#39;,stat,&#39;</span><span class="n">expected</span><span class="s1">&#39;,iostat_end)</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">read_line</span><span class="s1">&#39;,icount.eq.1,&#39;</span><span class="n">expected</span><span class="w"> </span><span class="s1">&#39;,1,&#39;</span><span class="n">lines</span><span class="w"> </span><span class="n">got</span><span class="s1">&#39;,icount)</span>
+<span class="s1">   call unit_check(&#39;</span><span class="n">read_line</span><span class="s1">&#39;,last.eq.expected,&#39;</span><span class="n">expected</span><span class="s1">&#39;,expected,&#39;</span><span class="n">got</span><span class="s1">&#39;,last)</span>
+<span class="s1">   ierr=filedelete(&#39;</span><span class="err">_</span><span class="n">scratch_read_line</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;)</span>
+<span class="s1">   call unit_check_done(&#39;</span><span class="n">read_line</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">! create test file</span>
-<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;inputfile&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">action</span><span class="o">=</span><span class="s1">&#39;write&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;#2345678901234567890123456789012345678901234567890123456789012345678901234567890&#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;# a comment number 10   &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39; #test                  &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;  # table               &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;.-----.-----.-----.     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;| 1   | -5  | 3e2 |     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;.-----+-----+-----.     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;| 4   | 2.0 | 6   |     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;.-----.-----.-----.     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;                        &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">       </span><span class="s1">&#39;# Original sample file: VEALYL_5mm_50um_pH2p50_12p5mM_NewFreezeT30.0384.DAT     &#39;</span><span class="p">]</span><span class="w"></span>
-<span class="w">   </span><span class="k">close</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">! read file as a table</span>
-<span class="w">   </span><span class="k">call </span><span class="n">read_table</span><span class="p">(</span><span class="s1">&#39;inputfile&#39;</span><span class="p">,</span><span class="k">array</span><span class="p">,</span><span class="n">ierr</span><span class="p">,</span><span class="n">comment</span><span class="o">=</span><span class="s1">&#39;#&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="c">! print values</span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="k">array</span><span class="w">      </span><span class="p">)</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="mi">6</span><span class="p">,</span><span class="w">                 </span><span class="s1">&#39;checking size&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="k">array</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="mi">2</span><span class="p">,</span><span class="w">                 </span><span class="s1">&#39;checking rows&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="p">(</span><span class="k">array</span><span class="p">,</span><span class="nb">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="mi">3</span><span class="p">,</span><span class="w">                 </span><span class="s1">&#39;checking columns&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="w"> </span><span class="nb">sum</span><span class="p">(</span><span class="nb">nint</span><span class="p">(</span><span class="k">array</span><span class="p">))</span><span class="w">   </span><span class="o">==</span><span class="w">  </span><span class="mi">308</span><span class="p">,</span><span class="w">               </span><span class="s1">&#39;sum&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">all</span><span class="p">([</span><span class="nb">nint</span><span class="p">(</span><span class="k">array</span><span class="p">)]</span><span class="w">  </span><span class="o">==</span><span class="w">  </span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">300</span><span class="p">,</span><span class="mi">6</span><span class="p">]),</span><span class="w"> </span><span class="s1">&#39;values&#39;</span><span class="w"> </span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="c">! remove sample file</span>
-<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="s1">&#39;inputfile&#39;</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">close</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;delete&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;read_table&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_read_table</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_filebyte</span><span class="p">()</span><span class="w"></span>
-<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">data2</span><span class="p">(:)</span><span class="w"></span>
-<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">line</span><span class="w"></span>
-<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;fileread&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filewrite</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&gt;&#39;</span><span class="p">,[</span><span class="w"> </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;abcdefghij                 &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;klmnop                     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;qrstuv                     &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;wxyz                       &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;&#39;</span><span class="p">])</span><span class="w"></span>
+<span class="s1">end subroutine test_read_line</span>
+<span class="s1">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="s1">subroutine test_read_table()</span>
+<span class="s1">doubleprecision,allocatable :: array(:,:)</span>
+<span class="s1">integer :: ierr</span>
 
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_start</span><span class="p">(</span><span class="s1">&#39;filebyte&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">filebyte</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">data2</span><span class="p">))</span><span class="k">then</span>
-<span class="k">      call </span><span class="n">unit_check_bad</span><span class="p">(</span><span class="s1">&#39;filebyte&#39;</span><span class="p">,</span><span class="s1">&#39;failed to load file&#39;</span><span class="p">,</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">else</span>
-<span class="k">      </span><span class="n">line</span><span class="o">=</span><span class="nb">repeat</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span><span class="n">size</span><span class="p">(</span><span class="n">data2</span><span class="p">))</span><span class="w"></span>
-<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">line</span><span class="p">,</span><span class="s1">&#39;(*(a))&#39;</span><span class="p">)</span><span class="nb">pack</span><span class="p">(</span><span class="n">data2</span><span class="p">,</span><span class="nb">index</span><span class="p">(</span><span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span><span class="p">,</span><span class="n">data2</span><span class="p">).</span><span class="n">ne</span><span class="p">.</span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
-<span class="w">      </span><span class="k">call </span><span class="n">unit_check</span><span class="p">(</span><span class="s1">&#39;filebyte&#39;</span><span class="p">,</span><span class="n">line</span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="s1">&#39;abcdefghijklmnopqrstuvwxyz&#39;</span><span class="p">,</span><span class="s1">&#39;find all the letters&#39;</span><span class="p">,</span><span class="n">line</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">endif</span>
-<span class="k">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filedelete</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="w">   </span><span class="k">call </span><span class="n">unit_check_done</span><span class="p">(</span><span class="s1">&#39;filebyte&#39;</span><span class="p">,</span><span class="n">msg</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="w"></span>
-<span class="k">end subroutine </span><span class="n">test_filebyte</span><span class="w"></span>
-<span class="c">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
-<span class="k">subroutine </span><span class="n">test_fileread</span><span class="p">()</span><span class="w"></span>
-<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="k">data</span><span class="p">(:),</span><span class="w"> </span><span class="n">data2</span><span class="p">(:)</span><span class="w"></span>
-<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">ierr</span><span class="w"></span>
-<span class="w">   </span><span class="k">data</span><span class="o">=</span><span class="p">[</span><span class="w"> </span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;This is the text to write  &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;into the file. It will be  &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;trimmed on the right side. &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;                           &#39;</span><span class="p">,</span><span class="w"> </span><span class="p">&amp;</span><span class="w"></span>
-<span class="w">   </span><span class="p">&amp;</span><span class="s1">&#39;     That is all Folks!    &#39;</span><span class="p">]</span><span class="w"></span>
+<span class="s1">   call unit_check_start(&#39;</span><span class="n">read_table</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">   ! create test file</span>
+<span class="s1">   open(file=&#39;</span><span class="n">inputfile</span><span class="s1">&#39;,unit=10,action=&#39;</span><span class="k">write</span><span class="s1">&#39;)</span>
+<span class="s1">   write(10,&#39;</span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="s1">&#39;) [character(len=80):: &amp;</span>
+<span class="s1">       &#39;</span><span class="err">#</span><span class="mi">2345678901234567890123456789012345678901234567890123456789012345678901234567890</span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="err">#</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">comment</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="mi">10</span><span class="w">   </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="w"> </span><span class="err">#</span><span class="n">test</span><span class="w">                  </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="w">  </span><span class="err">#</span><span class="w"> </span><span class="n">table</span><span class="w">               </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="w">     </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="err">|</span><span class="w"> </span><span class="mi">1</span><span class="w">   </span><span class="err">|</span><span class="w"> </span><span class="o">-</span><span class="mi">5</span><span class="w">  </span><span class="err">|</span><span class="w"> </span><span class="mf">3e2</span><span class="w"> </span><span class="err">|</span><span class="w">     </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="p">.</span><span class="o">-----+-----+-----</span><span class="p">.</span><span class="w">     </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="err">|</span><span class="w"> </span><span class="mi">4</span><span class="w">   </span><span class="err">|</span><span class="w"> </span><span class="mf">2.0</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="mi">6</span><span class="w">   </span><span class="err">|</span><span class="w">     </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="o">-----</span><span class="p">.</span><span class="w">     </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="w">                        </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">       &#39;</span><span class="err">#</span><span class="w"> </span><span class="n">Original</span><span class="w"> </span><span class="n">sample</span><span class="w"> </span><span class="k">file</span><span class="p">:</span><span class="w"> </span><span class="n">VEALYL_5mm_50um_pH2p50_12p5mM_NewFreezeT30</span><span class="p">.</span><span class="mi">038</span><span class="mf">4.</span><span class="n">DAT</span><span class="w">     </span><span class="s1">&#39;]</span>
+<span class="s1">   close(unit=10)</span>
+<span class="s1">   ! read file as a table</span>
+<span class="s1">   call read_table(&#39;</span><span class="n">inputfile</span><span class="s1">&#39;,array,ierr,comment=&#39;</span><span class="err">#</span><span class="s1">&#39;)</span>
+<span class="s1">      ! print values</span>
+<span class="s1">   call unit_check( &#39;</span><span class="n">read_table</span><span class="s1">&#39;, size(array      )  ==  6,                 &#39;</span><span class="n">checking</span><span class="w"> </span><span class="n">size</span><span class="s1">&#39; )</span>
+<span class="s1">   call unit_check( &#39;</span><span class="n">read_table</span><span class="s1">&#39;, size(array,dim=1)  ==  2,                 &#39;</span><span class="n">checking</span><span class="w"> </span><span class="n">rows</span><span class="s1">&#39; )</span>
+<span class="s1">   call unit_check( &#39;</span><span class="n">read_table</span><span class="s1">&#39;, size(array,dim=2)  ==  3,                 &#39;</span><span class="n">checking</span><span class="w"> </span><span class="n">columns</span><span class="s1">&#39; )</span>
+<span class="s1">   call unit_check( &#39;</span><span class="n">read_table</span><span class="s1">&#39;, sum(nint(array))   ==  308,               &#39;</span><span class="nb">sum</span><span class="s1">&#39; )</span>
+<span class="s1">   call unit_check( &#39;</span><span class="n">read_table</span><span class="s1">&#39;, all([nint(array)]  ==  [1,4,-5,2,300,6]), &#39;</span><span class="n">values</span><span class="s1">&#39; )</span>
+<span class="s1">   ! remove sample file</span>
+<span class="s1">   open(file=&#39;</span><span class="n">inputfile</span><span class="s1">&#39;,unit=10)</span>
+<span class="s1">   close(unit=10,status=&#39;</span><span class="n">delete</span><span class="s1">&#39;)</span>
+<span class="s1">   call unit_check_done(&#39;</span><span class="n">read_table</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">end subroutine test_read_table</span>
+<span class="s1">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="s1">subroutine test_filebyte()</span>
+<span class="s1">character(len=1),allocatable :: data2(:)</span>
+<span class="s1">character(len=:),allocatable :: line</span>
+<span class="s1">integer :: ierr</span>
+<span class="s1">   call unit_check_start(&#39;</span><span class="n">fileread</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">   ierr=filewrite(&#39;</span><span class="err">_</span><span class="n">scratch</span><span class="p">.</span><span class="n">txt</span><span class="o">&gt;</span><span class="s1">&#39;,[ character(len=10) :: &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">abcdefghij</span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">klmnop</span><span class="w">    </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">qrstuv</span><span class="w">    </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">wxyz</span><span class="w">      </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;&#39;])</span>
+
+<span class="s1">   call unit_check_start(&#39;</span><span class="n">filebyte</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">   call filebyte(&#39;</span><span class="err">_</span><span class="n">scratch</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;,data2)</span>
+<span class="s1">   if(.not.allocated(data2))then</span>
+<span class="s1">      call unit_check_bad(&#39;</span><span class="n">filebyte</span><span class="s1">&#39;,&#39;</span><span class="n">failed</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">load</span><span class="w"> </span><span class="k">file</span><span class="s1">&#39;,&#39;</span><span class="err">_</span><span class="n">scratch</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;)</span>
+<span class="s1">   else</span>
+<span class="s1">      line=repeat(&#39;</span><span class="w"> </span><span class="s1">&#39;,size(data2))</span>
+<span class="s1">      write(line,&#39;</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="p">))</span><span class="s1">&#39;)pack(data2,index(&#39;</span><span class="n">abcdefghijklmnopqrstuvwxyz</span><span class="s1">&#39;,data2).ne.0)</span>
+<span class="s1">      call unit_check(&#39;</span><span class="n">filebyte</span><span class="s1">&#39;,line.eq.&#39;</span><span class="n">abcdefghijklmnopqrstuvwxyz</span><span class="s1">&#39;,&#39;</span><span class="n">find</span><span class="w"> </span><span class="k">all </span><span class="n">the</span><span class="w"> </span><span class="n">letters</span><span class="s1">&#39;,line)</span>
+<span class="s1">   endif</span>
+<span class="s1">   ierr=filedelete(&#39;</span><span class="err">_</span><span class="n">scratch</span><span class="p">.</span><span class="n">txt</span><span class="s1">&#39;)</span>
+<span class="s1">   call unit_check_done(&#39;</span><span class="n">filebyte</span><span class="s1">&#39;,msg=&#39;&#39;)</span>
+<span class="s1">end subroutine test_filebyte</span>
+<span class="s1">!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT</span>
+<span class="s1">subroutine test_fileread()</span>
+<span class="s1">character(len=:),allocatable :: data(:), data2(:)</span>
+<span class="s1">integer :: ierr</span>
+<span class="s1">   data=[ character(len=80) :: &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">This</span><span class="w"> </span><span class="k">is </span><span class="n">the</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="k">write</span><span class="w">  </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">into</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="k">file</span><span class="p">.</span><span class="w"> </span><span class="n">It</span><span class="w"> </span><span class="n">will</span><span class="w"> </span><span class="n">be</span><span class="w">  </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="n">trimmed</span><span class="w"> </span><span class="n">on</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">right</span><span class="w"> </span><span class="n">side</span><span class="p">.</span><span class="w"> </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="w">                           </span><span class="s1">&#39;, &amp;</span>
+<span class="s1">   &amp;&#39;</span><span class="w">     </span><span class="n">That</span><span class="w"> </span><span class="k">is all </span><span class="n">Folks</span><span class="c">!    &#39;]</span>
 <span class="w">   </span><span class="n">ierr</span><span class="o">=</span><span class="n">filewrite</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="k">data</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">call </span><span class="n">fileread</span><span class="p">(</span><span class="s1">&#39;_scratch.txt&#39;</span><span class="p">,</span><span class="n">data2</span><span class="p">)</span><span class="w"></span>
 <span class="w">   </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="nb">allocated</span><span class="p">(</span><span class="n">data2</span><span class="p">))</span><span class="k">then</span>
@@ -1010,50 +1084,50 @@ teardown</p>
     </div>
   </div>
 
-    <hr>    
+      <hr>
     </div> <!-- /container -->
     <footer>
       <div class="container">
-      <div class="row">
-        <div class="col-xs-6 col-md-6"><p>easy was developed by John Doe<br>&copy; 2023 
+        <div class="row">
+          <div class="col-xs-6 col-md-6"><p>M_io was developed by John Doe<br>&copy; 2023 
 </p>
+          </div>
+          <div class="col-xs-6 col-md-6">
+            <p class="text-right">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2023-04-16 21:59              </p>
+          </div>
         </div>
-        <div class="col-xs-6 col-md-6">
-          <p class="text-right">
-            Documentation generated by 
-            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2023-01-07 18:45            </p>
-        </div>
-      </div>
-      <br>
-      </div> <!-- /container -->    
+        <br>
+      </div> <!-- /container -->
     </footer>
 
     <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-<!--
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
--->
-    <script src="../js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+         ================================================== -->
+         <!-- Placed at the end of the document so the pages load faster -->
+    <!--
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        -->
+        <script src="../js/bootstrap.min.js"></script>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../js/ie10-viewport-bug-workaround.js"></script>
 
-    <!-- MathJax JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
-        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
-        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
-      });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <script src="../tipuesearch/tipuesearch_content.js"></script>
-    <script src="../tipuesearch/tipuesearch_set.js"></script>
-    <script src="../tipuesearch/tipuesearch.js"></script>
-    
+        <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
   </body>
 </html>
