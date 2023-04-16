@@ -10,8 +10,8 @@ categories = ["io"]
 keywords = ["fortran", "files"]
 homepage = "https://github.com/urbanjost/M_io.git"
 
-[build]
-module-naming = true
+#[build]
+#module-naming = true
 
 #[dev-dependencies]
 #M_msg    = { git = "https://github.com/urbanjost/M_msg.git" }
