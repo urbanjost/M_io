@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="description" content="easy project">
+    <meta name="author" content="John Doe" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>uniq &ndash; easy</title>
+
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+    <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <script src="../js/jquery-2.1.3.min.js"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../index.html">easy </a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="dropdown hidden-xs visible-sm visible-md hidden-lg">
+              <a href="#" class="dropdown-toggle"
+              data-toggle="dropdown" role="button"
+              aria-haspopup="true"
+     aria-expanded="false">Contents <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+            <li><a href="../lists/files.html">Source Files</a></li>
+            <li><a href="../lists/modules.html">Modules</a></li>
+            <li><a href="../lists/procedures.html">Procedures</a></li>
+                   <li><a href="../lists/programs.html">Programs</a></li>
+       
+            </ul>
+        
+            </li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/files.html">Source Files</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/modules.html">Modules</a></li>
+<li class="visible-xs hidden-sm visible-lg"><a href="../lists/procedures.html">Procedures</a></li>
+                             <li class="visible-xs hidden-sm visible-lg"><a href="../lists/programs.html">Programs</a></li>
+          </ul>
+        <form action="../search.html" class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="text" class="form-control" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+        </div>
+<!--
+        <button type="submit" class="btn btn-default">Submit</button>
+-->
+        </form>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container">
+  <div class="row">
+    <h1>uniq
+      <small>Function</small>
+      
+    </h1>
+      <div class="row" id="info-bar">
+    <div class="col-lg-12">
+      <div class="well well-sm">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+          <li id="statements"><i class="fa fa-list-ol"></i>
+            <a data-toggle="tooltip"
+               data-placement="bottom" data-html="true"
+               title=" 6.4% of total for procedures.">80 statements</a>
+          </li>
+
+            <li id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_io.F90"> Source File</a>
+            </li>
+        </ul>
+        <ol class="breadcrumb in-well text-right">
+              <li><a href='../sourcefile/m_io.f90.html'>M_io.F90</a></li>
+              <li><a href='../module/m_io.html'>M_io</a></li>
+          <li class="active">uniq</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/uniq.html#src">uniq</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>public  function uniq(name, istart, verbose, create)  
+</h2>
+    
+
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code>  <span class="nv">uniq</span><span class="ss">(</span><span class="mi">3</span><span class="nv">f</span><span class="ss">)</span> <span class="o">-</span> [<span class="nv">M_io</span>:<span class="nv">QUERY</span>] <span class="nv">append</span> <span class="nv">a</span> <span class="nv">number</span> <span class="nv">to</span> <span class="nv">the</span> <span class="k">end</span> <span class="nv">of</span> <span class="nv">filename</span> <span class="nv">to</span> <span class="nv">make</span>
+             <span class="nv">a</span> <span class="nv">unique</span> <span class="nv">name</span> <span class="k">if</span> <span class="nv">name</span> <span class="nv">exists</span>
+  <span class="ss">(</span><span class="nv">LICENSE</span>:<span class="nv">PD</span><span class="ss">)</span>
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<div class="codehilite"><pre><span></span><code>  Usage
+
+   character(len=:),allocatable function uniq(name,istart,verbose,create)
+   character(len=*),intent(in) :: name
+   integer,intent(in),optional :: istart
+   logical,intent(in),optional :: verbose
+   logical,intent(in),optional :: create
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">Given</span> <span class="nv">a</span> <span class="nv">filename</span> <span class="nv">test</span> <span class="k">if</span> <span class="nv">it</span> <span class="nv">is</span> <span class="nv">in</span> <span class="nv">use</span> <span class="nv">or</span> <span class="nv">exists</span>. <span class="k">If</span> <span class="nv">it</span> <span class="nv">is</span>, <span class="nv">or</span> <span class="k">if</span> <span class="nv">it</span>
+<span class="nv">ends</span> <span class="nv">in</span> <span class="nv">a</span> <span class="nv">period</span> <span class="nv">add</span> <span class="nv">a</span> <span class="nv">number</span> <span class="nv">to</span> <span class="nv">the</span> <span class="k">end</span> <span class="nv">of</span> <span class="nv">the</span> <span class="nv">name</span> <span class="nv">and</span>
+<span class="nv">test</span> <span class="k">if</span> <span class="nv">the</span> <span class="nv">new</span> <span class="nv">name</span> <span class="nv">exists</span>. <span class="k">If</span> <span class="nv">necessary</span>, <span class="nv">increment</span> <span class="nv">the</span> <span class="nv">number</span> <span class="nv">and</span>
+<span class="nv">try</span> <span class="nv">again</span> <span class="nv">up</span> <span class="nv">to</span> <span class="nv">the</span> <span class="nv">value</span> <span class="mi">9999999</span>. <span class="nv">By</span> <span class="nv">default</span> <span class="nv">an</span> <span class="nv">empty</span> <span class="nv">file</span> <span class="nv">is</span> <span class="nv">created</span>
+<span class="k">if</span> <span class="nv">an</span> <span class="nv">unused</span> <span class="nv">name</span> <span class="nv">is</span> <span class="nv">found</span>.
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">name</span>     <span class="nv">base</span> <span class="nv">input</span> <span class="nv">name</span> <span class="nv">used</span> <span class="nv">to</span> <span class="nv">create</span> <span class="nv">output</span> <span class="nv">filename</span>
+         <span class="k">If</span> <span class="nv">name</span> <span class="nv">ends</span> <span class="nv">in</span> <span class="s2">&quot;</span><span class="s">.</span><span class="s2">&quot;</span> <span class="nv">a</span> <span class="nv">numeric</span> <span class="nv">suffix</span> <span class="nv">is</span> <span class="nv">always</span> <span class="nv">added</span>.
+<span class="nv">istart</span>   <span class="nv">number</span> <span class="nv">to</span> <span class="nv">start</span> <span class="nv">with</span> <span class="nv">as</span> <span class="nv">a</span> <span class="nv">suffix</span>. <span class="nv">Default</span> <span class="nv">is</span> <span class="mi">1</span>. <span class="nv">Must</span> <span class="nv">be</span> <span class="nv">a</span>
+         <span class="nv">positive</span> <span class="nv">integer</span> <span class="nv">less</span> <span class="nv">than</span> <span class="mi">9999999</span>.
+<span class="nv">verbose</span>  <span class="nv">writes</span> <span class="nv">extra</span> <span class="nv">messages</span> <span class="nv">to</span> <span class="nv">stdout</span>. <span class="nv">Defaults</span> <span class="nv">to</span> .<span class="nv">false</span>.
+<span class="nv">create</span>   <span class="nv">create</span> <span class="nv">file</span> <span class="k">if</span> <span class="nv">a</span> <span class="nv">new</span> <span class="nv">unused</span> <span class="nv">name</span> <span class="nv">is</span> <span class="nv">successfully</span>
+         <span class="nv">found</span>. <span class="nv">Defaults</span> <span class="nv">to</span> .<span class="nv">true</span>. .
+</code></pre></div>
+
+<h2 id="returns">RETURNS</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">uniq</span>     <span class="nv">A</span> <span class="nv">unique</span> <span class="nv">filename</span> <span class="nv">that</span> <span class="nv">is</span> <span class="nv">the</span> <span class="nv">same</span> <span class="nv">as</span> <span class="nv">the</span> <span class="nv">NAME</span> <span class="nv">input</span> <span class="nv">parameter</span>
+         <span class="nv">except</span> <span class="nv">with</span> <span class="nv">a</span> <span class="nv">number</span> <span class="nv">appended</span> <span class="nv">at</span> <span class="nv">the</span> <span class="k">end</span> <span class="k">if</span> <span class="nv">needed</span>. <span class="k">If</span> <span class="nv">could</span>
+         <span class="nv">not</span> <span class="nv">find</span> <span class="nv">a</span> <span class="nv">unique</span> <span class="nv">name</span> <span class="nv">a</span> <span class="nv">blank</span> <span class="nv">is</span> <span class="nv">returned</span>.
+</code></pre></div>
+
+<h2 id="example">EXAMPLE</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">Sample</span> <span class="nv">program</span>
+
+   <span class="nv">program</span> <span class="nv">demo_uniq</span>
+   <span class="nv">use</span> <span class="nv">M_io</span>, <span class="nv">only</span> : <span class="nv">uniq</span>
+   <span class="nv">implicit</span> <span class="nv">none</span>
+   <span class="nv">character</span><span class="ss">(</span><span class="nv">len</span><span class="o">=</span><span class="mi">4096</span><span class="ss">)</span> :: <span class="nv">myname</span>
+   <span class="nv">integer</span>             :: <span class="nv">i</span>
+      <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_not_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name stays the same   :</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
+      <span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="mi">10</span>,<span class="nv">file</span><span class="o">=</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
+      <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
+      <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span><span class="s1">&#39;</span><span class="s">name has suffix added :</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
+      <span class="k">do</span> <span class="nv">i</span><span class="o">=</span><span class="mi">1</span>,<span class="mi">10</span>
+         <span class="nv">myname</span><span class="o">=</span><span class="nv">uniq</span><span class="ss">(</span><span class="s1">&#39;</span><span class="s">does_exist</span><span class="s1">&#39;</span><span class="ss">)</span>
+         <span class="nv">write</span><span class="ss">(</span><span class="o">*</span>,<span class="o">*</span><span class="ss">)</span> <span class="s1">&#39;</span><span class="s">FILENAME:</span><span class="s1">&#39;</span>,<span class="nv">trim</span><span class="ss">(</span><span class="nv">myname</span><span class="ss">)</span>
+         <span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="mi">20</span><span class="o">+</span><span class="nv">i</span>,<span class="nv">file</span><span class="o">=</span><span class="nv">myname</span><span class="ss">)</span>
+      <span class="nv">enddo</span>
+   <span class="k">end</span> <span class="nv">program</span> <span class="nv">demo_uniq</span>
+
+<span class="nv">Expected</span> <span class="nv">output</span>
+
+ <span class="nv">name</span> <span class="nv">stays</span> <span class="nv">the</span> <span class="nv">same</span> <span class="nv">does_not_exist</span>
+ <span class="nv">name</span> <span class="nv">has</span> <span class="nv">suffix</span> <span class="nv">added</span> <span class="nv">does_exist0001</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0002</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0003</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0004</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0005</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0006</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0007</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0008</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0009</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0010</span>
+ <span class="nv">FILENAME</span>:<span class="nv">does_exist0011</span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban, 1993
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<p>Public Domain</p>
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th>Type</th>
+<th>Intent</th><th>Optional</th>        <th>Attributes</th>
+        <th></th>
+        <th>Name</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>name</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-istart"></span>
+              integer,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>istart</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-verbose"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>verbose</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-create"></span>
+              logical,
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>create</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+      <h3>Return Value
+        <small>
+          <span class="anchor" id="variable-uniq"></span>
+          character(len=:), allocatable
+        </small>
+      </h3>
+      
+    <br>
+
+    <section class="visible-xs visible-sm hidden-md">
+        <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="panel panel-primary">
+      <div class="panel-heading text-left"><h3 class="panel-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/uniq.html#src">uniq</a>
+      </div>
+    </div>
+
+
+    </section>
+    <br class="visible-xs visible-sm hidden-md">
+
+
+    
+    
+
+    
+    
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="highlight"><pre><span></span><span class="k">function </span><span class="n">uniq</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="n">istart</span><span class="p">,</span><span class="n">verbose</span><span class="p">,</span><span class="n">create</span><span class="p">)</span><span class="w"></span>
+<span class="k">implicit none</span><span class="w"></span>
+
+<span class="c">! ident_3=&quot;@(#) M_io uniq(3f) append a number to the end of filename to make a unique name if name exists&quot;</span>
+
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">name</span><span class="w"></span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">uniq</span><span class="w"></span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">istart</span><span class="w"></span>
+<span class="kt">logical</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">verbose</span><span class="w"></span>
+<span class="kt">logical</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="k">optional</span><span class="w">  </span><span class="kd">::</span><span class="w"> </span><span class="n">create</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="kt">logical</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">around</span><span class="w"></span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">save</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">           </span><span class="c">! counter to generate suffix from</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">),</span><span class="k">save</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">lastname</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="w">       </span><span class="c">! name called with last time the routine was called</span>
+<span class="kt">integer</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">ilen</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">itimes</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">iscr</span><span class="w"></span>
+<span class="kt">integer</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">ios</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">verbose_local</span><span class="w"></span>
+<span class="kt">logical</span><span class="w">                     </span><span class="kd">::</span><span class="w"> </span><span class="n">create_local</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="n">uniq</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w">                                   </span><span class="c">! the input name will be returned if it passes all the tests</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">lastname</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="k">then</span><span class="w">                          </span><span class="c">! if a different input name than last time called reset icount</span>
+<span class="w">      </span><span class="n">lastname</span><span class="o">=</span><span class="n">name</span><span class="w">                                  </span><span class="c">! a new name to keep for subsequent calls</span>
+<span class="w">      </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">                                       </span><span class="c">! icount is used to make a suffix to add to make the file unique</span>
+<span class="w">   </span><span class="k">endif</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">verbose</span><span class="p">))</span><span class="k">then</span>
+<span class="k">      </span><span class="n">verbose_local</span><span class="o">=</span><span class="n">verbose</span><span class="w"></span>
+<span class="w">   </span><span class="k">else</span>
+<span class="k">      </span><span class="n">verbose_local</span><span class="o">=</span><span class="p">.</span><span class="n">false</span><span class="p">.</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">create</span><span class="p">))</span><span class="k">then</span>
+<span class="k">      </span><span class="n">create_local</span><span class="o">=</span><span class="n">create</span><span class="w"></span>
+<span class="w">   </span><span class="k">else</span>
+<span class="k">      </span><span class="n">create_local</span><span class="o">=</span><span class="p">.</span><span class="n">true</span><span class="p">.</span><span class="w"></span>
+<span class="w">   </span><span class="k">endif</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">istart</span><span class="p">))</span><span class="k">then</span>
+<span class="k">      </span><span class="n">icount</span><span class="o">=</span><span class="n">istart</span><span class="w">                                  </span><span class="c">! icount is used to make a suffix to add to make the file unique</span>
+<span class="w">   </span><span class="k">endif</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="n">ilen</span><span class="o">=</span><span class="nb">len_trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w">                               </span><span class="c">! find last non-blank character in file name</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ilen</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                                 </span><span class="c">! a blank input name so name will just be a suffix</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">name</span><span class="p">(</span><span class="n">ilen</span><span class="p">:</span><span class="n">ilen</span><span class="p">)</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;.&#39;</span><span class="p">)</span><span class="k">then</span><span class="w">                 </span><span class="c">! always append a number to a file ending in .</span>
+<span class="w">         </span><span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="n">name</span><span class="p">(:</span><span class="n">ilen</span><span class="p">),</span><span class="n">exist</span><span class="o">=</span><span class="n">around</span><span class="p">)</span><span class="w">      </span><span class="c">! check filename as-is</span>
+<span class="w">         </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">around</span><span class="p">)</span><span class="k">then</span><span class="w">                         </span><span class="c">! file name does not exist, can use it as-is</span>
+<span class="w">            </span><span class="n">uniq</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">create_local</span><span class="p">)</span><span class="k">then</span>
+<span class="k">               open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">iscr</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="n">uniq</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;new&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">               </span><span class="k">close</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">iscr</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">endif</span>
+<span class="k">            return</span>
+<span class="k">         endif</span>
+<span class="k">      endif</span>
+<span class="k">   endif</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="w">   </span><span class="n">itimes</span><span class="o">=</span><span class="mi">0</span><span class="w">                                           </span><span class="c">! count number of times tried to get a uniq name</span>
+<span class="w">   </span><span class="k">deallocate</span><span class="p">(</span><span class="n">uniq</span><span class="p">)</span><span class="w"></span>
+<span class="w">   </span><span class="k">allocate</span><span class="p">(</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="n">ilen</span><span class="o">+</span><span class="mi">8</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">uniq</span><span class="p">)</span><span class="w">            </span><span class="c">! make it useable with an internal WRITE(3f) with room for a numeric suffix</span>
+<span class="w">   </span><span class="n">uniq</span><span class="p">(:)</span><span class="o">=</span><span class="n">name</span><span class="w"></span>
+<span class="w">   </span><span class="n">INFINITE</span><span class="p">:</span><span class="w"> </span><span class="k">do</span><span class="w">                                       </span><span class="c">! top of loop trying for a unique name</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">itimes</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">9999999</span><span class="p">)</span><span class="k">then</span><span class="w">                       </span><span class="c">! if too many tries to be reasonable give up</span>
+<span class="w">         </span><span class="k">call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;sc&#39;</span><span class="p">,</span><span class="s1">&#39;*uniq* unable to find a unique filename. Too many tries&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="n">uniq</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="w"></span>
+<span class="w">         </span><span class="k">return</span>
+<span class="k">      endif</span>
+<span class="k">      if</span><span class="p">(</span><span class="n">icount</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">9999999</span><span class="p">)</span><span class="w"> </span><span class="n">icount</span><span class="o">=</span><span class="mi">1</span><span class="w">                  </span><span class="c">! reset ICOUNT when it hits arbitrary maximum value</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">icount</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">9999</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">ilen</span><span class="o">+</span><span class="mi">1</span><span class="p">:),</span><span class="s1">&#39;(i4.4)&#39;</span><span class="p">)</span><span class="n">icount</span><span class="w">          </span><span class="c">! create name by adding a numeric string to end</span>
+<span class="w">      </span><span class="k">else</span>
+<span class="k">         write</span><span class="p">(</span><span class="n">uniq</span><span class="p">(</span><span class="n">ilen</span><span class="o">+</span><span class="mi">1</span><span class="p">:),</span><span class="s1">&#39;(i7.7)&#39;</span><span class="p">)</span><span class="n">icount</span><span class="w">          </span><span class="c">! create name by adding a numeric string to end</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      </span><span class="n">icount</span><span class="o">=</span><span class="n">icount</span><span class="o">+</span><span class="mi">1</span><span class="w">                                 </span><span class="c">! increment counter used to come up with suffix</span>
+<span class="w">      </span><span class="k">inquire</span><span class="p">(</span><span class="k">file</span><span class="o">=</span><span class="n">uniq</span><span class="p">,</span><span class="n">exist</span><span class="o">=</span><span class="n">around</span><span class="p">)</span><span class="w">                 </span><span class="c">! see if this filename already exists</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(.</span><span class="nb">not</span><span class="p">.</span><span class="n">around</span><span class="p">)</span><span class="k">then</span><span class="w">                             </span><span class="c">! found an unused name</span>
+<span class="w">         </span><span class="k">if</span><span class="p">(</span><span class="n">verbose_local</span><span class="p">)</span><span class="k">then</span>
+<span class="k">            call </span><span class="n">journal</span><span class="p">(</span><span class="s1">&#39;c&#39;</span><span class="p">,</span><span class="nb">trim</span><span class="p">(</span><span class="s1">&#39;*uniq* name=&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">uniq</span><span class="p">)))</span><span class="w"> </span><span class="c">! write out message reporting name used</span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">         if</span><span class="p">(</span><span class="n">create_local</span><span class="p">)</span><span class="k">then</span>
+<span class="k">            open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">iscr</span><span class="p">,</span><span class="k">file</span><span class="o">=</span><span class="n">uniq</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;new&#39;</span><span class="p">)</span><span class="w"></span>
+<span class="w">            </span><span class="k">close</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">iscr</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">         </span><span class="n">uniq</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">uniq</span><span class="p">)</span><span class="w"></span>
+<span class="w">         </span><span class="k">return</span><span class="w">                                       </span><span class="c">! return successfully</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">      </span><span class="n">itimes</span><span class="o">=</span><span class="n">itimes</span><span class="o">+</span><span class="mi">1</span><span class="w">                                 </span><span class="c">! haven&#39;t found a unique name, try again</span>
+<span class="w">   </span><span class="k">enddo </span><span class="n">INFINITE</span><span class="w"></span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">end function </span><span class="n">uniq</span><span class="w"></span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+    <hr>    
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+      <div class="row">
+        <div class="col-xs-6 col-md-6"><p>easy was developed by John Doe<br>&copy; 2023 
+</p>
+        </div>
+        <div class="col-xs-6 col-md-6">
+          <p class="text-right">
+            Documentation generated by 
+            <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2023-01-07 18:45            </p>
+        </div>
+      </div>
+      <br>
+      </div> <!-- /container -->    
+    </footer>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+<!--
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+-->
+    <script src="../js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../js/ie10-viewport-bug-workaround.js"></script>
+
+    <!-- MathJax JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+        jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+        extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+      });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script src="../tipuesearch/tipuesearch_content.js"></script>
+    <script src="../tipuesearch/tipuesearch_set.js"></script>
+    <script src="../tipuesearch/tipuesearch.js"></script>
+    
+  </body>
+</html>
