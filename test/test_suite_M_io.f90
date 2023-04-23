@@ -7,15 +7,12 @@ use M_io
 use M_framework__msg
 use :: M_framework__verify, only : unit_check_start, unit_check, unit_check_done, unit_check_good, unit_check_bad, unit_check_msg
 use :: M_framework__verify, only : unit_check_stop
-use :: M_framework__verify, only : unit_check_level, unit_check_keep_going, unit_check_command
+use :: M_framework__verify, only : unit_check_level
 use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
 use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 
 !! setup
-   unit_check_command=''
-   unit_check_keep_going=.true.
-   unit_check_level=0
 
    call test_dirname()
    call test_get_tmp()
