@@ -11,6 +11,7 @@ use :: M_framework__verify, only : unit_check_level
 use,intrinsic :: iso_fortran_env, only : stdin_lun  => input_unit
 use,intrinsic :: iso_fortran_env, only : stderr_lun => error_unit
 use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
+character(len=:),allocatable :: tmsg
 
 !! setup
 
@@ -30,6 +31,7 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
    call test_number_of_lines()
    call test_basename()
    call test_joinpath()
+   call test_is_hidden_file()
    call test_fileopen()
    call test_fileclose()
    call test_filewrite()
@@ -48,24 +50,25 @@ use,intrinsic :: iso_fortran_env, only : iostat_end, iostat_eor
 contains
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_dirname()
-
-call unit_check_start('dirname',msg='')
-call unit_check('dirname',  dirname('/usr/bin/')  ==  '/usr', '/usr/bin ==>',dirname('/usr/bin'))
-call unit_check('dirname',  dirname('dir1/str/')  ==  'dir1', 'dir1/str ==>',dirname('dir1/str/'))
-call unit_check('dirname',  dirname('stdio.h')    ==  '.',    '/stdio.h ==>',dirname('stdio.h'))
-call unit_check_done('dirname',msg='')
+   tmsg='strip last component from filename'
+   call unit_check_start('dirname',msg=tmsg)
+   call unit_check('dirname',  dirname('/usr/bin/')  ==  '/usr', '/usr/bin ==>',dirname('/usr/bin'))
+   call unit_check('dirname',  dirname('dir1/str/')  ==  'dir1', 'dir1/str ==>',dirname('dir1/str/'))
+   call unit_check('dirname',  dirname('stdio.h')    ==  '.',    '/stdio.h ==>',dirname('stdio.h'))
+   call unit_check_done('dirname',msg='')
 end subroutine test_dirname
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_tmp()
-
-   call unit_check_start('get_tmp',msg='')
+   tmsg='Return the name of the scratch directory'
+   call unit_check_start('get_tmp',msg=tmsg)
    !!call unit_check('get_tmp', 0 == 0, 'checking',100)
    call unit_check_done('get_tmp',msg='')
 end subroutine test_get_tmp
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filename_generator()
 
-   call unit_check_start('filename_generator',msg='')
+   tmsg='generate a filename containing a number'
+   call unit_check_start('filename_generator',msg=tmsg)
    call unit_check_msg('filename_generator','generate a filename containing a whole number')
 
    call unit_check('filename_generator', filename_generator('head','.tail',100) ==  'head100.tail' )
@@ -79,7 +82,8 @@ subroutine test_notopen()
 
 integer :: i, bug, ierr, ierr2
 
-   call unit_check_start('notopen',msg='')
+   tmsg='Find a FUN/LUN (Fortran-unit-number) that is not in use'
+   call unit_check_start('notopen',msg=tmsg)
    call unit_check_msg('notopen','check for preassigned files from unit 0 to unit 1000')
    call unit_check_msg('notopen','assume 5 and 6 always return -1')
 
@@ -108,15 +112,15 @@ integer :: i, bug, ierr, ierr2
 end subroutine test_notopen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_print_inquire()
-
-   call unit_check_start('print_inquire',msg='')
+   tmsg='Do INQUIRE on file by name/number and print results'
+   call unit_check_start('print_inquire',msg=tmsg)
    !!call unit_check('print_inquire', 0 == 0, 'checking',100)
    call unit_check_done('print_inquire',msg='')
 end subroutine test_print_inquire
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_rd()
-
-   call unit_check_start('rd',msg='')
+   tmsg='ask for string from standard input with user-definable prompt'
+   call unit_check_start('rd',msg=tmsg)
    !!call unit_check('rd_character', 0 == 0, 'checking',100)
    call unit_check_done('rd',msg='')
 end subroutine test_rd
@@ -124,7 +128,8 @@ end subroutine test_rd
 subroutine test_getline()
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
-   call unit_check_start('getline',msg='')
+   tmsg='read a line from specified LUN into allocatable string up to line length limit'
+   call unit_check_start('getline',msg=tmsg)
    ierr=filewrite('_scratch_getline.txt>',[ character(len=80) :: &
    &achar(9)//'abcdefghij\ ', &
    &'klmnop'//achar(8)//'\' , &
@@ -149,7 +154,8 @@ end subroutine test_getline
 subroutine test_read_line()
 character(len=:),allocatable :: line, last, expected
 integer                      :: lun, ierr, stat, icount
-   call unit_check_start('read_line',msg='')
+   tmsg='read a sanitized line from specified LUN into allocatable string'
+   call unit_check_start('read_line',msg=tmsg)
    ierr=filewrite('_scratch_read_line.txt>',[ character(len=80) :: &
    &achar(9)//'abcdefghij\ ', &
    &'klmnop'//achar(8)//'\' , &
@@ -174,8 +180,8 @@ end subroutine test_read_line
 subroutine test_read_table()
 doubleprecision,allocatable :: array(:,:)
 integer :: ierr
-
-   call unit_check_start('read_table',msg='')
+   tmsg='read file containing a table of numeric values'
+   call unit_check_start('read_table',msg=tmsg)
    ! create test file
    open(file='inputfile',unit=10,action='write')
    write(10,'(a)') [character(len=80):: &
@@ -209,7 +215,6 @@ subroutine test_filebyte()
 character(len=1),allocatable :: data2(:)
 character(len=:),allocatable :: line
 integer :: ierr
-   call unit_check_start('fileread',msg='')
    ierr=filewrite('_scratch.txt>',[ character(len=10) :: &
    &'abcdefghij', &
    &'klmnop    ', &
@@ -217,7 +222,8 @@ integer :: ierr
    &'wxyz      ', &
    &''])
 
-   call unit_check_start('filebyte',msg='')
+   tmsg='read a file into a character array'
+   call unit_check_start('filebyte',msg=tmsg)
    call filebyte('_scratch.txt',data2)
    if(.not.allocated(data2))then
       call unit_check_bad('filebyte','failed to load file','_scratch.txt')
@@ -240,6 +246,8 @@ integer :: ierr
    &'                           ', &
    &'     That is all Folks!    ']
    ierr=filewrite('_scratch.txt',data)
+   tmsg='read a file into a string array'
+   call unit_check_start('fileread',msg=tmsg)
    call fileread('_scratch.txt',data2)
    if(.not.allocated(data2))then
       call unit_check_bad('fileread','failed to load file','_scratch.txt')
@@ -260,7 +268,8 @@ subroutine test_number_of_lines()
 integer,parameter  :: lun=10
 character(len=256) :: iomsg
 integer            :: iostat
-   call unit_check_start('number_of_lines',msg='')
+   tmsg='read an open sequential file to get number of lines'
+   call unit_check_start('number_of_lines',msg=tmsg)
    ! create test file
    open(file='inputfile',unit=LUN,action='write')
    write(LUN,'(a)') [character(len=80):: &
@@ -285,7 +294,8 @@ end subroutine test_number_of_lines
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_basename()
 character(len=:),allocatable :: fn
-   call unit_check_start('basename',msg='')
+   tmsg='return last component from filename '
+   call unit_check_start('basename',msg=tmsg)
    fn='/home/user/src/code.f90'
    call unit_check('basename', basename(fn) == 'code',            ' leaf with any suffix removed'    ,basename(fn) )
    call unit_check('basename', basename(fn,'') == 'code.f90',     ' leaf with suffix retained'       ,basename(fn,'') )
@@ -295,19 +305,40 @@ character(len=:),allocatable :: fn
 end subroutine test_basename
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_joinpath()
-   call unit_check_start('joinpath',msg='')
+   tmsg='join parts of a pathname together'
+   call unit_check_start('joinpath',msg=tmsg)
    !!call unit_check('joinpath', 0 == 0, 'checking',100)
    call unit_check_done('joinpath',msg='')
 end subroutine test_joinpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+subroutine test_is_hidden_file()
+logical,parameter :: F=.false., T=.true.
+   call unit_check_start('is_hidden_file', msg='categorize pathname as a hidden filename or not')
+   call showit_is_hidden_file('.abc', T)
+   call showit_is_hidden_file('./.', F)
+   call showit_is_hidden_file('..', F)
+   call showit_is_hidden_file('...', T)
+   call showit_is_hidden_file('/abc/def/notes.txt', F)
+   call showit_is_hidden_file('/abc/def/.hide', T)
+   call unit_check_done('is_hidden_file', msg='')
+end subroutine test_is_hidden_file
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine showit_is_hidden_file(path, expected)
+character(len=*), intent(in) :: path
+logical, intent(in) :: expected
+   call unit_check('is_hidden_file', is_hidden_file(path) .eqv.expected, 'for', path, 'expected', expected)
+end subroutine showit_is_hidden_file
+!TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileopen()
-   call unit_check_start('fileopen',msg='')
+   tmsg='A simple open of a sequential file'
+   call unit_check_start('fileopen',msg=tmsg)
    !!call unit_check('fileopen', 0 == 0, 'checking',100)
    call unit_check_done('fileopen',msg='')
 end subroutine test_fileopen
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_fileclose()
-   call unit_check_start('fileclose',msg='')
+   tmsg='A simple close of a sequential file'
+   call unit_check_start('fileclose',msg=tmsg)
    !!call unit_check('fileclose', 0 == 0, 'checking',100)
    call unit_check_done('fileclose',msg='')
 end subroutine test_fileclose
@@ -315,7 +346,8 @@ end subroutine test_fileclose
 subroutine test_filewrite()
 integer :: ierr
 character(len=:),allocatable :: data(:), data2(:)
-   call unit_check_start('filewrite',msg='')
+   tmsg='A simple write of a CHARACTER array to a file'
+   call unit_check_start('filewrite',msg=tmsg)
    data=[ character(len=80) :: &
    &'This is the text to write  ', &
    &'into the file. It will be  ', &
@@ -341,37 +373,43 @@ character(len=:),allocatable :: data(:), data2(:)
 end subroutine test_filewrite
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_filedelete()
-   call unit_check_start('filedelete',msg='')
+   tmsg='A simple close of an open file with STATUS="DELETE"'
+   call unit_check_start('filedelete',msg=tmsg)
    !!call unit_check('filedelete', 0 == 0, 'checking',100)
    call unit_check_done('filedelete',msg='')
 end subroutine test_filedelete
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_scratch
-   call unit_check_start('scratch',msg='')
+   tmsg='Return the name of a scratch file'
+   call unit_check_start('scratch',msg=tmsg)
    !!call unit_check('scratch', 0 == 0, 'checking',100)
    call unit_check_done('scratch',msg='')
 end subroutine test_scratch
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_separator()
-   call unit_check_start('separator',msg='')
+   tmsg='try to determine pathname directory separator character'
+   call unit_check_start('separator',msg=tmsg)
    !!call unit_check('separator', 0 == 0, 'checking',100)
    call unit_check_done('separator',msg='')
 end subroutine test_separator
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_which()
-   call unit_check_start('which',msg='')
+   tmsg='find the pathname of a command by searching the directories in $PATH'
+   call unit_check_start('which',msg=tmsg)
    !!call unit_check('which', 0 == 0, 'checking',100)
    call unit_check_done('which',msg='')
 end subroutine test_which
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_lookfor()
-   call unit_check_start('lookfor',msg='')
+   tmsg='look for a filename in directories specified by an environment variable'
+   call unit_check_start('lookfor',msg=tmsg)
    !!call unit_check('lookfor', 0 == 0, 'checking',100)
    call unit_check_done('lookfor',msg='')
 end subroutine test_lookfor
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_getname()
-   call unit_check_start('getname',msg='')
+   tmsg='get name of the current executable'
+   call unit_check_start('getname',msg=tmsg)
    !!call unit_check('getname', 0 == 0, 'checking',100)
    call unit_check_done('getname',msg='')
 end subroutine test_getname
@@ -382,7 +420,8 @@ character(len=maxlen)  :: dir
 character(len=maxlen)  :: name
 character(len=maxlen)  :: basename
 character(len=maxlen)  :: ext
-   call unit_check_start('splitpath',msg='')
+   tmsg='split a Unix pathname into components'
+   call unit_check_start('splitpath',msg=tmsg)
    call splitpath('/usr/local/bin/test.exe', dir, name, basename, ext)
    call unit_check('splitpath', dir=='/usr/local/bin', 'directory','/usr/local/bin/',dir)
    call unit_check('splitpath', name=='test.exe', 'name','test.exe',name)
@@ -406,22 +445,22 @@ character(len=maxlen)  :: ext
 end subroutine test_splitpath
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_uniq()
-
-   call unit_check_start('uniq',msg='')
+   tmsg='append a number to the end of filename to make a unique name if name exists'
+   call unit_check_start('uniq',msg=tmsg)
    !!call unit_check('uniq', 0 == 0, 'checking',100)
    call unit_check_done('uniq',msg='')
 end subroutine test_uniq
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_env()
-
-   call unit_check_start('get_env',msg='')
+   tmsg='a function returning the value of an environment variable'
+   call unit_check_start('get_env',msg=tmsg)
    !!call unit_check('get_env', 0 == 0, 'checking',100)
    call unit_check_done('get_env',msg='')
 end subroutine test_get_env
 !TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 subroutine test_get_next_char()
-
-   call unit_check_start('get_next_char',msg='')
+   tmsg='read from a file one character at a time'
+   call unit_check_start('get_next_char',msg=tmsg)
    !!call unit_check('get_next_char', 0 == 0, 'checking',100)
    call unit_check_done('get_next_char',msg='')
 end subroutine test_get_next_char

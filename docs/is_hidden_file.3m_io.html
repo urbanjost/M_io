@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>which (3m_io)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>is_hidden_file (3m_io)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,9 +56,8 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-which(3f) - [M_io:SCANNAMES] given a command name find the pathname
-by searching the directories in the environment variable
-$PATH
+is_hidden_file(3f) - [M_io:QUERY] determine if a pathname points to a
+hidden file, which is defined as a file basename starting with a period.
 (LICENSE:PD)
 <P>
 </BLOCKQUOTE>
@@ -66,24 +65,25 @@ $PATH
 <BLOCKQUOTE>
 <A HREF=#1>Syntax</A><BR>
 <A HREF=#2>Description</A><BR>
-<A HREF=#3>Options</A><BR>
-<A HREF=#4>Returns</A><BR>
-<A HREF=#5>Example</A><BR>
-<A HREF=#6>See Also</A><BR>
-<A HREF=#7>Author</A><BR>
-<A HREF=#8>License</A><BR>
+<A HREF=#3>Limitations</A><BR>
+<A HREF=#4>Options</A><BR>
+<A HREF=#5>Returns</A><BR>
+<A HREF=#6>Example</A><BR>
+<A HREF=#7>See Also</A><BR>
+<A HREF=#8>Author</A><BR>
+<A HREF=#9>License</A><BR>
 </BLOCKQUOTE>
-<A name=9>
+<A name=10>
 
      <H3>SYNTAX</H3>
 
 </A>
 <BLOCKQUOTE>
-function which(command) result(pathname)
+impure elemental function is_hidden_file(PATH) result(YESNO)
 <P>
 <PRE>
-   character(len=*),intent(in)  :: command
-   character(len=:),allocatable :: pathname
+     character(len=*),intent(in) :: PATH
+     logical                     :: YESNO
 <P>
 </PRE>
 </BLOCKQUOTE>
@@ -93,35 +93,47 @@ function which(command) result(pathname)
 
 </A>
 <BLOCKQUOTE>
-Given a command name find the first file with that name in the directories
-specified by the environment variable $PATH.
+Given a pathname determine if it is a hidden file. This is simply
+assumed to be a basename that does not begin with a period and is not
+a single or double period, assumed to represent the current directory
+and parent directory.
 </BLOCKQUOTE>
 <A name=3>
+
+     <H3>LIMITATIONS</H3>
+
+</A>
+<BLOCKQUOTE>
+Pathnames are not expanded to a canonical form, so if the basename is
+value will still be .FALSE. . Filenames are assumed to not contain
+leading or trailing spaces.
+</BLOCKQUOTE>
+<A name=4>
 
      <H3>OPTIONS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>COMMAND</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-the command to search for
+<TR valign=top><TD width=6% nowrap>
+<B>PATH</B> </TD><TD valign=bottom>
+pathname to classify. It need not exist.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=4>
+<A name=5>
 
      <H3>RETURNS</H3>
 
 </A>
 <BLOCKQUOTE>
 <TABLE cellpadding=3>
-<TR valign=top><TD colspan=2>
-<B>PATHNAME</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-the first pathname found in the current user path. Returns blank
-if the command is not found.
+<TR valign=top><TD width=6% nowrap>
+<B>YESNO</B> </TD><TD valign=bottom>
+true if pathname points to a hidden file, otherwise it
+is false.
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>EXAMPLE</H3>
 
@@ -130,25 +142,44 @@ if the command is not found.
 Sample program:
 <P>
 <PRE>
-    program demo_which
-    use M_io, only : which
-    implicit none
-       write(*,*)&#146;ls is &#146;,which(&#146;ls&#146;)
-       write(*,*)&#146;dir is &#146;,which(&#146;dir&#146;)
-       write(*,*)&#146;install is &#146;,which(&#146;install&#146;)
-    end program demo_which
+      program demo_is_hidden_file
+      use M_io, only : is_hidden_file, basename
+         call showit(&#146;.abc&#146;)
+         call showit(&#146;./.&#146;)
+         call showit(&#146;..&#146;)
+         call showit(&#146;&#46;&#46;&#46;&#146;)
+         call showit(&#146;/abc/def/notes.txt&#146;)
+         call showit(&#146;/abc/def/.hide&#146;)
+      contains
+      subroutine showit(path)
+      character(len=*),intent(in) :: path
+         write(*,*)is_hidden_file(path), &
+          & &#146; ,path=&#146;,path
+      end subroutine showit
+      end program demo_is_hidden_file
+<P>
+</PRE>
+Results:
+<P>
+<PRE>
+    &gt;  T  ,path=.abc
+    &gt;  F  ,path=./.
+    &gt;  F  ,path=..
+    &gt;  T  ,path=&#46;&#46;&#46;
+    &gt;  F  ,path=/abc/def/notes.txt
+    &gt;  T  ,path=/abc/def/.hide
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>SEE ALSO</H3>
 
 </A>
 <BLOCKQUOTE>
-M_system:system_dir(3f)
+<P>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>AUTHOR</H3>
 
@@ -156,7 +187,7 @@ M_system:system_dir(3f)
 <BLOCKQUOTE>
 John S. Urban
 </BLOCKQUOTE>
-<A name=8>
+<A name=9>
 
      <H3>LICENSE</H3>
 
@@ -165,8 +196,8 @@ John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>which (3m_io)</TD> <TD align=right width=33%><I>June 17, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from 5e2f4065-99e6-40b8-a6f0-b1a1152dfa60 using man macros.</FONT>
-<br><br><center><img src="images/which.gif"></center>
+<TABLE width=100%><TR> <TD width=33%><I>Nemo Release 3.1</I></TD> <TD width=33% align=center>is_hidden_file (3m_io)</TD> <TD align=right width=33%><I>June 17, 2023</I></TD> </TR></TABLE><FONT SIZE=-1>Generated by <A HREF="http://www.squarebox.co.uk/download/manServer.shtml">manServer 1.08</A> from f1bb8abb-4b70-4417-b23c-7d219a3b83f0 using man macros.</FONT>
+<br><br><center><img src="images/is_hidden_file.gif"></center>
 </div>
 </div>
 </body>
