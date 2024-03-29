@@ -34,6 +34,7 @@ public separator
 public lookfor
 public which
 public get_env
+public is_hidden_file
 public getname
 
 ! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
@@ -2465,19 +2466,20 @@ integer                                  :: lun_local
       lun_local=stdin
    endif
 
-   INFINITE: do                                                      ! read characters from line and append to result
-      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for files
-                                                                     ! other than stdin so system line limit is not limiting
-      if(isize > 0)line_local=line_local//buffer(:isize)            ! append what was read to result
-      if(is_iostat_eor(ier))then                                     ! if hit EOR reading is complete unless backslash ends the line
-         ier=0                                                       ! hitting end of record is not an error for this routine
-         exit INFINITE                                               ! end of reading line
-     elseif(ier /= 0)then                                            ! end of file or error
+   INFINITE: do                                                   ! read characters from line and append to result
+      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no', &
+      & size=isize,iomsg=message) buffer                          ! read next buffer (might use stream I/O for files
+                                                                  ! other than stdin so system line limit is not limiting
+      if(isize > 0)line_local=line_local//buffer(:isize)          ! append what was read to result
+      if(is_iostat_eor(ier))then                                  ! if hit EOR reading is complete unless backslash ends the line
+         ier=0                                                    ! hitting end of record is not an error for this routine
+         exit INFINITE                                            ! end of reading line
+     elseif(ier /= 0)then                                         ! end of file or error
         line=trim(message)
         exit INFINITE
      endif
    enddo INFINITE
-   line=line_local                                                   ! trim line
+   line=line_local                                                ! trim line
    if(present(iostat))iostat=ier
 end function getline
 !===================================================================================================================================
@@ -3100,7 +3102,7 @@ contains
 logical function exists(filename) result(r)
 character(len=*), intent(in) :: filename
     inquire(file=filename, exist=r)
-end function
+end function exists
 end function which
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -3249,6 +3251,88 @@ integer                                :: stat
    end if
    if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!   is_hidden_file(3f) - [M_io:QUERY]  determine if a pathname points to a
+!!   hidden file, which is defined as a file basename starting with a period.
+!!   (LICENSE:PD)
+!!
+!!##SYNTAX
+!!     impure elemental function is_hidden_file(PATH) result(YESNO)
+!!
+!!      character(len=*),intent(in) :: PATH
+!!      logical                     :: YESNO
+!!
+!!##DESCRIPTION
+!!    Given a pathname determine if it is a hidden file. This is simply
+!!    assumed to be a basename that does not begin with a period and is not
+!!    a single or double period, assumed to represent the current directory
+!!    and parent directory.
+!!
+!!##LIMITATIONS
+!!    Pathnames are not expanded to a canonical form, so if the basename is
+!!    '.' or '..' and those point to a hidden directory name the return
+!!    value will still be .FALSE. . Filenames are assumed to not contain
+!!    leading or trailing spaces.
+!!
+!!##OPTIONS
+!!    PATH     pathname to classify. It need not exist.
+!!
+!!##RETURNS
+!!    YESNO    true if pathname points to a hidden file, otherwise it
+!!             is false.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!       program demo_is_hidden_file
+!!       use M_io, only : is_hidden_file, basename
+!!          call showit('.abc')
+!!          call showit('./.')
+!!          call showit('..')
+!!          call showit('...')
+!!          call showit('/abc/def/notes.txt')
+!!          call showit('/abc/def/.hide')
+!!       contains
+!!       subroutine showit(path)
+!!       character(len=*),intent(in) :: path
+!!          write(*,*)is_hidden_file(path), &
+!!           & ' ,path=',path
+!!       end subroutine showit
+!!       end program demo_is_hidden_file
+!!
+!!    Results:
+!!
+!!     >  T  ,path=.abc
+!!     >  F  ,path=./.
+!!     >  F  ,path=..
+!!     >  T  ,path=...
+!!     >  F  ,path=/abc/def/notes.txt
+!!     >  T  ,path=/abc/def/.hide
+!!
+!!##SEE ALSO
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+impure elemental function is_hidden_file(path) result(yesno)
+character(*), intent(in) :: path
+logical :: yesno
+character(len=:), allocatable :: base
+
+   base = basename(path,suffix=char(0))//'  '
+   select case (base)
+   case ('.', '..');  yesno = .false.
+   case default;      yesno = merge(.true., .false., base(1:1) == '.')
+   end select
+
+end function is_hidden_file
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -4850,7 +4934,7 @@ end subroutine write_message_only
 function msg_scalar(generic0, generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9, &
                   & generica, genericb, genericc, genericd, generice, genericf, genericg, generich, generici, genericj, &
                   & sep)
-! ident_2="@(#)M_msg::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
+! ident_2="@(#)M_io::msg_scalar(3fp): writes a message to a string composed of any standard scalar types"
 class(*),intent(in),optional  :: generic0, generic1, generic2, generic3, generic4
 class(*),intent(in),optional  :: generic5, generic6, generic7, generic8, generic9
 class(*),intent(in),optional  :: generica, genericb, genericc, genericd, generice
@@ -4920,7 +5004,7 @@ end function msg_scalar
 
 function msg_one(generic0,generic1, generic2, generic3, generic4, generic5, generic6, generic7, generic8, generic9,sep)
 implicit none
-! ident_3="@(#)M_msg::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
+! ident_3="@(#)M_io::msg_one(3fp): writes a message to a string composed of any standard one dimensional types"
 class(*),intent(in)           :: generic0(:)
 class(*),intent(in),optional  :: generic1(:), generic2(:), generic3(:), generic4(:), generic5(:)
 class(*),intent(in),optional  :: generic6(:), generic7(:), generic8(:), generic9(:)
