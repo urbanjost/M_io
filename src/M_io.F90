@@ -1,6 +1,7 @@
 !===================================================================================================================================
 MODULE M_io
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
+
 #ifdef __NVCOMPILER
 #define NOREAL128
 #else
@@ -34,6 +35,7 @@ public separator
 public lookfor
 public which
 public get_env
+public readenv
 public is_hidden_file
 public getname
 
@@ -87,6 +89,22 @@ interface gulp;     module procedure fileread;  end interface
 interface slurp;    module procedure filebyte;  end interface
 !-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
+
+interface readenv
+   module procedure get_env_integer
+   module procedure get_env_real
+   module procedure get_env_double
+   module procedure get_env_character
+   module procedure get_env_logical
+end interface readenv
+
+type :: force_keywd_hack  ! force keywords, using @awvwgk method
+end type force_keywd_hack
+! so then any argument that comes afer "force_keywd" is a compile time error
+! if not done with a keyword unless someone "breaks" it by passing something
+! of this type:
+!    type(force_keywd_hack), optional, intent(in) :: force_keywd
+
 
 CONTAINS
 !===================================================================================================================================
@@ -767,7 +785,7 @@ end subroutine read_table_r
 !===================================================================================================================================
 !>
 !!##NAME
-!!    fileread(3f) - [M_io:READ] read a file into a string array
+!!    fileread(3f) - [M_io:READ] read (ie. slurp) a file into a string array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -790,7 +808,7 @@ end subroutine read_table_r
 !!
 !!##OPTIONS
 !!    filename   filename to read into memory, or LUN (Fortran Logical
-!!               Unit Number).  If filename is a LUN, file must be opened
+!!               Unit Number). If filename is a LUN, file must be opened
 !!               with
 !!
 !!                  form='unformatted',access='stream'
@@ -801,6 +819,10 @@ end subroutine read_table_r
 !!                 & action="read", iomsg=message,        &
 !!                 & form="unformatted", access="stream", &
 !!                 & status='old',iostat=ios)
+!!
+!!               An exception is that although stdin cannot currently
+!!               generally be treated as a stream file file the data
+!!               will be read from stdin if the filename is '-'.
 !!
 !!    pageout    array of characters to hold file
 !!
@@ -931,7 +953,7 @@ end subroutine fileread
 !===================================================================================================================================
 !>
 !!##NAME
-!!    filebyte(3f) - [M_io:READ] read a file into a character array
+!!    filebyte(3f) - [M_io:READ] read (ie. slurp) a file into a character array
 !!    (LICENSE:PD)
 !!##SYNOPSIS
 !!
@@ -966,6 +988,10 @@ end subroutine fileread
 !!                    & action="read", iomsg=message,        &
 !!                    & form="unformatted", access="stream", &
 !!                    & status='old',iostat=ios)
+!!
+!!                  An exception is that although stdin cannot currently
+!!                  generally be treated as a stream file file the data
+!!                  will be read from stdin if the filename is '-'.
 !!
 !!       text       array of characters to hold file
 !!       length     returns length of longest line read(Optional).
@@ -1569,11 +1595,13 @@ character(len=maxlen)                :: bname
 character(len=maxlen)                :: extension
 character(len=1)                 :: sep
    sep=separator()
+   ! trim trailing separators
    iend=len_trim(filename)
    do i=iend,1,-1
       if(filename(i:i) /= sep)exit
       iend=iend-1
    enddo
+   !
    call splitpath(filename(:iend),name=name,basename=bname,ext=extension)
    if(present(suffix))then
       leaf=merge(bname,name,suffix == extension)
@@ -2669,7 +2697,7 @@ function get_tmp() result(tname)
 
 character(len=:),allocatable :: tname
 integer                      :: lngth
-character(len=10),parameter  :: names(4)=["TMPDIR    ","TEMP      ","TEMPDIR   ","TMP       "]
+character(len=10),parameter  :: names(*)=["TMPDIR    ","TEMP      ","TEMPDIR   ","TMP       "]
 integer                      :: i
 character(len=1)             :: sep
    sep=separator()
@@ -3222,7 +3250,7 @@ end function lookfor
 !!    get_environment_variable(3fortran), system_getenv(3m_system),
 !!    set_environment_variable(3m_system), system_putenv(3m_system),
 !!    system_clearenv(3m_system), system_initenv(3m_system),
-!!    system_readenv(3m_system), system_unsetenv(3m_system)
+!!    system_getenv(3m_system), system_unsetenv(3m_system)
 !!
 !!##AUTHOR
 !!    John S. Urban
@@ -3251,6 +3279,301 @@ integer                                :: stat
    end if
    if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
 end function get_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!     readenv(3f) - [M_io:QUERY] a function returning the value of
+!!                   an environment variable
+!!     (LICENSE:PD)
+!!
+!!##SYNTAX
+!!    function readenv(NAME,DEFAULT,IERR=IERR) result(VALUE)
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     character(len=*),intent(in),optional :: DEFAULT
+!!     integer,intent(out),optional         :: IERR
+!!     character(len=:),allocatable         :: VALUE
+!!
+!!      or
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     real,intent(in),optional             :: DEFAULT
+!!     integer,intent(out),optional         :: IERR
+!!     real                                 :: VALUE
+!!
+!!      or
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     integer,intent(in),optional          :: DEFAULT
+!!     integer,intent(out),optional         :: IERR
+!!     integer                              :: VALUE
+!!
+!!      or
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     doubleprecision,intent(in),optional  :: DEFAULT
+!!     integer,intent(out),optional         :: IERR
+!!     doubleprecision                      :: VALUE
+!!      or
+!!
+!!     character(len=*),intent(in)          :: NAME
+!!     logical,intent(in),optional          :: DEFAULT
+!!     integer,intent(out),optional         :: IERR
+!!     logical                              :: VALUE
+!!
+!!
+!!##DESCRIPTION
+!!     Get the value of an environment variable or optionally return a
+!!     default value if the returned value would be a blank string.
+!!
+!!     The type returned is the same as the type of the default
+!!
+!!
+!!##OPTIONS
+!!    NAME     name of environment variable
+!!    DEFAULT  value to return if environment variable is not set or set
+!!             to an empty string. May be CHARACTER, REAL, INTEGER, or
+!!             DOUBLEPRECISION. Defaults to a null CHARACTER value.
+!!##RETURNS
+!!    VALUE    the value of the environment variable or the default.
+!!             The type is the same as DEFAULT. If an error occurs and it
+!!             is numeric, huge(0|0.0|0.0d0) is returned.
+!!
+!!             For a LOGICAL type, Any environment variable value starting
+!!             with F,f,N or n is .FALSE. and any value starting with
+!!             Y,y,T or t is true. A leading period (".") is ignored.
+!!             Anything else returns .false. .
+!!
+!!    IERR     return error code. Must be specified with a keyword.
+!!             It is zero if no error occurred.
+!!
+!!##EXAMPLE
+!!
+!!   Sample program:
+!!
+!!    program demo_readenv
+!!    use M_io, only : readenv, getname
+!!    character(len=*),parameter :: g='(*(g0))'
+!!    integer :: ierr
+!!
+!!       if(readenv('STOP').eq.'RUN')then
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)readenv('CHARACTER','string')
+!!          write(*,g)readenv('INTEGER',100)
+!!          write(*,g)readenv('REAL',200.0)
+!!          write(*,g)readenv('DOUBLE',300.0d0)
+!!          write(*,g)readenv('LOGICAL',.true.)
+!!
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)readenv('CHARACTER','string',ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)readenv('INTEGER',100,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)readenv('REAL',200.0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)readenv('DOUBLE',300.0d0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)readenv('LOGICAL',.true.)
+!!          write(*,*)'ierr=',ierr
+!!
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)readenv('CHARACTER')
+!!          write(*,g)readenv('HOME')
+!!        else
+!!          write(*,g)repeat('-',80)
+!!          call execute_command_line('env STOP=RUN '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=aaaa &
+!!          & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=bbbb &
+!!          & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
+!!          call execute_command_line('env STOP=RUN CHARACTER=cccc &
+!!          & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
+!!          write(*,g)repeat('-',80)
+!!          stop
+!!       endif
+!!
+!!    end program demo_readenv
+!!
+!!##SEE ALSO
+!!    get_environment_variable(3fortran), system_getenv(3m_system),
+!!    set_environment_variable(3m_system), system_putenv(3m_system),
+!!    system_clearenv(3m_system), system_initenv(3m_system),
+!!    system_getenv(3m_system), system_unsetenv(3m_system)
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function get_env_character(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+implicit none
+character(len=*),intent(in)                :: NAME
+character(len=*),intent(in),optional       :: DEFAULT
+type(force_keywd_hack),optional,intent(in) :: force_keywd
+integer,intent(out),optional               :: ierr
+character(len=:),allocatable               :: VALUE
+character(len=255)                         :: errmsg
+integer                                    :: howbig
+integer                                    :: stat
+integer                                    :: length
+   ! get length required to hold value
+   length=0
+   errmsg=''
+   stat=0
+   if(NAME.ne.'')then
+      call get_environment_variable(NAME, length=howbig,status=stat,trim_name=.true.)
+      select case (stat)
+      case (1)
+         !*!print *, NAME, " is not defined in the environment. Strange..."
+         VALUE=''
+         stat=0
+      case (2)
+         !*!print *, "This processor doesn't support environment variables. Boooh!"
+         VALUE=''
+      case default
+         ! make string to hold value of sufficient size
+         allocate(character(len=max(howbig,1)) :: VALUE)
+         ! get value
+         call get_environment_variable(NAME,VALUE,status=stat,trim_name=.true.)
+         if(stat.ne.0)VALUE=''
+      end select
+   else
+      VALUE=''
+   endif
+   if(VALUE.eq.''.and.present(DEFAULT))VALUE=DEFAULT
+   if(present(ierr))then
+      ierr=stat
+   elseif(stat.ne.0)then
+      !write(stderr,'(a)')trim(errmsg)
+   endif
+end function get_env_character
+
+function get_env_real(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+real,intent(in)               :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+real                          :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_real
+
+function get_env_double(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+doubleprecision,intent(in)    :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+doubleprecision               :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0d0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_double
+
+function get_env_integer(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+integer,intent(in)            :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+integer                       :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+   STRING=get_env_character(NAME,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      write(fmt,'(*(g0))')'(i',max(1,len(string)),')'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_integer
+
+function get_env_logical(NAME,DEFAULT,force_keywd,ierr) result(VALUE)
+character(len=*),intent(in)   :: NAME
+logical,intent(in)            :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional :: ierr
+logical                       :: VALUE
+character(len=:),allocatable  :: STRING
+integer                       :: iostat
+character(len=255)            :: iomsg, fmt
+character(len=1)              :: ch
+   STRING=get_env_character(NAME,'',ierr=iostat)
+   if(iostat.ne.0)then
+      VALUE=.false.
+   elseif(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      string=string//'  '
+      ch=string(1:1)
+      if(ch.eq.'.')ch=string(2:2)
+      select case(ch)
+      case('t','T','y','Y')
+         value=.true.
+      case('f','F','n','N')
+         value=.false.
+       case default
+         value=.false.
+      end select
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_env_logical
+
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -3480,7 +3803,7 @@ end subroutine get_next_char
 !!##DESCRIPTION
 !!
 !!    Generate a filename containing a representation of the specified
-!!    whole number.  This is useful for generating a series of filenames
+!!    whole number. This is useful for generating a series of filenames
 !!    differing by a number such as "file1.txt", "file2.txt",
 !!    ... .
 !!

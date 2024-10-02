@@ -22,5 +22,7 @@ source-dir="test"
 main="test_suite_M_io.f90"
 ##link = ["blas", "lapack"]
 [test.dependencies]
-M_framework = { git = "https://github.com/urbanjost/M_framework.git" }
+M_framework  =  {  git        =  "https://github.com/urbanjost/M_framework.git"  }
+#M_framework  =  {  namespace  =  "GPF"                                           }
+#M_framework  =  {  path       =  "GLINKS/M_framework"                            }
 
