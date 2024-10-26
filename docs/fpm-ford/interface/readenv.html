@@ -1,0 +1,781 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Fortran I/O module">
+    <meta name="author" content="John Doe" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>readenv &ndash; M_io</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_io </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>readenv
+      <small>Interface</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title="<p> 0.5% of total for procedures.</p>Including implementation: 163 statements, 11.9% of total for procedures.">7 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_io.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_io.f90.html'>M_io.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/m_io.html'>M_io</a></li>
+            <li class="breadcrumb-item active" aria-current="page">readenv</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+      <div class="card mb-4">
+      <a data-bs-toggle="collapse" href="#modprocs-0"
+         aria-expanded="false" aria-controls="modprocs-0">
+         <h4 class="card-header bg-primary text-white">Module Procedures</h4>
+      </a>
+      <div id="modprocs-0" class="collapse">
+        <div class="list-group list-group-flush">
+            <a class="list-group-item" href="../interface/readenv.html#moduleprocedure-get_env_integer~2">get_env_integer</a>
+            <a class="list-group-item" href="../interface/readenv.html#moduleprocedure-get_env_real~2">get_env_real</a>
+            <a class="list-group-item" href="../interface/readenv.html#moduleprocedure-get_env_double~2">get_env_double</a>
+            <a class="list-group-item" href="../interface/readenv.html#moduleprocedure-get_env_character~2">get_env_character</a>
+            <a class="list-group-item" href="../interface/readenv.html#moduleprocedure-get_env_logical~2">get_env_logical</a>
+        </div>
+      </div>
+    </div>
+
+  
+
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      <h2>public interface readenv</h2>
+      
+
+
+
+        <h2>Module Procedures</h2>
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_env_integer"></span> <h3>private  function get_env_integer(NAME, DEFAULT, force_keywd, ierr) result(VALUE)  
+</h3></div>
+    <div class="card-body">
+        
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~4"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>NAME</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-default~4"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>DEFAULT</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-force_keywd~4"></span>
+              type(force_keywd_hack),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>force_keywd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr~11"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>integer</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_env_real"></span> <h3>private  function get_env_real(NAME, DEFAULT, force_keywd, ierr) result(VALUE)  
+</h3></div>
+    <div class="card-body">
+        
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~2"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>NAME</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-default~2"></span>
+              real,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>DEFAULT</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-force_keywd~2"></span>
+              type(force_keywd_hack),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>force_keywd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr~9"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>real</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_env_double"></span> <h3>private  function get_env_double(NAME, DEFAULT, force_keywd, ierr) result(VALUE)  
+</h3></div>
+    <div class="card-body">
+        
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~3"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>NAME</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-default~3"></span>
+              doubleprecision,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>DEFAULT</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-force_keywd~3"></span>
+              type(force_keywd_hack),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>force_keywd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr~10"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>doubleprecision</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_env_character"></span> <h3>private  function get_env_character(NAME, DEFAULT, force_keywd, ierr) result(VALUE)  
+</h3></div>
+    <div class="card-body">
+        <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">get_env</span><span class="p">(</span><span class="mi">3</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">[</span><span class="n">M_io</span><span class="p">:</span><span class="n">QUERY</span><span class="p">]</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">function</span><span class="w"> </span><span class="n">returning</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">of</span>
+<span class="w">               </span><span class="n">an</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span>
+<span class="w"> </span><span class="p">(</span><span class="n">LICENSE</span><span class="p">:</span><span class="n">PD</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="syntax">SYNTAX</h2>
+<div class="codehilite"><pre><span></span><code><span class="k">function</span><span class="w"> </span>get_env(NAME,DEFAULT,IERR<span class="p">=</span><span class="nf">IERR) result</span><span class="p">(</span>VALUE<span class="p">)</span>
+
+<span class="w"> </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">            </span><span class="p">::</span><span class="w"> </span><span class="n">NAME</span>
+
+<span class="w"> </span>!<span class="w"> </span><span class="n">ONE</span><span class="w"> </span><span class="n">OF</span><span class="w"> </span><span class="k">...</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=</span><span class="o">*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">DEFAULT</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="nb">real</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">             </span><span class="p">::</span><span class="w"> </span><span class="n">DEFAULT</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">DEFAULT</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">doubleprecision</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">  </span><span class="p">::</span><span class="w"> </span><span class="n">DEFAULT</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="nb">logical</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">in</span><span class="p">),</span><span class="n">optional</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">DEFAULT</span>
+
+<span class="w"> </span><span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="n">optional</span><span class="w">           </span><span class="p">::</span><span class="w"> </span><span class="n">IERR</span>
+
+<span class="w"> </span>!<span class="w"> </span><span class="n">ONE</span><span class="w"> </span><span class="n">OF</span><span class="w"> </span><span class="n">THE</span><span class="w"> </span><span class="n">FOLLOWING</span><span class="p">,</span><span class="w"> </span><span class="n">MATCHING</span><span class="w"> </span><span class="n">TYPE</span><span class="w"> </span><span class="n">OF</span><span class="w"> </span><span class="n">DEFAULT</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="p">=:),</span><span class="n">allocatable</span><span class="w">         </span><span class="p">::</span><span class="w"> </span><span class="n">VALUE</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">integer</span><span class="w">                              </span><span class="p">::</span><span class="w"> </span><span class="n">VALUE</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="nb">real</span><span class="w">                                 </span><span class="p">::</span><span class="w"> </span><span class="n">VALUE</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="n">doubleprecision</span><span class="w">                      </span><span class="p">::</span><span class="w"> </span><span class="n">VALUE</span>
+<span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="nb">logical</span><span class="w">                              </span><span class="p">::</span><span class="w"> </span><span class="n">VALUE</span>
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="w"> </span><span class="n">Get</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">optionally</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">a</span>
+<span class="w"> </span><span class="n">default</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">when</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">set</span>
+<span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">blank</span><span class="w"> </span><span class="n">string</span><span class="o">.</span>
+
+<span class="w"> </span><span class="n">The</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">returned</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">default</span><span class="w"> </span><span class="n">value</span><span class="o">.</span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">NAME</span><span class="w">     </span><span class="n">name</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span>
+<span class="n">DEFAULT</span><span class="w">  </span><span class="n">value</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="n">set</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">set</span>
+<span class="w">         </span><span class="n">to</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">empty</span><span class="w"> </span><span class="n">string</span><span class="o">.</span><span class="w"> </span><span class="n">May</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">CHARACTER</span><span class="p">,</span><span class="w"> </span><span class="n">REAL</span><span class="p">,</span><span class="w"> </span><span class="n">INTEGER</span><span class="p">,</span>
+<span class="w">         </span><span class="n">LOGICAL</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">DOUBLEPRECISION</span><span class="o">.</span><span class="w"> </span><span class="n">Defaults</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="nb nb-Type">null</span><span class="w"> </span><span class="n">CHARACTER</span><span class="w"> </span><span class="n">value</span><span class="o">.</span>
+</code></pre></div>
+
+<h2 id="returns">RETURNS</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">VALUE</span><span class="w">    </span><span class="n">the</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">default</span><span class="o">.</span>
+<span class="w">         </span><span class="n">The</span><span class="w"> </span><span class="n">type</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">the</span><span class="w"> </span><span class="n">same</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">DEFAULT</span><span class="o">.</span><span class="w"> </span><span class="n">If</span><span class="w"> </span><span class="n">an</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">occurs</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">it</span>
+<span class="w">         </span><span class="k">is</span><span class="w"> </span><span class="n">numeric</span><span class="p">,</span><span class="w"> </span><span class="n">huge</span><span class="p">(</span><span class="mi">0</span><span class="o">|</span><span class="mf">0.0</span><span class="o">|</span><span class="mf">0.0</span><span class="n">d0</span><span class="p">)</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">returned</span><span class="o">.</span>
+
+<span class="w">         </span><span class="n">For</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">LOGICAL</span><span class="w"> </span><span class="n">type</span><span class="p">,</span><span class="w"> </span><span class="n">Any</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">starting</span>
+<span class="w">         </span><span class="n">with</span><span class="w"> </span><span class="n">F</span><span class="p">,</span><span class="n">f</span><span class="p">,</span><span class="n">N</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="o">.</span><span class="n">FALSE</span><span class="o">.</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="n">any</span><span class="w"> </span><span class="n">value</span><span class="w"> </span><span class="n">starting</span><span class="w"> </span><span class="n">with</span>
+<span class="w">         </span><span class="n">Y</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">T</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="bp">true</span><span class="o">.</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">leading</span><span class="w"> </span><span class="n">period</span><span class="w"> </span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">ignored</span><span class="o">.</span>
+<span class="w">         </span><span class="n">Anything</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="n">returns</span><span class="w"> </span><span class="o">.</span><span class="n">false</span><span class="o">.</span><span class="w"> </span><span class="o">.</span>
+
+<span class="n">IERR</span><span class="w">     </span><span class="k">return</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">code</span><span class="o">.</span><span class="w"> </span><span class="n">Must</span><span class="w"> </span><span class="n">be</span><span class="w"> </span><span class="n">specified</span><span class="w"> </span><span class="n">with</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">keyword</span><span class="o">.</span>
+<span class="w">         </span><span class="n">It</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="n">zero</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">no</span><span class="w"> </span><span class="n">error</span><span class="w"> </span><span class="n">occurred</span><span class="o">.</span>
+</code></pre></div>
+
+<h2 id="example">EXAMPLE</h2>
+<p>Sample program:</p>
+<div class="codehilite"><pre><span></span><code><span class="n">program</span><span class="w"> </span><span class="n">demo_get_env</span>
+<span class="n">use</span><span class="w"> </span><span class="n">M_io</span><span class="p">,</span><span class="w"> </span><span class="n">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">get_env</span><span class="p">,</span><span class="w"> </span><span class="n">getname</span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">parameter</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">g</span><span class="o">=</span><span class="s1">&#39;(*(g0))&#39;</span>
+<span class="n">integer</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">ierr</span>
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="p">:),</span><span class="n">allocatable</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">HOME</span>
+<span class="w">  </span><span class="o">!</span><span class="n">Basics</span>
+<span class="w">   </span><span class="n">HOME</span><span class="o">=</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;HOME&#39;</span><span class="p">,</span><span class="s1">&#39;UNKNOWN&#39;</span><span class="p">)</span>
+<span class="w">   </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">HOME</span>
+<span class="w">   </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="n">Get_env</span><span class="p">(</span><span class="s1">&#39;PATH&#39;</span><span class="p">)</span>
+
+<span class="w">  </span><span class="o">!</span><span class="n">call</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">setting</span><span class="w"> </span><span class="n">STOP</span><span class="o">=</span><span class="n">RUN</span><span class="w"> </span><span class="n">unless</span><span class="w"> </span><span class="n">STOP</span><span class="o">=</span><span class="n">RUN</span>
+<span class="w">  </span><span class="o">!</span><span class="n">otherwise</span><span class="w"> </span><span class="nb">print</span><span class="w"> </span><span class="n">various</span><span class="w"> </span><span class="n">environment</span><span class="w"> </span><span class="n">variable</span><span class="w"> </span><span class="n">values</span>
+<span class="w">  </span><span class="o">!</span><span class="n">converted</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">various</span><span class="w"> </span><span class="n">types</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;STOP&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="o">.</span><span class="s1">&#39;RUN&#39;</span><span class="p">)</span><span class="n">then</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;CHARACTER&#39;</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;INTEGER&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;REAL&#39;</span><span class="p">,</span><span class="mf">200.0</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;DOUBLE&#39;</span><span class="p">,</span><span class="mf">300.0</span><span class="n">d0</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;LOGICAL&#39;</span><span class="p">,</span><span class="o">.</span><span class="n">true</span><span class="o">.</span><span class="p">)</span>
+
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;CHARACTER&#39;</span><span class="p">,</span><span class="s1">&#39;string&#39;</span><span class="p">,</span><span class="n">ierr</span><span class="o">=</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;ierr=&#39;</span><span class="p">,</span><span class="n">ierr</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;INTEGER&#39;</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="n">ierr</span><span class="o">=</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;ierr=&#39;</span><span class="p">,</span><span class="n">ierr</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;REAL&#39;</span><span class="p">,</span><span class="mf">200.0</span><span class="p">,</span><span class="n">ierr</span><span class="o">=</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;ierr=&#39;</span><span class="p">,</span><span class="n">ierr</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;DOUBLE&#39;</span><span class="p">,</span><span class="mf">300.0</span><span class="n">d0</span><span class="p">,</span><span class="n">ierr</span><span class="o">=</span><span class="n">ierr</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;ierr=&#39;</span><span class="p">,</span><span class="n">ierr</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;LOGICAL&#39;</span><span class="p">,</span><span class="o">.</span><span class="n">true</span><span class="o">.</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;ierr=&#39;</span><span class="p">,</span><span class="n">ierr</span>
+
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;CHARACTER&#39;</span><span class="p">)</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">get_env</span><span class="p">(</span><span class="s1">&#39;HOME&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="k">else</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">execute_command_line</span><span class="p">(</span><span class="s1">&#39;env STOP=RUN &#39;</span><span class="o">//</span><span class="n">getname</span><span class="p">())</span>
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">execute_command_line</span><span class="p">(</span><span class="s1">&#39;env STOP=RUN CHARACTER=aaaa &amp;</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="w"> </span><span class="n">INTEGER</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="n">REAL</span><span class="o">=</span><span class="mf">2.3</span><span class="w"> </span><span class="n">DOUBLE</span><span class="o">=</span><span class="mi">444444444444</span><span class="w"> </span><span class="s1">&#39;//getname())</span>
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">execute_command_line</span><span class="p">(</span><span class="s1">&#39;env STOP=RUN CHARACTER=bbbb &amp;</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="w"> </span><span class="n">INTEGER</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="n">REAL</span><span class="o">=</span><span class="mf">2.3</span><span class="w"> </span><span class="n">DOUBLE</span><span class="o">=</span><span class="mf">44.555</span><span class="w"> </span><span class="s1">&#39;//getname())</span>
+<span class="w">      </span><span class="n">call</span><span class="w"> </span><span class="n">execute_command_line</span><span class="p">(</span><span class="s1">&#39;env STOP=RUN CHARACTER=cccc &amp;</span>
+<span class="w">      </span><span class="o">&amp;</span><span class="w"> </span><span class="n">INTEGER</span><span class="o">=</span><span class="n">asdf</span><span class="w"> </span><span class="n">REAL</span><span class="o">=</span><span class="n">asdf</span><span class="w"> </span><span class="n">DOUBLE</span><span class="o">=</span><span class="n">adsf</span><span class="w"> </span><span class="s1">&#39;//getname())</span>
+<span class="w">      </span><span class="n">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="n">g</span><span class="p">)</span><span class="n">repeat</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span><span class="mi">80</span><span class="p">)</span>
+<span class="w">      </span><span class="n">stop</span>
+<span class="w">   </span><span class="n">endif</span>
+
+<span class="n">end</span><span class="w"> </span><span class="n">program</span><span class="w"> </span><span class="n">demo_get_env</span>
+</code></pre></div>
+
+<h2 id="see-also">SEE ALSO</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">This</span><span class="w"> </span><span class="n">duplicates</span><span class="w"> </span><span class="n">system_getenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">)</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">most</span><span class="w"> </span><span class="n">respects</span><span class="w"> </span><span class="n">but</span><span class="w"> </span><span class="n">avoids</span>
+<span class="n">some</span><span class="w"> </span><span class="n">interdependencies</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="n">M_system</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="n">currently</span><span class="w"> </span><span class="n">requires</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">POSIX</span>
+<span class="n">programming</span><span class="w"> </span><span class="n">environment</span><span class="o">.</span>
+
+<span class="n">get_environment_variable</span><span class="p">(</span><span class="mi">3</span><span class="n">fortran</span><span class="p">),</span><span class="w"> </span><span class="n">system_getenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span>
+<span class="n">set_environment_variable</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span><span class="w"> </span><span class="n">system_putenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span>
+<span class="n">system_clearenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span><span class="w"> </span><span class="n">system_initenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span>
+<span class="n">system_getenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">),</span><span class="w"> </span><span class="n">system_unsetenv</span><span class="p">(</span><span class="mi">3</span><span class="n">m_system</span><span class="p">)</span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+<p>!print <em>, NAME, &rdquo; is not defined in the environment. Strange&hellip;&rdquo;
+!print </em>, &ldquo;This processor doesn&rsquo;t support environment variables. Boooh!&rdquo;</p>
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>NAME</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-default"></span>
+              character(len=*),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>DEFAULT</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-force_keywd"></span>
+              type(force_keywd_hack),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>force_keywd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr~8"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>character(len=:), allocatable</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+            <div class="card">
+    <div class="card-header codesum"><span class="anchor" id="proc-get_env_logical"></span> <h3>private  function get_env_logical(NAME, DEFAULT, force_keywd, ierr) result(VALUE)  
+</h3></div>
+    <div class="card-body">
+        
+
+  <h4>Arguments</h4>
+      <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-name~5"></span>
+              character(len=*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>NAME</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-default~5"></span>
+              logical,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>DEFAULT</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-force_keywd~5"></span>
+              type(force_keywd_hack),
+            </td>
+<td>intent(in),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>force_keywd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ierr~12"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ierr</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <h4>
+    Return Value
+    <small>logical</small>
+    </h4>
+    
+
+    </div>
+  </div>
+
+</div>
+  </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_io
+ was developed by John Doe<br>              &copy; 2024 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2024-10-26 03:22              </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>
