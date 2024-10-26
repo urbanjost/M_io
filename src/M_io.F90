@@ -35,7 +35,6 @@ public separator
 public lookfor
 public which
 public get_env
-public readenv
 public is_hidden_file
 public getname
 
@@ -82,21 +81,15 @@ end interface journal
 interface str
    module procedure msg_scalar, msg_one
 end interface str
-!-----------------------------------
-! old names
-interface swallow;  module procedure fileread;  end interface
-interface gulp;     module procedure fileread;  end interface
-interface slurp;    module procedure filebyte;  end interface
-!-----------------------------------
 character(len=*),parameter,private :: gen='(*(g0,1x))'
 
-interface readenv
+interface get_env
    module procedure get_env_integer
    module procedure get_env_real
    module procedure get_env_double
    module procedure get_env_character
    module procedure get_env_logical
-end interface readenv
+end interface get_env
 
 type :: force_keywd_hack  ! force keywords, using @awvwgk method
 end type force_keywd_hack
@@ -104,7 +97,20 @@ end type force_keywd_hack
 ! if not done with a keyword unless someone "breaks" it by passing something
 ! of this type:
 !    type(force_keywd_hack), optional, intent(in) :: force_keywd
-
+!-----------------------------------
+! old names
+interface swallow;  module procedure fileread;  end interface
+interface gulp;     module procedure fileread;  end interface
+interface slurp;    module procedure filebyte;  end interface
+interface readenv
+   module procedure get_env_integer
+   module procedure get_env_real
+   module procedure get_env_double
+   module procedure get_env_character
+   module procedure get_env_logical
+end interface readenv
+public readenv
+!-----------------------------------
 
 CONTAINS
 !===================================================================================================================================
@@ -3213,129 +3219,39 @@ end function lookfor
 !!     (LICENSE:PD)
 !!
 !!##SYNTAX
-!!    function get_env(NAME,DEFAULT) result(VALUE)
+!!    function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
 !!
-!!     character(len=*),intent(in)          :: NAME
-!!     character(len=*),intent(in),optional :: DEFAULT
-!!     character(len=:),allocatable         :: VALUE
+!!     character(len=*),intent(in)            :: NAME
 !!
+!!     ! ONE OF ...
+!!     o character(len=*),intent(in),optional :: DEFAULT
+!!     o real,intent(in),optional             :: DEFAULT
+!!     o integer,intent(in),optional          :: DEFAULT
+!!     o doubleprecision,intent(in),optional  :: DEFAULT
+!!     o logical,intent(in),optional          :: DEFAULT
 !!
-!!##DESCRIPTION
-!!     Get the value of an environment variable or optionally return a
-!!     default value if the returned value would be a blank string.
+!!     integer,intent(out),optional           :: IERR
 !!
-!!     This is a duplicate of system_getenv(3m_system) used to avoid
-!!     some interdependencies.
-!!
-!!##OPTIONS
-!!    NAME     name of environment variable
-!!    DEFAULT  value to return if environment variable is not set or set
-!!             to an empty string
-!!##RETURNS
-!!    VALUE    the value of the environment variable or the default
-!!
-!!##EXAMPLE
-!!
-!!   Sample program:
-!!
-!!       program demo_get_env
-!!       use M_io, only : get_env
-!!       character(len=:),allocatable :: HOME
-!!          HOME=get_env('HOME','UNKNOWN')
-!!          write(*,'(a)')HOME,get_env('PATH')
-!!          write(*,'(a)')get_env('HOME'),get_env('PATH')
-!!       end program demo_get_env
-!!
-!!##SEE ALSO
-!!    get_environment_variable(3fortran), system_getenv(3m_system),
-!!    set_environment_variable(3m_system), system_putenv(3m_system),
-!!    system_clearenv(3m_system), system_initenv(3m_system),
-!!    system_getenv(3m_system), system_unsetenv(3m_system)
-!!
-!!##AUTHOR
-!!    John S. Urban
-!!
-!!##LICENSE
-!!    Public Domain
-function get_env(NAME, DEFAULT) result(VALUE)
-implicit none
-character(len=*), intent(in)           :: NAME
-character(len=*), intent(in), optional :: DEFAULT
-character(len=:), allocatable          :: VALUE
-integer                                :: howbig
-integer                                :: stat
-   if (NAME /= '') then
-      call get_environment_variable(NAME, length=howbig, status=stat, trim_name=.true.) ! get length required to hold value
-      select case (stat)
-      case (1); VALUE = '' ! NAME is not defined in the environment
-      case (2); VALUE = '' ! This processor doesn't support environment variables. Boooh!
-      case default
-         allocate (character(len=max(howbig, 1)) :: VALUE)                         ! make string to hold value of sufficient size
-         call get_environment_variable(NAME, VALUE, status=stat, trim_name=.true.) ! get value
-         if (stat /= 0) VALUE = ''
-      end select
-   else
-      VALUE = ''
-   end if
-   if (VALUE == '' .and. present(DEFAULT)) VALUE = DEFAULT
-end function get_env
-!===================================================================================================================================
-!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
-!===================================================================================================================================
-!>
-!!##NAME
-!!     readenv(3f) - [M_io:QUERY] a function returning the value of
-!!                   an environment variable
-!!     (LICENSE:PD)
-!!
-!!##SYNTAX
-!!    function readenv(NAME,DEFAULT,IERR=IERR) result(VALUE)
-!!
-!!     character(len=*),intent(in)          :: NAME
-!!     character(len=*),intent(in),optional :: DEFAULT
-!!     integer,intent(out),optional         :: IERR
-!!     character(len=:),allocatable         :: VALUE
-!!
-!!      or
-!!
-!!     character(len=*),intent(in)          :: NAME
-!!     real,intent(in),optional             :: DEFAULT
-!!     integer,intent(out),optional         :: IERR
-!!     real                                 :: VALUE
-!!
-!!      or
-!!
-!!     character(len=*),intent(in)          :: NAME
-!!     integer,intent(in),optional          :: DEFAULT
-!!     integer,intent(out),optional         :: IERR
-!!     integer                              :: VALUE
-!!
-!!      or
-!!
-!!     character(len=*),intent(in)          :: NAME
-!!     doubleprecision,intent(in),optional  :: DEFAULT
-!!     integer,intent(out),optional         :: IERR
-!!     doubleprecision                      :: VALUE
-!!      or
-!!
-!!     character(len=*),intent(in)          :: NAME
-!!     logical,intent(in),optional          :: DEFAULT
-!!     integer,intent(out),optional         :: IERR
-!!     logical                              :: VALUE
-!!
+!!     ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
+!!     o character(len=:),allocatable         :: VALUE
+!!     o integer                              :: VALUE
+!!     o real                                 :: VALUE
+!!     o doubleprecision                      :: VALUE
+!!     o logical                              :: VALUE
 !!
 !!##DESCRIPTION
 !!     Get the value of an environment variable or optionally return a
-!!     default value if the returned value would be a blank string.
+!!     default value when the environment variable is not set or is set
+!!     to a blank string.
 !!
-!!     The type returned is the same as the type of the default
+!!     The type returned is the same as the type of the default value.
 !!
 !!
 !!##OPTIONS
 !!    NAME     name of environment variable
 !!    DEFAULT  value to return if environment variable is not set or set
-!!             to an empty string. May be CHARACTER, REAL, INTEGER, or
-!!             DOUBLEPRECISION. Defaults to a null CHARACTER value.
+!!             to an empty string. May be CHARACTER, REAL, INTEGER,
+!!             LOGICAL or DOUBLEPRECISION. Defaults to a null CHARACTER value.
 !!##RETURNS
 !!    VALUE    the value of the environment variable or the default.
 !!             The type is the same as DEFAULT. If an error occurs and it
@@ -3353,34 +3269,42 @@ end function get_env
 !!
 !!   Sample program:
 !!
-!!    program demo_readenv
-!!    use M_io, only : readenv, getname
+!!    program demo_get_env
+!!    use M_io, only : get_env, getname
 !!    character(len=*),parameter :: g='(*(g0))'
 !!    integer :: ierr
+!!    character(len=:),allocatable :: HOME
+!!      !Basics
+!!       HOME=get_env('HOME','UNKNOWN')
+!!       write(*,'(a)')HOME
+!!       write(*,'(a)')Get_env('PATH')
 !!
-!!       if(readenv('STOP').eq.'RUN')then
+!!      !call this program setting STOP=RUN unless STOP=RUN
+!!      !otherwise print various environment variable values
+!!      !converted to various types
+!!       if(get_env('STOP').eq.'RUN')then
 !!          write(*,g)repeat('-',80)
-!!          write(*,g)readenv('CHARACTER','string')
-!!          write(*,g)readenv('INTEGER',100)
-!!          write(*,g)readenv('REAL',200.0)
-!!          write(*,g)readenv('DOUBLE',300.0d0)
-!!          write(*,g)readenv('LOGICAL',.true.)
-!!
-!!          write(*,g)repeat('-',80)
-!!          write(*,g)readenv('CHARACTER','string',ierr=ierr)
-!!          write(*,*)'ierr=',ierr
-!!          write(*,g)readenv('INTEGER',100,ierr=ierr)
-!!          write(*,*)'ierr=',ierr
-!!          write(*,g)readenv('REAL',200.0,ierr=ierr)
-!!          write(*,*)'ierr=',ierr
-!!          write(*,g)readenv('DOUBLE',300.0d0,ierr=ierr)
-!!          write(*,*)'ierr=',ierr
-!!          write(*,g)readenv('LOGICAL',.true.)
-!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('CHARACTER','string')
+!!          write(*,g)get_env('INTEGER',100)
+!!          write(*,g)get_env('REAL',200.0)
+!!          write(*,g)get_env('DOUBLE',300.0d0)
+!!          write(*,g)get_env('LOGICAL',.true.)
 !!
 !!          write(*,g)repeat('-',80)
-!!          write(*,g)readenv('CHARACTER')
-!!          write(*,g)readenv('HOME')
+!!          write(*,g)get_env('CHARACTER','string',ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('INTEGER',100,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('REAL',200.0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('DOUBLE',300.0d0,ierr=ierr)
+!!          write(*,*)'ierr=',ierr
+!!          write(*,g)get_env('LOGICAL',.true.)
+!!          write(*,*)'ierr=',ierr
+!!
+!!          write(*,g)repeat('-',80)
+!!          write(*,g)get_env('CHARACTER')
+!!          write(*,g)get_env('HOME')
 !!        else
 !!          write(*,g)repeat('-',80)
 !!          call execute_command_line('env STOP=RUN '//getname())
@@ -3394,9 +3318,13 @@ end function get_env
 !!          stop
 !!       endif
 !!
-!!    end program demo_readenv
+!!    end program demo_get_env
 !!
 !!##SEE ALSO
+!!    This duplicates system_getenv(3m_system) in most respects but avoids
+!!    some interdependencies as M_system(3) currently requires a POSIX
+!!    programming environment.
+!!
 !!    get_environment_variable(3fortran), system_getenv(3m_system),
 !!    set_environment_variable(3m_system), system_putenv(3m_system),
 !!    system_clearenv(3m_system), system_initenv(3m_system),
@@ -3475,7 +3403,7 @@ character(len=255)            :: iomsg, fmt
    if(present(ierr))then
       ierr=iostat
    elseif(iostat.ne.0)then
-      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
    endif
 end function get_env_real
 
@@ -3504,7 +3432,7 @@ character(len=255)            :: iomsg, fmt
    if(present(ierr))then
       ierr=iostat
    elseif(iostat.ne.0)then
-      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
    endif
 end function get_env_double
 
@@ -3534,7 +3462,7 @@ character(len=255)            :: iomsg, fmt
    if(present(ierr))then
       ierr=iostat
    elseif(iostat.ne.0)then
-      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
    endif
 end function get_env_integer
 
@@ -3570,7 +3498,7 @@ character(len=1)              :: ch
    if(present(ierr))then
       ierr=iostat
    elseif(iostat.ne.0)then
-      write(stderr,'(a)')'<ERROR>*readenv* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
+      write(stderr,'(a)')'<ERROR>*get_env* NAME='//NAME//' STRING='//STRING//':'//trim(iomsg)
    endif
 end function get_env_logical
 

@@ -95,7 +95,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		dirname(3m_io)
+			       October 25, 2024 		dirname(3m_io)
 fileclose(3m_io)					      fileclose(3m_io)
 
 
@@ -144,7 +144,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	      fileclose(3m_io)
+			       October 25, 2024 	      fileclose(3m_io)
 filedelete(3m_io)					     filedelete(3m_io)
 
 
@@ -195,7 +195,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	     filedelete(3m_io)
+			       October 25, 2024 	     filedelete(3m_io)
 filewrite(3m_io)					      filewrite(3m_io)
 
 
@@ -269,7 +269,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	      filewrite(3m_io)
+			       October 25, 2024 	      filewrite(3m_io)
 get_env(3m_io)							get_env(3m_io)
 
 
@@ -280,20 +280,32 @@ NAME
 
 
 SYNTAX
-  function get_env(NAME,DEFAULT) result(VALUE)
+  function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
 
-      character(len=*),intent(in)	   :: NAME
-      character(len=*),intent(in),optional :: DEFAULT
-      character(len=:),allocatable	   :: VALUE
+      character(len=*),intent(in)	     :: NAME
 
+      ! ONE OF ...
+      o character(len=*),intent(in),optional :: DEFAULT
+      o real,intent(in),optional	     :: DEFAULT
+      o integer,intent(in),optional	     :: DEFAULT
+      o doubleprecision,intent(in),optional  :: DEFAULT
+      o logical,intent(in),optional	     :: DEFAULT
+
+      integer,intent(out),optional	     :: IERR
+
+      ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
+      o character(len=:),allocatable	     :: VALUE
+      o integer 			     :: VALUE
+      o real				     :: VALUE
+      o doubleprecision 		     :: VALUE
+      o logical 			     :: VALUE
 
 
 DESCRIPTION
   Get the value of an environment variable or optionally return a default
-  value if the returned value would be a blank string.
+  value when the environment variable is not set or is set to a blank string.
 
-  This is a duplicate of system_getenv(3m_system) used to avoid some
-  interdependencies.
+  The type returned is the same as the type of the default value.
 
 OPTIONS
   NAME
@@ -301,25 +313,83 @@ OPTIONS
 
   DEFAULT
     value to return if environment variable is not set or set to an empty
-    string
+    string. May be CHARACTER, REAL, INTEGER, LOGICAL or DOUBLEPRECISION.
+    Defaults to a null CHARACTER value.
 
 RETURNS
   VALUE
-    the value of the environment variable or the default
+    the value of the environment variable or the default.  The type is the
+    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
+    is returned.
+
+    For a LOGICAL type, Any environment variable value starting with F,f,N or
+    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
+    period (".") is ignored.  Anything else returns .false. .
+
+  IERR
+    return error code. Must be specified with a keyword.  It is zero if no
+    error occurred.
 
 EXAMPLE
   Sample program:
 
-	program demo_get_env
-	use M_io, only : get_env
-	character(len=:),allocatable :: HOME
-	   HOME=get_env('HOME','UNKNOWN')
-	   write(*,'(a)')HOME,get_env('PATH')
-	   write(*,'(a)')get_env('HOME'),get_env('PATH')
-	end program demo_get_env
+     program demo_get_env
+     use M_io, only : get_env, getname
+     character(len=*),parameter :: g='(*(g0))'
+     integer :: ierr
+     character(len=:),allocatable :: HOME
+       !Basics
+	HOME=get_env('HOME','UNKNOWN')
+	write(*,'(a)')HOME
+	write(*,'(a)')Get_env('PATH')
+
+       !call this program setting STOP=RUN unless STOP=RUN
+       !otherwise print various environment variable values
+       !converted to various types
+	if(get_env('STOP').eq.'RUN')then
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER','string')
+	   write(*,g)get_env('INTEGER',100)
+	   write(*,g)get_env('REAL',200.0)
+	   write(*,g)get_env('DOUBLE',300.0d0)
+	   write(*,g)get_env('LOGICAL',.true.)
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER','string',ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('INTEGER',100,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('REAL',200.0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('DOUBLE',300.0d0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('LOGICAL',.true.)
+	   write(*,*)'ierr=',ierr
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER')
+	   write(*,g)get_env('HOME')
+	 else
+	   write(*,g)repeat('-',80)
+	   call execute_command_line('env STOP=RUN '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
+	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
+	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
+	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
+	   write(*,g)repeat('-',80)
+	   stop
+	endif
+
+     end program demo_get_env
 
 
 SEE ALSO
+  This duplicates system_getenv(3m_system) in most respects but avoids some
+  interdependencies as M_system(3) currently requires a POSIX programming
+  environment.
+
   get_environment_variable(3fortran), system_getenv(3m_system),
   set_environment_variable(3m_system), system_putenv(3m_system),
   system_clearenv(3m_system), system_initenv(3m_system),
@@ -333,7 +403,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		get_env(3m_io)
+			       October 25, 2024 		get_env(3m_io)
 get_next_char(3m_io)					  get_next_char(3m_io)
 
 
@@ -424,7 +494,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	  get_next_char(3m_io)
+			       October 25, 2024 	  get_next_char(3m_io)
 get_tmp(3m_io)							get_tmp(3m_io)
 
 
@@ -477,7 +547,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		get_tmp(3m_io)
+			       October 25, 2024 		get_tmp(3m_io)
 number_of_lines(3m_io)					number_of_lines(3m_io)
 
 
@@ -531,7 +601,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	number_of_lines(3m_io)
+			       October 25, 2024 	number_of_lines(3m_io)
 print_inquire(3m_io)					  print_inquire(3m_io)
 
 
@@ -606,7 +676,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	  print_inquire(3m_io)
+			       October 25, 2024 	  print_inquire(3m_io)
 rd(3m_io)							     rd(3m_io)
 
 
@@ -696,7 +766,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		     rd(3m_io)
+			       October 25, 2024 		     rd(3m_io)
 read_line(3m_io)					      read_line(3m_io)
 
 
@@ -789,7 +859,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	      read_line(3m_io)
+			       October 25, 2024 	      read_line(3m_io)
 read_table(3m_io)					     read_table(3m_io)
 
 
@@ -920,144 +990,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	     read_table(3m_io)
-readenv(3m_io)							readenv(3m_io)
-
-
-
-NAME
-  readenv(3f) - [M_io:QUERY] a function returning the value of an environment
-  variable (LICENSE:PD)
-
-
-SYNTAX
-  function readenv(NAME,DEFAULT,IERR=IERR) result(VALUE)
-
-      character(len=*),intent(in)	   :: NAME
-      character(len=*),intent(in),optional :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      character(len=:),allocatable	   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      real,intent(in),optional		   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      real				   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      integer,intent(in),optional	   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      integer				   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      doubleprecision,intent(in),optional  :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      doubleprecision			   :: VALUE
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      logical,intent(in),optional	   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      logical				   :: VALUE
-
-
-
-DESCRIPTION
-  Get the value of an environment variable or optionally return a default
-  value if the returned value would be a blank string.
-
-  The type returned is the same as the type of the default
-
-OPTIONS
-  NAME
-    name of environment variable
-
-  DEFAULT
-    value to return if environment variable is not set or set to an empty
-    string. May be CHARACTER, REAL, INTEGER, or DOUBLEPRECISION. Defaults to a
-    null CHARACTER value.
-
-RETURNS
-  VALUE
-    the value of the environment variable or the default.  The type is the
-    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
-    is returned.
-
-    For a LOGICAL type, Any environment variable value starting with F,f,N or
-    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
-    period (".") is ignored.  Anything else returns .false. .
-
-  IERR
-    return error code. Must be specified with a keyword.  It is zero if no
-    error occurred.
-
-EXAMPLE
-  Sample program:
-
-     program demo_readenv
-     use M_io, only : readenv, getname
-     character(len=*),parameter :: g='(*(g0))'
-     integer :: ierr
-
-	if(readenv('STOP').eq.'RUN')then
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER','string')
-	   write(*,g)readenv('INTEGER',100)
-	   write(*,g)readenv('REAL',200.0)
-	   write(*,g)readenv('DOUBLE',300.0d0)
-	   write(*,g)readenv('LOGICAL',.true.)
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER','string',ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('INTEGER',100,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('REAL',200.0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('DOUBLE',300.0d0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('LOGICAL',.true.)
-	   write(*,*)'ierr=',ierr
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER')
-	   write(*,g)readenv('HOME')
-	 else
-	   write(*,g)repeat('-',80)
-	   call execute_command_line('env STOP=RUN '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
-	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
-	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
-	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
-	   write(*,g)repeat('-',80)
-	   stop
-	endif
-
-     end program demo_readenv
-
-
-SEE ALSO
-  get_environment_variable(3fortran), system_getenv(3m_system),
-  set_environment_variable(3m_system), system_putenv(3m_system),
-  system_clearenv(3m_system), system_initenv(3m_system),
-  system_getenv(3m_system), system_unsetenv(3m_system)
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 02, 2024 		readenv(3m_io)
+			       October 25, 2024 	     read_table(3m_io)
 separator(3m_io)					      separator(3m_io)
 
 
@@ -1101,7 +1034,7 @@ EXAMPLE
 
 
 
-			       October 02, 2024 	      separator(3m_io)
+			       October 25, 2024 	      separator(3m_io)
 splitpath(3m_io)					      splitpath(3m_io)
 
 
@@ -1246,7 +1179,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	      splitpath(3m_io)
+			       October 25, 2024 	      splitpath(3m_io)
 uniq(3m_io)							   uniq(3m_io)
 
 
@@ -1337,7 +1270,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		   uniq(3m_io)
+			       October 25, 2024 		   uniq(3m_io)
 which(3m_io)							  which(3m_io)
 
 
@@ -1390,7 +1323,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		  which(3m_io)
+			       October 25, 2024 		  which(3m_io)
 getline(3m_io)							getline(3m_io)
 
 
@@ -1469,7 +1402,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		getline(3m_io)
+			       October 25, 2024 		getline(3m_io)
 getname(3m_io)							getname(3m_io)
 
 
@@ -1506,7 +1439,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		getname(3m_io)
+			       October 25, 2024 		getname(3m_io)
 is_hidden_file(3m_io)					 is_hidden_file(3m_io)
 
 
@@ -1581,7 +1514,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	 is_hidden_file(3m_io)
+			       October 25, 2024 	 is_hidden_file(3m_io)
 joinpath(3m_io) 					       joinpath(3m_io)
 
 
@@ -1637,7 +1570,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	       joinpath(3m_io)
+			       October 25, 2024 	       joinpath(3m_io)
 lookfor(3m_io)							lookfor(3m_io)
 
 
@@ -1698,7 +1631,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		lookfor(3m_io)
+			       October 25, 2024 		lookfor(3m_io)
 untitled()							    untitled()
 
 
@@ -1715,7 +1648,7 @@ untitled()							    untitled()
   use M_io, only : separator, getname, which, lookfor use M_io, only :
   read_line, getline, rd, get_next_char use M_io, only : fileopen, fileclose,
   filedelete, filewrite, fileread, fil ebyte use M_io, only : number_of_lines
-  use M_io, only : get_env, readenv, is_hidden_file
+  use M_io, only : get_env, is_hidden_file
 
    DESCRIPTION
   The M_io module is a collection of routines related to basic I/O
@@ -1805,7 +1738,7 @@ untitled()							    untitled()
 
 
 
-			       October 02, 2024 		    untitled()
+			       October 25, 2024 		    untitled()
 notopen(3m_io)							notopen(3m_io)
 
 
@@ -1945,7 +1878,7 @@ LICENSE
 
 
 
-			       October 02, 2024 		notopen(3m_io)
+			       October 25, 2024 		notopen(3m_io)
 filename_generator(3m_io)			     filename_generator(3m_io)
 
 
@@ -2018,7 +1951,7 @@ LICENSE
 
 
 
-			       October 02, 2024      filename_generator(3m_io)
+			       October 25, 2024      filename_generator(3m_io)
 fileopen(3m_io) 					       fileopen(3m_io)
 
 
@@ -2160,7 +2093,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	       fileopen(3m_io)
+			       October 25, 2024 	       fileopen(3m_io)
 fileread(3m_io) 					       fileread(3m_io)
 
 
@@ -2262,7 +2195,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	       fileread(3m_io)
+			       October 25, 2024 	       fileread(3m_io)
 filebyte(3m_io) 					       filebyte(3m_io)
 
 
@@ -2361,7 +2294,7 @@ LICENSE
 
 
 
-			       October 02, 2024 	       filebyte(3m_io)
+			       October 25, 2024 	       filebyte(3m_io)
 basename(3m_io) 					       basename(3m_io)
 
 
@@ -2444,4 +2377,141 @@ LICENSE
 
 
 
-			       October 02, 2024 	       basename(3m_io)
+			       October 25, 2024 	       basename(3m_io)
+readenv(3m_io)							readenv(3m_io)
+
+
+
+NAME
+  readenv(3f) - [M_io:QUERY] a function returning the value of an environment
+  variable (LICENSE:PD)
+
+
+SYNTAX
+  function readenv(NAME,DEFAULT,IERR=IERR) result(VALUE)
+
+      character(len=*),intent(in)	   :: NAME
+      character(len=*),intent(in),optional :: DEFAULT
+      integer,intent(out),optional	   :: IERR
+      character(len=:),allocatable	   :: VALUE
+
+       or
+
+      character(len=*),intent(in)	   :: NAME
+      real,intent(in),optional		   :: DEFAULT
+      integer,intent(out),optional	   :: IERR
+      real				   :: VALUE
+
+       or
+
+      character(len=*),intent(in)	   :: NAME
+      integer,intent(in),optional	   :: DEFAULT
+      integer,intent(out),optional	   :: IERR
+      integer				   :: VALUE
+
+       or
+
+      character(len=*),intent(in)	   :: NAME
+      doubleprecision,intent(in),optional  :: DEFAULT
+      integer,intent(out),optional	   :: IERR
+      doubleprecision			   :: VALUE
+       or
+
+      character(len=*),intent(in)	   :: NAME
+      logical,intent(in),optional	   :: DEFAULT
+      integer,intent(out),optional	   :: IERR
+      logical				   :: VALUE
+
+
+
+DESCRIPTION
+  Get the value of an environment variable or optionally return a default
+  value if the returned value would be a blank string.
+
+  The type returned is the same as the type of the default
+
+OPTIONS
+  NAME
+    name of environment variable
+
+  DEFAULT
+    value to return if environment variable is not set or set to an empty
+    string. May be CHARACTER, REAL, INTEGER, or DOUBLEPRECISION. Defaults to a
+    null CHARACTER value.
+
+RETURNS
+  VALUE
+    the value of the environment variable or the default.  The type is the
+    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
+    is returned.
+
+    For a LOGICAL type, Any environment variable value starting with F,f,N or
+    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
+    period (".") is ignored.  Anything else returns .false. .
+
+  IERR
+    return error code. Must be specified with a keyword.  It is zero if no
+    error occurred.
+
+EXAMPLE
+  Sample program:
+
+     program demo_readenv
+     use M_io, only : readenv, getname
+     character(len=*),parameter :: g='(*(g0))'
+     integer :: ierr
+
+	if(readenv('STOP').eq.'RUN')then
+	   write(*,g)repeat('-',80)
+	   write(*,g)readenv('CHARACTER','string')
+	   write(*,g)readenv('INTEGER',100)
+	   write(*,g)readenv('REAL',200.0)
+	   write(*,g)readenv('DOUBLE',300.0d0)
+	   write(*,g)readenv('LOGICAL',.true.)
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)readenv('CHARACTER','string',ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)readenv('INTEGER',100,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)readenv('REAL',200.0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)readenv('DOUBLE',300.0d0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)readenv('LOGICAL',.true.)
+	   write(*,*)'ierr=',ierr
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)readenv('CHARACTER')
+	   write(*,g)readenv('HOME')
+	 else
+	   write(*,g)repeat('-',80)
+	   call execute_command_line('env STOP=RUN '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
+	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
+	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
+	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
+	   write(*,g)repeat('-',80)
+	   stop
+	endif
+
+     end program demo_readenv
+
+
+SEE ALSO
+  get_environment_variable(3fortran), system_getenv(3m_system),
+  set_environment_variable(3m_system), system_putenv(3m_system),
+  system_clearenv(3m_system), system_initenv(3m_system),
+  system_getenv(3m_system), system_unsetenv(3m_system)
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+
+
+			       October 02, 2024 		readenv(3m_io)
