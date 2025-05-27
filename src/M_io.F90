@@ -408,7 +408,11 @@ integer                       :: size           ; namelist/inquire/size
 character(len=20)             :: stream         ; namelist/inquire/stream
 !==============================================================================================
    namein=merge_str(namein_in,'',present(namein_in))
-   lun=merge(lun_in,-1,present(lun_in))
+   if(present(lun_in))then
+      lun=lun_in
+   else
+      lun=-1
+   endif
    ! exist, opened, and named always become defined unless an error condition occurs.
    !!write(*,*)'LUN=',lun,' FILENAME=',namein
    !-----------------------------------------------------------------------------------------------------------------------------------
@@ -2617,7 +2621,11 @@ integer                                  :: lun_local
 
    line_local=''
    ier=0
-   lun_local=merge(lun,stdin,present(lun))
+   if(present(lun))then
+      lun_local=lun
+   else
+      lun_local=stdin
+   endif
    INFINITE: do                                                           ! read characters from line and append to result
       read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no',size=isize,iomsg=message) buffer ! read next buffer (might use stream I/O for
                                                                           ! files other than stdin so system line limit
