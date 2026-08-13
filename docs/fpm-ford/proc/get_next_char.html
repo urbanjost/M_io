@@ -1,0 +1,397 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Fortran I/O module">
+    <meta name="author" content="John Doe" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>get_next_char &ndash; M_io</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_io </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>get_next_char
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 2.8% of total for procedures.">41 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_io.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_io.f90.html'>M_io.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/m_io.html'>M_io</a></li>
+            <li class="breadcrumb-item active" aria-current="page">get_next_char</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/get_next_char.html#src">get_next_char</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>public  subroutine get_next_char(fd, c, ios)  
+</h2>
+    
+
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code> get_next_char(3f) - [M_io:READ] read from a file one character at a time
+ (LICENSE:PD)
+</code></pre></div>
+
+<h2 id="syntax">SYNTAX</h2>
+<div class="codehilite"><pre><span></span><code>subroutine get_next_char(fd,c,ios)
+
+ integer,intent(in)    :: fd
+ character,intent(out) :: c
+ integer,intent(out)   :: ios
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nx">This</span><span class="w"> </span><span class="nx">reads</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">opened</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="nx">stream</span><span class="w"> </span><span class="nx">access</span><span class="w"> </span><span class="nx">one</span><span class="w"> </span><span class="nx">character</span><span class="w"> </span><span class="nx">at</span><span class="w"> </span><span class="nx">a</span>
+<span class="nx">time</span><span class="p">,</span><span class="w"> </span><span class="nx">much</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="nx">read</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span><span class="nx">iostat</span><span class="p">=</span><span class="nx">ios</span><span class="p">)</span><span class="w"> </span><span class="nx">c</span><span class="err">&quot;</span><span class="w"> </span><span class="nx">but</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="nx">buffering</span><span class="p">,</span><span class="w"> </span><span class="nx">which</span>
+<span class="nx">I</span><span class="w"> </span><span class="nx">have</span><span class="w"> </span><span class="nx">found</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">be</span><span class="w"> </span><span class="nx">up</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">sixty</span><span class="w"> </span><span class="nx">times</span><span class="w"> </span><span class="nx">faster</span><span class="w"> </span><span class="nx">than</span><span class="w"> </span><span class="nx">such</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">plain</span><span class="w"> </span><span class="nx">read</span><span class="p">,</span>
+<span class="nx">although</span><span class="w"> </span><span class="nx">this</span><span class="w"> </span><span class="nx">varies</span><span class="w"> </span><span class="nx">depending</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">how</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">programming</span><span class="w"> </span><span class="nx">environment</span>
+<span class="nx">implements</span><span class="w"> </span><span class="nx">I</span><span class="o">/</span><span class="nx">O</span><span class="w"> </span><span class="nx">buffering</span><span class="w"> </span><span class="nx">itself</span><span class="p">.</span>
+
+<span class="nx">IT</span><span class="w"> </span><span class="nx">USES</span><span class="w"> </span><span class="nx">SAVED</span><span class="w"> </span><span class="nx">VARIABLES</span><span class="w"> </span><span class="nx">AND</span><span class="w"> </span><span class="nx">CAN</span><span class="w"> </span><span class="nx">ONLY</span><span class="w"> </span><span class="nx">BE</span><span class="w"> </span><span class="nx">USED</span><span class="w"> </span><span class="nx">ON</span><span class="w"> </span><span class="nx">ONE</span><span class="w"> </span><span class="nx">FILE</span><span class="w"> </span><span class="nx">AT</span><span class="w"> </span><span class="nx">A</span><span class="w"> </span><span class="nx">TIME</span>
+<span class="nx">IN</span><span class="w"> </span><span class="nx">THE</span><span class="w"> </span><span class="nx">CURRENT</span><span class="w"> </span><span class="nx">FORM</span><span class="p">.</span><span class="w"> </span><span class="nx">A</span><span class="w"> </span><span class="nx">user</span><span class="w"> </span><span class="k">type</span><span class="w"> </span><span class="nx">including</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">saved</span><span class="w"> </span><span class="nx">values</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="nx">the</span>
+<span class="nx">LUN</span><span class="w"> </span><span class="nx">could</span><span class="w"> </span><span class="nx">easily</span><span class="w"> </span><span class="nx">resolve</span><span class="w"> </span><span class="nx">this</span><span class="p">.</span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">FD</span><span class="w">    </span><span class="nv">A</span><span class="w"> </span><span class="nv">Fortran</span><span class="w"> </span><span class="nv">unit</span><span class="w"> </span><span class="nv">number</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">opened</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nv">stream</span><span class="w"> </span><span class="nv">access</span>
+<span class="nv">C</span><span class="w">     </span><span class="nv">The</span><span class="w"> </span><span class="k">next</span><span class="w"> </span><span class="nv">returned</span><span class="w"> </span><span class="nv">character</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">IOS</span><span class="o">=</span><span class="mi">0</span>
+<span class="nv">IOS</span><span class="w">   </span><span class="nv">The</span><span class="w"> </span><span class="nv">error</span><span class="w"> </span><span class="nv">status</span><span class="w"> </span><span class="nv">returned</span><span class="w"> </span><span class="nv">by</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">last</span><span class="w"> </span><span class="nv">read</span>.<span class="w"> </span><span class="nv">It</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">zero</span><span class="w"> </span><span class="ss">(</span><span class="mi">0</span><span class="ss">)</span><span class="w"> </span><span class="k">if</span>
+<span class="w">      </span><span class="nv">no</span><span class="w"> </span><span class="nv">error</span><span class="w"> </span><span class="nv">occurred</span>
+</code></pre></div>
+
+<h2 id="example">EXAMPLE</h2>
+<p>Sample program:</p>
+<div class="codehilite"><pre><span></span><code><span class="nx">program</span><span class="w"> </span><span class="nx">demo_get_next_char</span>
+<span class="nx">use</span><span class="p">,</span><span class="nx">intrinsic</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nx">iso_fortran_env</span><span class="p">,</span><span class="w"> </span><span class="nx">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">iostat_end</span>
+<span class="nx">use</span><span class="w"> </span><span class="nx">M_io</span><span class="p">,</span><span class="w"> </span><span class="nx">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nx">get_next_char</span>
+<span class="nx">implicit</span><span class="w"> </span><span class="nx">none</span>
+<span class="nx">character</span><span class="p">(</span><span class="nx">len</span><span class="p">=</span><span class="mi">4096</span><span class="p">)</span><span class="w"> </span><span class="o">::</span><span class="w"> </span><span class="nx">filename</span><span class="w"> </span><span class="p">!</span><span class="w"> </span><span class="nx">filename</span><span class="w"> </span><span class="nx">to</span><span class="w"> </span><span class="nx">read</span>
+<span class="nx">character</span><span class="p">(</span><span class="nx">len</span><span class="p">=</span><span class="mi">256</span><span class="p">)</span><span class="w">  </span><span class="o">::</span><span class="w"> </span><span class="nx">message</span><span class="w">  </span><span class="p">!</span><span class="w"> </span><span class="k">returned</span><span class="w"> </span><span class="nx">error</span><span class="w"> </span><span class="nx">messages</span>
+<span class="nx">integer</span><span class="w">             </span><span class="o">::</span><span class="w"> </span><span class="nx">fd</span><span class="w">       </span><span class="p">!</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">descriptor</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="nx">input</span><span class="w"> </span><span class="nx">file</span>
+<span class="nx">integer</span><span class="w">             </span><span class="o">::</span><span class="w"> </span><span class="nx">ios</span><span class="p">,</span><span class="nx">ios1</span><span class="w"> </span><span class="p">!</span><span class="w"> </span><span class="nx">hold</span><span class="w"> </span><span class="nx">I</span><span class="o">/</span><span class="nx">O</span><span class="w"> </span><span class="nx">error</span><span class="w"> </span><span class="nx">flag</span>
+<span class="nx">character</span><span class="w">           </span><span class="o">::</span><span class="w"> </span><span class="nx">c1</span><span class="w">       </span><span class="p">!</span><span class="w"> </span><span class="nx">current</span><span class="w"> </span><span class="nx">character</span><span class="w"> </span><span class="nx">read</span>
+<span class="w">   </span><span class="nx">filename</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">test</span><span class="p">.</span><span class="k">in</span><span class="err">&#39;</span>
+<span class="w">   </span><span class="nx">open</span><span class="p">(</span><span class="nx">unit</span><span class="p">=</span><span class="nx">fd</span><span class="p">,</span><span class="nx">file</span><span class="p">=</span><span class="nx">trim</span><span class="p">(</span><span class="nx">filename</span><span class="p">),</span><span class="nx">access</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">stream</span><span class="err">&#39;</span><span class="p">,</span><span class="nx">status</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">old</span><span class="err">&#39;</span><span class="p">,</span><span class="o">&amp;</span>
+<span class="w">   </span><span class="o">&amp;</span><span class="w"> </span><span class="nx">iostat</span><span class="p">=</span><span class="nx">ios</span><span class="p">,</span><span class="nx">action</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">read</span><span class="err">&#39;</span><span class="p">,</span><span class="nx">form</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">unformatted</span><span class="err">&#39;</span><span class="p">,</span><span class="nx">iomsg</span><span class="p">=</span><span class="nx">message</span><span class="p">)</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nx">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="w">      </span><span class="nx">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span>
+<span class="w">      </span><span class="err">&#39;</span><span class="o">*</span><span class="nx">demo_get_next_char</span><span class="o">*</span><span class="w"> </span><span class="nx">ERROR</span><span class="p">:</span><span class="w"> </span><span class="nx">could</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="nx">open</span><span class="w"> </span><span class="err">&#39;</span><span class="c1">//&amp;</span>
+<span class="w">      </span><span class="nx">trim</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
+<span class="w">      </span><span class="nx">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span>
+<span class="w">      </span><span class="err">&#39;</span><span class="o">*</span><span class="nx">demo_get_next_char</span><span class="o">*</span><span class="w"> </span><span class="nx">ERROR</span><span class="p">:</span><span class="w"> </span><span class="err">&#39;</span><span class="c1">//trim(message)</span>
+<span class="w">      </span><span class="nx">stop</span><span class="w"> </span><span class="mi">5</span>
+<span class="w">   </span><span class="nx">endif</span>
+<span class="w">   </span><span class="p">!</span><span class="w"> </span><span class="nx">loop</span><span class="w"> </span><span class="nx">through</span><span class="w"> </span><span class="nx">read</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">one</span><span class="w"> </span><span class="nx">character</span><span class="w"> </span><span class="nx">at</span><span class="w"> </span><span class="nx">a</span><span class="w"> </span><span class="nx">time</span>
+<span class="w">   </span><span class="nx">ONE_CHAR_AT_A_TIME</span><span class="p">:</span><span class="w"> </span><span class="nx">do</span>
+<span class="w">      </span><span class="p">!</span><span class="w"> </span><span class="nx">get</span><span class="w"> </span><span class="nx">next</span><span class="w"> </span><span class="nx">character</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">buffered</span><span class="w"> </span><span class="nx">read</span><span class="w"> </span><span class="nx">from</span><span class="w"> </span><span class="nx">file</span>
+<span class="w">      </span><span class="nx">call</span><span class="w"> </span><span class="nx">get_next_char</span><span class="p">(</span><span class="nx">fd</span><span class="p">,</span><span class="nx">c1</span><span class="p">,</span><span class="nx">ios1</span><span class="p">)</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="nx">ios1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nx">iostat_end</span><span class="p">)</span><span class="k">then</span>
+<span class="w">         </span><span class="p">!</span><span class="w"> </span><span class="nx">reached</span><span class="w"> </span><span class="nx">end</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">so</span><span class="w"> </span><span class="nx">stop</span>
+<span class="w">         </span><span class="nx">stop</span>
+<span class="w">      </span><span class="nx">elseif</span><span class="p">(</span><span class="nx">ios1</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="k">then</span>
+<span class="w">         </span><span class="p">!</span><span class="w"> </span><span class="nx">error</span><span class="w"> </span><span class="nx">on</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">read</span>
+<span class="w">         </span><span class="nx">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="o">&amp;</span>
+<span class="w">      </span><span class="err">&#39;</span><span class="o">*</span><span class="nx">demo_get_next_char</span><span class="o">*</span><span class="w"> </span><span class="nx">ERROR</span><span class="p">:</span><span class="w"> </span><span class="nx">before</span><span class="w"> </span><span class="nx">end</span><span class="w"> </span><span class="nx">of</span><span class="w"> </span><span class="err">&#39;</span><span class="c1">//&amp;</span>
+<span class="w">      </span><span class="nx">trim</span><span class="p">(</span><span class="nx">filename</span><span class="p">)</span>
+<span class="w">         </span><span class="nx">stop</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">      </span><span class="nx">endif</span>
+<span class="w">      </span><span class="p">!</span><span class="w"> </span><span class="nx">do</span><span class="w"> </span><span class="nx">something</span><span class="w"> </span><span class="nx">with</span><span class="w"> </span><span class="nx">the</span><span class="w"> </span><span class="nx">characters</span>
+<span class="w">      </span><span class="nx">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="err">&#39;</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span><span class="err">&#39;</span><span class="p">,</span><span class="nx">advance</span><span class="p">=</span><span class="err">&#39;</span><span class="nx">no</span><span class="err">&#39;</span><span class="p">)</span><span class="nx">c1</span>
+<span class="w">   </span><span class="nx">enddo</span><span class="w"> </span><span class="nx">ONE_CHAR_AT_A_TIME</span>
+<span class="nx">end</span><span class="w"> </span><span class="nx">program</span><span class="w"> </span><span class="nx">demo_get_next_char</span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-fd~2"></span>
+              integer,
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>fd</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-c"></span>
+              character(len=1),
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>c</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-ios~18"></span>
+              integer,
+            </td>
+<td>intent(out)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>ios</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="k">subroutine </span><span class="n">get_next_char</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">c</span><span class="p">,</span><span class="n">ios</span><span class="p">)</span>
+<span class="c">! replace &quot;read(fd,iostat=ios) c&quot; because gfortran on CygWin sixty times slower with plain read (no system buffering?)</span>
+<span class="c">! quick buffering read</span>
+<span class="k">implicit none</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">          </span><span class="kd">::</span><span class="w"> </span><span class="n">fd</span>
+<span class="kt">character</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">c</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">         </span><span class="kd">::</span><span class="w"> </span><span class="n">ios</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">parameter</span><span class="w">           </span><span class="kd">::</span><span class="w"> </span><span class="n">bufsize</span><span class="o">=</span><span class="mi">1048576</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="k">save</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">buff</span><span class="p">(</span><span class="n">bufsize</span><span class="p">)</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">save</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">point</span><span class="o">=</span><span class="mi">0</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">save</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">filepoint</span><span class="o">=</span><span class="mi">1</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">save</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">sz</span><span class="o">=</span><span class="n">bufsize</span>
+
+<span class="n">ios</span><span class="o">=</span><span class="mi">0</span>
+
+<span class="k">do</span>
+<span class="k">select case</span><span class="p">(</span><span class="n">point</span><span class="p">)</span>
+<span class="k">case</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w">                                            </span><span class="c">! read a buffer</span>
+<span class="w">   </span><span class="k">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">pos</span><span class="o">=</span><span class="n">filepoint</span><span class="p">)</span><span class="w"> </span><span class="n">buff</span><span class="p">(</span><span class="mi">1</span><span class="p">:</span><span class="n">sz</span><span class="p">)</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nb">is_iostat_end</span><span class="p">(</span><span class="n">ios</span><span class="p">))</span><span class="k">then</span><span class="w">                      </span><span class="c">! this is the last buffer</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">sz</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="k">then</span><span class="w">                              </span><span class="c">! try again with a smaller buffer</span>
+<span class="w">         </span><span class="n">sz</span><span class="o">=</span><span class="n">sz</span><span class="o">/</span><span class="mi">2</span>
+<span class="w">         </span><span class="n">sz</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">sz</span><span class="p">)</span>
+<span class="w">         </span><span class="k">cycle</span>
+<span class="k">      endif</span>
+<span class="k">   elseif</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">                            </span><span class="c">! no error occurred so successfully read a buffer</span>
+<span class="w">      </span><span class="n">c</span><span class="o">=</span><span class="n">buff</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">      </span><span class="n">filepoint</span><span class="o">=</span><span class="n">filepoint</span><span class="o">+</span><span class="n">sz</span>
+<span class="w">      </span><span class="n">point</span><span class="o">=</span><span class="n">sz</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">case</span><span class="p">(</span><span class="mi">1</span><span class="p">:)</span><span class="w">                                           </span><span class="c">! getting a character from a previous buffer</span>
+<span class="w">   </span><span class="n">point</span><span class="o">=</span><span class="n">point</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">   </span><span class="n">c</span><span class="o">=</span><span class="n">buff</span><span class="p">(</span><span class="n">sz</span><span class="o">-</span><span class="n">point</span><span class="p">)</span>
+<span class="k">case </span><span class="n">default</span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="o">*</span><span class="p">,</span><span class="o">*</span><span class="p">)</span><span class="s1">&#39;*get_next_char* internal error &#39;</span>
+<span class="w">   </span><span class="k">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span><span class="w"> </span><span class="n">c</span>
+<span class="k">end select</span>
+<span class="c">! assume if IOS is not zero, not called again until new file is started</span>
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">      </span><span class="n">filepoint</span><span class="o">=</span><span class="mi">1</span>
+<span class="w">      </span><span class="n">point</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">      </span><span class="n">sz</span><span class="o">=</span><span class="n">bufsize</span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="k">   exit</span>
+<span class="k">enddo</span>
+<span class="k">end subroutine </span><span class="n">get_next_char</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_io
+ was developed by John Doe<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-08-13 05:15 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

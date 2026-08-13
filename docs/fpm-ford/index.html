@@ -1,0 +1,308 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Fortran I/O module">
+    <meta name="author" content="John Doe" >
+    <link rel="icon" href="./favicon.png">
+
+    <title> M_io </title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="./css/fontawesome.min.css" rel="stylesheet">
+    <link href="./css/brands.min.css" rel="stylesheet">
+    <link href="./css/regular.min.css" rel="stylesheet">
+    <link href="./css/solid.min.css" rel="stylesheet">
+    <link href="./css/v4-font-face.min.css" rel="stylesheet">
+    <link href="./css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="./css/local.css" rel="stylesheet">
+    <link href="./css/pygments.css" rel="stylesheet">
+    <script src="./js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="./index.html">M_io </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="./lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="./lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="./search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <!-- Main component for a primary marketing message or call to action -->
+    <div class="p-5 mb-4 bg-light border rounded-3" id="jumbotron">
+      <p>Fortran I/O module</p>
+        <p> Find us on&hellip;</p>
+      <p>
+        <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/M_io" role="button">GitHub</a>
+        
+        
+        
+        
+        <a class="btn btn-lg btn-danger" style="float:right" href="https://github.com/urbanjost/M_io/archive/refs/heads/master.zip" role="button">Download the Source</a>
+      </p>
+    </div>
+
+      <div class="row" id='text'>
+        <div class=col-md-8>
+          <h1>M_io</h1>
+          <h2 id="m_iof90-and-associated-files">M_io.f90 and associated files</h2>
+<h3 id="name">Name</h3>
+<p>M_io - Fortran module for common I/O tasks</p>
+<h3 id="description">Description</h3>
+<p>This package is a self-contained version of the M_io library from the GPF
+(General Purpose Fortran) package that has been extracted for those just
+interested in a library of IO-related functions. In the GPF package this
+library is intertwined with several other large modules.</p>
+<p>The procedures collected into M_io do not depend on interfacing to
+system-dependent functionality such as POSIX functions. They are
+self-contained standard Fortran.</p>
+<p>There are related functions in 
+ <a href="https://urbanjost.github.io/M_system/man3.html">M_system</a> 
+that require a POSIX system.</p>
+<p><a href="https://urbanjost.github.io/M_display/man3.html">M_display</a> is
+ a collection of routines for writing tables.</p>
+<p><a href="https://urbanjost.github.io/M_strings/man3.html">M_strings</a> has 
+ functions for pure string manipulation.</p>
+<h4 id="file-ops">File OPs</h4>
+<ul>
+<li><strong>fileopen</strong>     - A simple open of a sequential file </li>
+<li><strong>filewrite</strong>    - A simple write of a CHARACTER array to a file </li>
+<li><strong>fileread</strong>     - read a file into a string array </li>
+<li><strong>read_table</strong>   - read file containing a table of numeric values </li>
+<li><strong>filebyte</strong>     - read a file into a character array </li>
+<li><strong>fileclose</strong>    - A simple close of a sequential file </li>
+<li><strong>filedelete</strong>   - A simple close of an open file with STATUS=&rsquo;DELETE&rsquo; </li>
+</ul>
+<h4 id="sequential-reads">Sequential Reads</h4>
+<ul>
+<li><strong>rd</strong>            - ask for string from standard input with user-definable prompt </li>
+<li><strong>get_next_char</strong> - read from a file one character at a time </li>
+<li><strong>getline</strong>       - read a line from specified LUN into allocatable string up to line length limit </li>
+<li><strong>read_line</strong>     - read a line from specified LUN into allocatable string up to line length limit cleaning up input line </li>
+</ul>
+<h4 id="manipulate-pathnames">Manipulate Pathnames</h4>
+<ul>
+<li><strong>joinpath</strong>      - join parts of a pathname together </li>
+<li><strong>basename</strong>      - return last component from filename </li>
+<li><strong>splitpath</strong>     - split a Unix pathname into components </li>
+<li><strong>dirname</strong>       - strip last component from filename </li>
+</ul>
+<h4 id="find-pathnames">Find Pathnames</h4>
+<ul>
+<li><strong>lookfor</strong>       - look for a filename in a number of directories specified by an environment variable </li>
+<li><strong>which</strong>         - given a command name find the pathname by searching the directories in the environment variable $PATH </li>
+<li><strong>getname</strong>       - get name of the current executable </li>
+<li><strong>get_tmp</strong>       - Return the name of the scratch directory </li>
+<li><strong>scratch</strong>       - Return the name of a scratch file </li>
+<li><strong>uniq</strong>          - append a number to the end of filename to make a unique name if name exists </li>
+</ul>
+<h4 id="other">Other</h4>
+<ul>
+<li><strong>get_env</strong>           - a function returning the value of an environment variable </li>
+<li><strong>print_inquire</strong>     - Do INQUIRE on file by name/number and print results </li>
+<li><strong>notopen</strong>           - Find a FUN/LUN (Fortran-unit-number) that is not in use </li>
+<li><strong>number_of_lines</strong>   - read an open sequential file to get number of lines </li>
+<li><strong>separator</strong>         - try to determine pathname directory separator character </li>
+<li><strong>generate_filename</strong> - generate a filename containing the specified whole number</li>
+</ul>
+<p><img alt="docs" src="docs/images/docs.gif"></p>
+<h3 id="documentation">Documentation</h3>
+<h4 id="user">User</h4>
+<p>In the docs/ directory there is</p>
+<ul>
+<li>
+<p>An <a href="https://urbanjost.github.io/M_io/man3.html">index</a> to HTML versions
+   of the man-pages </p>
+</li>
+<li>
+<p>A single page that uses javascript to combine all the HTML descriptions
+   of the man-pages is at
+   <a href="https://urbanjost.github.io/M_io/BOOK_M_io.html">BOOK_M_io</a>.</p>
+</li>
+<li>
+<p><img alt="manpages" src="docs/images/manpages.gif">
+   man-pages are in archive files that can be installed on ULS (Unix-like systems)</p>
+<ul>
+<li><a href="https://urbanjost.github.io/M_io/manpages.zip">manpages.zip</a> </li>
+<li><a href="https://urbanjost.github.io/M_io/manpages.tgz">manpages.tgz</a> </li>
+</ul>
+</li>
+<li>
+<p><a href="docs/CHANGELOG.md">CHANGELOG</a> provides a history of significant changes</p>
+</li>
+</ul>
+<h4 id="developer">Developer</h4>
+<ul>
+<li>
+<p>The code was run through <a href="https://politicalphysicist.github.io/ford-fortran-documentation.html">ford(1)</a>
+   to produce a <a href="https://urbanjost.github.io/M_strings/fpm-ford/index.html">developers&rsquo; document</a>.</p>
+</li>
+<li>
+<p><a href="docs/STATUS.md">github action status</a></p>
+</li>
+</ul>
+<p><img alt="demos" src="docs/images/demo.gif"></p>
+<h3 id="demo-programs">Demo Programs</h3>
+<p>There are demo programs extracted from the man pages in the <a href="example/">example/</a>
+directory.</p>
+<p><img alt="gmake" src="docs/images/gnu.gif"></p>
+<h3 id="build-with-make">Build with make</h3>
+<div class="codehilite"><pre><span></span><code>git clone https://github.com/urbanjost/M_io.git
+cd M_io/src
+<span class="gh">#</span> change Makefile if not using one of the listed compilers
+
+<span class="gh">#</span> for gfortran
+make clean
+make F90=gfortran gfortran
+
+<span class="gh">#</span> for ifort
+make clean
+make F90=ifort ifort
+</code></pre></div>
+
+<p>This will compile the M_io module and build all the example programs from
+the document pages in the <code>example/</code> sub-directory.</p>
+<p><img alt="fpm" src="docs/images/fpm_logo.gif"></p>
+<h3 id="build-with-fpm">Build with fpm</h3>
+<p>Alternatively, download the github repository and build it with 
+fpm ( as described at <a href="https://github.com/fortran-lang/fpm">Fortran Package Manager</a> )</p>
+<div class="codehilite"><pre><span></span><code><span class="w">     </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/urbanjost/M_io.git
+<span class="w">     </span><span class="nb">cd</span><span class="w"> </span>M_io
+<span class="w">     </span>fpm<span class="w"> </span><span class="nb">test</span><span class="w">  </span><span class="c1"># build and run unit tests</span>
+</code></pre></div>
+
+<p>or just list it as a dependency in your fpm.toml project file.</p>
+<div class="codehilite"><pre><span></span><code><span class="w">     </span><span class="k">[dependencies]</span>
+<span class="w">     </span><span class="n">M_io</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">git</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s2">&quot;https://github.com/urbanjost/M_io.git&quot;</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+
+<hr>
+        </div>
+          <div class="col-md-4">
+            <div class="card card-body bg-light">
+              <h2 class="card-title">Developer Info</h2>
+              <h4 class="card-text">John Doe</h4>
+              <p class="card-text"></p>
+                <div class="text-center"><div class="btn-group" role="group">
+                    
+                    <a class="btn btn-lg btn-primary" href="https://github.com/urbanjost/M_io"><i class="fa fa-github fa-lg"></i></a>
+                    
+                    
+                    
+                    
+                    
+                    
+                </div></div>
+            </div>
+          </div>
+      </div>
+        <div class="row">
+          <hr>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Source Files</h3>
+              <ul><li><a href='sourcefile/demo_basename.f90.html'>demo_basename.f90</a></li><li><a href='sourcefile/demo_dirname.f90.html'>demo_dirname.f90</a></li><li><a href='sourcefile/demo_filebyte.f90.html'>demo_filebyte.f90</a></li><li><a href='sourcefile/demo_fileclose.f90.html'>demo_fileclose.f90</a></li><li><a href='sourcefile/demo_filedelete.f90.html'>demo_filedelete.f90</a></li><li><a href='sourcefile/demo_filename_generator.f90.html'>demo_filename_generator.f90</a></li><li><a href='sourcefile/demo_fileopen.f90.html'>demo_fileopen.f90</a></li><li><a href='sourcefile/demo_fileread.f90.html'>demo_fileread.f90</a></li><li><a href='sourcefile/demo_filewrite.f90.html'>demo_filewrite.f90</a></li><li><a href='sourcefile/demo_get_env.f90.html'>demo_get_env.f90</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/files.html"><em>All source files&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Modules</h3>
+              <ul><li><a href='module/m_io.html'>M_io</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/modules.html"><em>All modules&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-xs-6 col-sm-4">
+            <div>
+              <h3>Procedures</h3>
+              <ul><li><a href='proc/basename.html'>basename</a></li><li><a href='proc/clockrate.html'>clockrate</a></li><li><a href='proc/dirname.html'>dirname</a></li><li><a href='proc/filebyte.html'>filebyte</a></li><li><a href='proc/fileclose.html'>fileclose</a></li><li><a href='interface/filedelete.html'>filedelete</a></li><li><a href='proc/filename_generator.html'>filename_generator</a></li><li><a href='proc/fileopen.html'>fileopen</a></li><li><a href='proc/fileread.html'>fileread</a></li><li><a href='proc/filewrite.html'>filewrite</a></li></ul>
+            </div>
+            <div>
+              <ul>
+                <li><a href="./lists/procedures.html"><em>All procedures&hellip;</em></a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_io
+ was developed by John Doe<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-08-13 05:15 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>

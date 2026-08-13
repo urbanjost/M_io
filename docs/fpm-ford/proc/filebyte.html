@@ -1,0 +1,477 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Fortran I/O module">
+    <meta name="author" content="John Doe" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>filebyte &ndash; M_io</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <!-- Font Awesome -->
+    <link href="../css/fontawesome.min.css" rel="stylesheet">
+    <link href="../css/brands.min.css" rel="stylesheet">
+    <link href="../css/regular.min.css" rel="stylesheet">
+    <link href="../css/solid.min.css" rel="stylesheet">
+    <link href="../css/v4-font-face.min.css" rel="stylesheet">
+    <link href="../css/v4-shims.min.css" rel="stylesheet">
+    <!-- MathJax -->
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML" async
+            integrity="sha256-DViIOMYdwlM/axqoGDPeUyf0urLoHMN4QACBKyB58Uw=" crossorigin="anonymous"></script>
+    <!-- Other scripts and stylesheets -->
+    <link href="../css/local.css" rel="stylesheet">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">M_io </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/namelists.html">Namelists</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/programs.html">Programs</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>filebyte
+      <small>Subroutine</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 6.0% of total for procedures.">89 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/M_io.F90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/m_io.f90.html'>M_io.F90</a></li>
+                <li class="breadcrumb-item"><a href='../module/m_io.html'>M_io</a></li>
+            <li class="breadcrumb-item active" aria-current="page">filebyte</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    // Enable Bootstrap tooltips
+    (function () {
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })();
+  </script>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-3 hidden-xs hidden-sm visible-md visible-lg">
+      <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    <div class="card card-primary">
+      <div class="card-header text-left"><h3 class="card-title">Source Code</h3></div>
+      <div class="list-group">
+        <a class="list-group-item" href="../proc/filebyte.html#src">filebyte</a>
+      </div>
+    </div>
+
+
+  </div>
+
+    </div>
+    
+    <div class="col-md-9" id='text'>
+    <h2>public  subroutine filebyte(filename, text, length, lines)  
+</h2>
+    
+
+    <h2 id="name">NAME</h2>
+<div class="codehilite"><pre><span></span><code>filebyte(3f) - [M_io:READ] read (ie. slurp) a file into a character array
+(LICENSE:PD)
+</code></pre></div>
+
+<h2 id="synopsis">SYNOPSIS</h2>
+<p>subroutine filebyte(filename,text,length.lines)</p>
+<div class="codehilite"><pre><span></span><code><span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=*</span><span class="p">),</span><span class="n">intent</span><span class="p">(</span><span class="ow">in</span><span class="p">)</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">filename</span>
+<span class="w"> </span><span class="ow">or</span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="ow">in</span><span class="p">)</span><span class="w">          </span><span class="p">::</span><span class="w"> </span><span class="n">filenumber</span>
+
+<span class="n">character</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="n">allocatable</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">text</span><span class="p">(:)</span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="n">optional</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">length</span>
+<span class="n">integer</span><span class="p">,</span><span class="n">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="n">optional</span><span class="w"> </span><span class="p">::</span><span class="w"> </span><span class="n">lines</span>
+</code></pre></div>
+
+<h2 id="description">DESCRIPTION</h2>
+<div class="codehilite"><pre><span></span><code><span class="nt">Read</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">entire</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">a</span><span class="w"> </span><span class="nt">stream</span><span class="w"> </span><span class="nt">into</span><span class="w"> </span><span class="nt">memory</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">array</span><span class="w"> </span><span class="nt">of</span><span class="w"> </span><span class="nt">single</span>
+<span class="nt">characters</span><span class="o">,</span><span class="w"> </span><span class="nt">retaining</span><span class="w"> </span><span class="nt">line</span><span class="w"> </span><span class="nt">end</span><span class="w"> </span><span class="nt">terminators</span><span class="o">.</span>
+
+<span class="nt">NOTE</span><span class="o">:</span>
+
+<span class="nt">Never</span><span class="w"> </span><span class="nt">casually</span><span class="w"> </span><span class="nt">read</span><span class="w"> </span><span class="nt">an</span><span class="w"> </span><span class="nt">entire</span><span class="w"> </span><span class="nt">file</span><span class="w"> </span><span class="nt">into</span><span class="w"> </span><span class="nt">memory</span><span class="w"> </span><span class="nt">if</span><span class="w"> </span><span class="nt">you</span><span class="w"> </span><span class="nt">can</span><span class="w"> </span><span class="nt">process</span><span class="w"> </span><span class="nt">it</span>
+<span class="nt">per</span><span class="w"> </span><span class="nt">line</span><span class="w"> </span><span class="nt">or</span><span class="w"> </span><span class="nt">in</span><span class="w"> </span><span class="nt">smaller</span><span class="w"> </span><span class="nt">units</span><span class="o">;</span><span class="w"> </span><span class="nt">as</span><span class="w"> </span><span class="nt">large</span><span class="w"> </span><span class="nt">files</span><span class="w"> </span><span class="nt">can</span><span class="w"> </span><span class="nt">consume</span><span class="w"> </span><span class="nt">unreasonable</span>
+<span class="nt">amounts</span><span class="w"> </span><span class="nt">of</span><span class="w"> </span><span class="nt">memory</span><span class="o">.</span>
+</code></pre></div>
+
+<h2 id="options">OPTIONS</h2>
+<div class="codehilite"><pre><span></span><code><span class="w">   </span><span class="nv">filename</span><span class="w">   </span><span class="nv">filename</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">read</span><span class="w"> </span><span class="nv">into</span><span class="w"> </span><span class="nv">memory</span><span class="w"> </span><span class="nv">or</span><span class="w"> </span><span class="nv">LUN</span><span class="w"> </span><span class="ss">(</span><span class="nv">Fortran</span><span class="w"> </span><span class="nv">Logical</span>
+<span class="w">              </span><span class="nv">Unit</span><span class="w"> </span><span class="nv">Number</span><span class="ss">)</span><span class="w"> </span><span class="k">If</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">LUN</span>,<span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">must</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">opened</span><span class="w"> </span><span class="nv">with</span>
+
+<span class="w">                 </span><span class="nv">form</span><span class="o">=</span><span class="s1">&#39;unformatted&#39;</span>,<span class="nv">access</span><span class="o">=</span><span class="s1">&#39;stream&#39;</span>
+
+<span class="w">              </span><span class="nv">as</span><span class="w"> </span><span class="nv">in</span>
+
+<span class="w">                </span><span class="nv">open</span><span class="ss">(</span><span class="nv">unit</span><span class="o">=</span><span class="nv">igetunit</span>,<span class="w"> </span><span class="nv">file</span><span class="o">=</span><span class="nv">filename</span>,<span class="w">     </span><span class="o">&amp;</span>
+<span class="w">                </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">action</span><span class="o">=</span><span class="s2">&quot;read&quot;</span>,<span class="w"> </span><span class="nv">iomsg</span><span class="o">=</span><span class="nv">message</span>,<span class="w">        </span><span class="o">&amp;</span>
+<span class="w">                </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">form</span><span class="o">=</span><span class="s2">&quot;unformatted&quot;</span>,<span class="w"> </span><span class="nv">access</span><span class="o">=</span><span class="s2">&quot;stream&quot;</span>,<span class="w"> </span><span class="o">&amp;</span>
+<span class="w">                </span><span class="o">&amp;</span><span class="w"> </span><span class="nv">status</span><span class="o">=</span><span class="s1">&#39;old&#39;</span>,<span class="nv">iostat</span><span class="o">=</span><span class="nv">ios</span><span class="ss">)</span>
+
+<span class="w">              </span><span class="nv">An</span><span class="w"> </span><span class="nv">exception</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="nv">that</span><span class="w"> </span><span class="nv">although</span><span class="w"> </span><span class="nv">stdin</span><span class="w"> </span><span class="nv">cannot</span><span class="w"> </span><span class="nv">currently</span>
+<span class="w">              </span><span class="nv">generally</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">treated</span><span class="w"> </span><span class="nv">as</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="nv">stream</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">file</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">data</span>
+<span class="w">              </span><span class="nv">will</span><span class="w"> </span><span class="nv">be</span><span class="w"> </span><span class="nv">read</span><span class="w"> </span><span class="nv">from</span><span class="w"> </span><span class="nv">stdin</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="nv">the</span><span class="w"> </span><span class="nv">filename</span><span class="w"> </span><span class="nv">is</span><span class="w"> </span><span class="s1">&#39;-&#39;</span>.
+
+<span class="w">   </span><span class="nv">text</span><span class="w">       </span><span class="nv">array</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">characters</span><span class="w"> </span><span class="nv">to</span><span class="w"> </span><span class="nv">hold</span><span class="w"> </span><span class="nv">file</span>
+<span class="w">   </span><span class="nv">length</span><span class="w">     </span><span class="nv">returns</span><span class="w"> </span><span class="nv">length</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">longest</span><span class="w"> </span><span class="nv">line</span><span class="w"> </span><span class="nv">read</span><span class="ss">(</span><span class="nv">Optional</span><span class="ss">)</span>.
+<span class="w">   </span><span class="nv">lines</span><span class="w">      </span><span class="nv">returns</span><span class="w"> </span><span class="nv">number</span><span class="w"> </span><span class="nv">of</span><span class="w"> </span><span class="nv">lines</span><span class="w"> </span><span class="nv">read</span><span class="ss">(</span><span class="nv">Optional</span><span class="ss">)</span>.
+</code></pre></div>
+
+<h2 id="examples">EXAMPLES</h2>
+<div class="codehilite"><pre><span></span><code><span class="nv">Sample</span> <span class="s s-Atom">program</span><span class="p">,</span> <span class="s s-Atom">which</span>  <span class="s s-Atom">creates</span> <span class="s s-Atom">test</span> <span class="s s-Atom">input</span> <span class="s s-Atom">file</span> <span class="s2">&quot;inputfile&quot;</span><span class="o">:</span>
+
+ <span class="s s-Atom">program</span> <span class="s s-Atom">demo_filebyte</span>
+ <span class="s s-Atom">use</span> <span class="nv">M_io</span><span class="p">,</span> <span class="s s-Atom">only</span>      <span class="o">:</span> <span class="s s-Atom">filebyte</span>
+ <span class="s s-Atom">implicit</span> <span class="s s-Atom">none</span>
+ <span class="nf">character</span><span class="p">(</span><span class="s s-Atom">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="s s-Atom">allocatable</span> <span class="o">::</span> <span class="nf">text</span><span class="p">(</span><span class="o">:</span><span class="p">)</span> <span class="p">!</span> <span class="s s-Atom">array</span> <span class="s s-Atom">to</span> <span class="s s-Atom">hold</span> <span class="s s-Atom">file</span> <span class="s s-Atom">in</span> <span class="s s-Atom">memory</span>
+ <span class="nf">character</span><span class="p">(</span><span class="s s-Atom">len=*</span><span class="p">),</span><span class="s s-Atom">parameter</span> <span class="o">::</span> <span class="nv">FILENAME</span><span class="s s-Atom">=&#39;inputfile&#39;</span> <span class="p">!</span> <span class="s s-Atom">file</span> <span class="s s-Atom">to</span> <span class="s s-Atom">read</span>
+
+ <span class="p">!</span> <span class="s s-Atom">create</span> <span class="s s-Atom">test</span> <span class="s s-Atom">file</span>
+ <span class="nf">open</span><span class="p">(</span><span class="s s-Atom">file</span><span class="o">=</span><span class="nv">FILENAME</span><span class="p">,</span><span class="s s-Atom">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">action=&#39;write&#39;</span><span class="p">)</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="nf">new_line</span><span class="p">(</span><span class="s s-Atom">&#39;A&#39;</span><span class="p">)</span><span class="s s-Atom">//&#39;esrever lliw&#39;</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="s s-Atom">&#39;margorp elpmas eht taht&#39;</span>
+ <span class="nf">write</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="s s-Atom">&#39;(a)&#39;</span><span class="p">)</span> <span class="s s-Atom">&#39;elif elpmas a si sihT&#39;</span>
+ <span class="nf">close</span><span class="p">(</span><span class="s s-Atom">unit</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+ <span class="s s-Atom">call</span> <span class="nf">filebyte</span><span class="p">(</span><span class="nv">FILENAME</span><span class="p">,</span><span class="s s-Atom">text</span><span class="p">)</span> <span class="p">!</span> <span class="s s-Atom">allocate</span> <span class="s s-Atom">character</span> <span class="s s-Atom">array</span> <span class="s s-Atom">and</span> <span class="s s-Atom">copy</span> <span class="s s-Atom">file</span> <span class="s s-Atom">into</span> <span class="s s-Atom">it</span>
+
+ <span class="nf">if</span><span class="p">(.</span><span class="o">not</span><span class="p">.</span><span class="nf">allocated</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">))</span><span class="s s-Atom">then</span>
+    <span class="nf">write</span><span class="p">(</span><span class="s s-Atom">*</span><span class="p">,</span><span class="s s-Atom">*</span><span class="p">)</span><span class="s s-Atom">&#39;*rever* failed to load file &#39;</span><span class="o">//</span><span class="nv">FILENAME</span>
+ <span class="s s-Atom">else</span>
+    <span class="p">!</span> <span class="s s-Atom">write</span> <span class="s s-Atom">file</span> <span class="s s-Atom">reversed</span> <span class="s s-Atom">to</span> <span class="s s-Atom">stdout</span>
+    <span class="nf">write</span><span class="p">(</span><span class="s s-Atom">*</span><span class="p">,</span><span class="s s-Atom">&#39;(*(a:))&#39;</span><span class="p">,</span><span class="s s-Atom">advance=&#39;no&#39;</span><span class="p">)</span><span class="nf">text</span><span class="p">(</span><span class="nf">size</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">)</span><span class="o">:</span><span class="mi">1</span><span class="o">:-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nf">deallocate</span><span class="p">(</span><span class="s s-Atom">text</span><span class="p">)</span>  <span class="p">!</span> <span class="s s-Atom">release</span> <span class="s s-Atom">memory</span>
+ <span class="s s-Atom">endif</span>
+
+ <span class="s s-Atom">end</span> <span class="s s-Atom">program</span> <span class="s s-Atom">demo_filebyte</span>
+
+<span class="nv">Expected</span> <span class="s s-Atom">output</span><span class="p">:</span>
+
+ <span class="o">&gt;</span><span class="nv">This</span> <span class="o">is</span> <span class="s s-Atom">a</span> <span class="s s-Atom">sample</span> <span class="s s-Atom">file</span>
+ <span class="o">&gt;</span><span class="s s-Atom">that</span> <span class="s s-Atom">the</span> <span class="s s-Atom">sample</span> <span class="s s-Atom">program</span>
+ <span class="o">&gt;</span><span class="s s-Atom">will</span> <span class="s s-Atom">reverse</span>
+</code></pre></div>
+
+<h2 id="author">AUTHOR</h2>
+<div class="codehilite"><pre><span></span><code>John S. Urban
+</code></pre></div>
+
+<h2 id="license">LICENSE</h2>
+<div class="codehilite"><pre><span></span><code>Public Domain
+</code></pre></div>
+
+
+    <h3>Arguments</h3>
+        <table class="table table-striped varlist">
+    <thead>
+      <tr>
+        <th scope="col">Type</th>
+<th scope="col">Intent</th><th scope="col">Optional</th>        <th scope="col">Attributes</th>
+        <th scope="col"></th>
+        <th scope="col">Name</th>
+        <th scope="col"></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-filename~4"></span>
+              class(*),
+            </td>
+<td>intent(in)</td>
+              <td></td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>filename</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-text~3"></span>
+              character(len=1),
+            </td>
+<td>intent(out),</td>
+              <td></td>            <td>
+              allocatable
+            </td>
+            <td>::</td>
+            <td><strong>text</strong>(:)</td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-length~2"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>length</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+        <tr>
+            <td>
+              <span class="anchor" id="variable-lines~3"></span>
+              integer,
+            </td>
+<td>intent(out),</td>
+              <td>optional</td>            <td>
+              
+            </td>
+            <td>::</td>
+            <td><strong>lines</strong></td>
+            <td>
+                
+            </td>
+        </tr>
+    </tbody>
+  </table>
+
+    <br>
+
+
+    
+    
+
+    
+    
+
+
+
+    
+    <section>
+    <h2><span class="anchor" id="src"></span>Source Code</h2>
+    <div class="hl codehilite"><pre><span></span><span class="k">subroutine </span><span class="n">filebyte</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="n">text</span><span class="p">,</span><span class="n">length</span><span class="p">,</span><span class="n">lines</span><span class="p">)</span>
+<span class="k">implicit none</span>
+
+<span class="c">! ident_6=&quot;@(#) M_io filebyte(3f) allocate text array and read file filename into it&quot;</span>
+
+<span class="k">class</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">filename</span><span class="w">    </span><span class="c">! filename to shlep</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="k">allocatable</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">text</span><span class="p">(:)</span><span class="w">     </span><span class="c">! array to hold file</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="k">optional</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">length</span><span class="w">      </span><span class="c">! length of longest line</span>
+<span class="kt">integer</span><span class="p">,</span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">),</span><span class="k">optional</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">lines</span><span class="w">       </span><span class="c">! number of lines</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">nchars</span><span class="w">               </span><span class="c">! holds size of file</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">igetunit</span><span class="w">             </span><span class="c">! use newunit=igetunit in f08</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">ios</span><span class="w">                  </span><span class="c">! used for I/O error status</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">length_local</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">lines_local</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">i</span>
+<span class="kt">integer</span><span class="w">                                  </span><span class="kd">::</span><span class="w"> </span><span class="n">icount</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span><span class="w">                       </span><span class="kd">::</span><span class="w"> </span><span class="n">message</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="mi">4096</span><span class="p">)</span><span class="w">                      </span><span class="kd">::</span><span class="w"> </span><span class="n">label</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=</span><span class="p">:),</span><span class="k">allocatable</span><span class="w">             </span><span class="kd">::</span><span class="w"> </span><span class="n">line</span>
+<span class="w">   </span><span class="n">length_local</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">   </span><span class="n">lines_local</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">   </span><span class="n">nchars</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">   </span><span class="n">ios</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">   </span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
+<span class="w">   </span><span class="k">select type</span><span class="p">(</span><span class="n">FILENAME</span><span class="p">)</span>
+<span class="w">    </span><span class="k">type is</span><span class="w"> </span><span class="p">(</span><span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">))</span>
+<span class="w">       </span><span class="k">if</span><span class="p">(</span><span class="n">filename</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">          open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">igetunit</span><span class="p">,</span><span class="w"> </span><span class="k">file</span><span class="o">=</span><span class="nb">trim</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span><span class="w"> </span><span class="n">action</span><span class="o">=</span><span class="s2">&quot;read&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">,&amp;</span>
+<span class="w">           </span><span class="p">&amp;</span><span class="n">form</span><span class="o">=</span><span class="s2">&quot;unformatted&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">access</span><span class="o">=</span><span class="s2">&quot;stream&quot;</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;old&#39;</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">)</span>
+<span class="w">          </span><span class="n">label</span><span class="o">=</span><span class="n">filename</span>
+<span class="w">       </span><span class="k">else</span><span class="w"> </span><span class="c">! copy stdin to a scratch file</span>
+<span class="w">          </span><span class="k">call </span><span class="n">copystdin</span><span class="p">()</span>
+<span class="w">       </span><span class="k">endif</span>
+<span class="k">    type is</span><span class="w"> </span><span class="p">(</span><span class="kt">integer</span><span class="p">)</span>
+<span class="w">       </span><span class="k">if</span><span class="p">(</span><span class="n">filename</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">stdin</span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">          rewind</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+<span class="w">          </span><span class="n">igetunit</span><span class="o">=</span><span class="n">filename</span>
+<span class="w">       </span><span class="k">else</span><span class="w"> </span><span class="c">! copy stdin to a scratch file</span>
+<span class="w">          </span><span class="k">call </span><span class="n">copystdin</span><span class="p">()</span>
+<span class="w">       </span><span class="k">endif</span>
+<span class="k">       write</span><span class="p">(</span><span class="n">label</span><span class="p">,</span><span class="s1">&#39;(&quot;unit &quot;,i0)&#39;</span><span class="p">)</span><span class="n">filename</span>
+<span class="w">   </span><span class="k">end select</span>
+<span class="k">   if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span><span class="w">  </span><span class="c">! if file was successfully opened</span>
+<span class="w">      </span><span class="k">inquire</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">igetunit</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="o">=</span><span class="n">nchars</span><span class="p">)</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">nchars</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         call </span><span class="n">stderr_local</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;*filebyte* empty file &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="w">         </span><span class="k">return</span>
+<span class="k">      endif</span>
+<span class="w">      </span><span class="c">! read file into text array</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="nb">allocated</span><span class="p">(</span><span class="n">text</span><span class="p">))</span><span class="k">deallocate</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="w"> </span><span class="c">! make sure text array not allocated</span>
+<span class="w">      </span><span class="k">allocate</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="n">nchars</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w">           </span><span class="c">! make enough storage to hold file</span>
+<span class="w">      </span><span class="k">read</span><span class="p">(</span><span class="n">igetunit</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="n">text</span><span class="w">      </span><span class="c">! load input file -&gt; text array</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="n">ios</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         call </span><span class="n">stderr_local</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;*filebyte* bad read of &#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">label</span><span class="p">)</span><span class="o">//</span><span class="s1">&#39;:&#39;</span><span class="o">//</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">endif</span>
+<span class="k">   else</span>
+<span class="k">      call </span><span class="n">stderr_local</span><span class="p">(</span><span class="s1">&#39;*filebyte* &#39;</span><span class="o">//</span><span class="n">message</span><span class="p">)</span>
+<span class="w">      </span><span class="k">allocate</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">text</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">)</span><span class="w">           </span><span class="c">! make enough storage to hold file</span>
+<span class="w">   </span><span class="k">endif</span>
+
+<span class="k">   close</span><span class="p">(</span><span class="n">iostat</span><span class="o">=</span><span class="n">ios</span><span class="p">,</span><span class="n">unit</span><span class="o">=</span><span class="n">igetunit</span><span class="p">)</span><span class="w">            </span><span class="c">! close if opened successfully or not</span>
+
+<span class="w">   </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">lines</span><span class="p">).</span><span class="nb">or</span><span class="p">.</span><span class="nb">present</span><span class="p">(</span><span class="n">length</span><span class="p">))</span><span class="k">then</span><span class="w">  </span><span class="c">! get length of longest line and number of lines</span>
+<span class="w">      </span><span class="n">icount</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">      </span><span class="k">do </span><span class="n">i</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">nchars</span>
+<span class="w">         </span><span class="k">if</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NEW_LINE</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">))</span><span class="k">then</span>
+<span class="k">            </span><span class="n">lines_local</span><span class="o">=</span><span class="n">lines_local</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">            </span><span class="n">length_local</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">length_local</span><span class="p">,</span><span class="n">icount</span><span class="p">)</span>
+<span class="w">            </span><span class="n">icount</span><span class="o">=</span><span class="mi">0</span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">         </span><span class="n">icount</span><span class="o">=</span><span class="n">icount</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">      </span><span class="k">enddo</span>
+<span class="k">      if</span><span class="p">(</span><span class="n">nchars</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="k">then</span>
+<span class="k">         if</span><span class="p">(</span><span class="n">text</span><span class="p">(</span><span class="n">nchars</span><span class="p">)</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="nb">NEW_LINE</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">))</span><span class="k">then</span>
+<span class="k">            </span><span class="n">lines_local</span><span class="o">=</span><span class="n">lines_local</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">            </span><span class="n">length_local</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">length_local</span><span class="p">,</span><span class="n">icount</span><span class="p">)</span>
+<span class="w">         </span><span class="k">endif</span>
+<span class="k">      endif</span>
+<span class="k">      if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span><span class="n">lines</span><span class="o">=</span><span class="n">lines_local</span>
+<span class="w">      </span><span class="k">if</span><span class="p">(</span><span class="nb">present</span><span class="p">(</span><span class="n">length</span><span class="p">))</span><span class="n">length</span><span class="o">=</span><span class="n">length_local</span>
+<span class="w">   </span><span class="k">endif</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">contains</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">subroutine </span><span class="n">copystdin</span><span class="p">()</span>
+<span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">iostat</span>
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">newunit</span><span class="o">=</span><span class="n">igetunit</span><span class="p">,</span><span class="w"> </span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">,&amp;</span>
+<span class="w">   </span><span class="p">&amp;</span><span class="n">form</span><span class="o">=</span><span class="s2">&quot;unformatted&quot;</span><span class="p">,</span><span class="w"> </span><span class="nb">access</span><span class="o">=</span><span class="s2">&quot;stream&quot;</span><span class="p">,</span><span class="n">status</span><span class="o">=</span><span class="s1">&#39;scratch&#39;</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">iostat</span><span class="p">)</span>
+<span class="w">   </span><span class="k">open</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="n">stdin</span><span class="p">,</span><span class="n">pad</span><span class="o">=</span><span class="s1">&#39;yes&#39;</span><span class="p">)</span>
+<span class="w">   </span><span class="n">INFINITE</span><span class="p">:</span><span class="w"> </span><span class="k">do while</span><span class="w"> </span><span class="p">(</span><span class="n">getline</span><span class="p">(</span><span class="n">line</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">iostat</span><span class="p">)</span><span class="o">==</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">      </span><span class="k">write</span><span class="p">(</span><span class="n">igetunit</span><span class="p">)</span><span class="n">line</span><span class="o">//</span><span class="nb">new_line</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)</span>
+<span class="w">   </span><span class="k">enddo </span><span class="n">INFINITE</span>
+<span class="w">   </span><span class="k">rewind</span><span class="p">(</span><span class="n">igetunit</span><span class="p">,</span><span class="n">iostat</span><span class="o">=</span><span class="n">iostat</span><span class="p">,</span><span class="n">iomsg</span><span class="o">=</span><span class="n">message</span><span class="p">)</span>
+<span class="k">end subroutine </span><span class="n">copystdin</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">subroutine </span><span class="n">stderr_local</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+<span class="kt">character</span><span class="p">(</span><span class="nb">len</span><span class="o">=*</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">message</span>
+<span class="w">   </span><span class="k">write</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="s1">&#39;(a)&#39;</span><span class="p">)</span><span class="nb">trim</span><span class="p">(</span><span class="n">message</span><span class="p">)</span><span class="w">    </span><span class="c">! write message to standard error</span>
+<span class="k">end subroutine </span><span class="n">stderr_local</span>
+<span class="c">!-----------------------------------------------------------------------------------------------------------------------------------</span>
+<span class="k">end subroutine </span><span class="n">filebyte</span>
+</pre></div>
+
+    </section>
+    <br>
+    
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              M_io
+ was developed by John Doe<br>              &copy; 2026 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2026-08-13 05:15 +0000             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+  </body>
+</html>
