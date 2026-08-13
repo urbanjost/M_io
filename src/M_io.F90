@@ -4,7 +4,7 @@
 #define  __GFORTRAN_COMP     2
 #define  __NVIDIA_COMP       3
 #define  __NAG_COMP          4
-#define  __flang__           5
+#define  __LLVM_FLANG_COMP   5
 #define  __UNKNOWN_COMP   9999
 
 #define FLOAT128
@@ -531,13 +531,14 @@ function separator() result(sep)
 implicit none
 integer                      :: ios
 integer                      :: i
-logical                      :: existing=.false.
+logical                      :: existing
 character(len=1)             :: sep
 !*!IFORT BUG:character(len=1),save        :: sep_cache=' '
 integer,save                 :: isep=-1
 character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
+    existing=.false. ! avoid some compilers complaining used uninitialized
     ! NOTE:  A parallel code might theoretically use multiple OS
     !*!FORT BUG:if(sep_cache /= ' ')then  ! use cached value.
     !*!FORT BUG:    sep=sep_cache
@@ -1075,18 +1076,20 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-integer :: nchars=0             ! holds size of file
-integer :: igetunit             ! use newunit=igetunit in f08
-integer :: ios=0                ! used for I/O error status
-integer :: length_local
-integer :: lines_local
-integer :: i
-integer :: icount
-character(len=256)  :: message
-character(len=4096) :: label
-character(len=:),allocatable :: line
+integer                                  :: nchars               ! holds size of file
+integer                                  :: igetunit             ! use newunit=igetunit in f08
+integer                                  :: ios                  ! used for I/O error status
+integer                                  :: length_local
+integer                                  :: lines_local
+integer                                  :: i
+integer                                  :: icount
+character(len=256)                       :: message
+character(len=4096)                      :: label
+character(len=:),allocatable             :: line
    length_local=0
    lines_local=0
+   nchars=0
+   ios=0
    message=''
    select type(FILENAME)
     type is (character(len=*))
@@ -2605,7 +2608,8 @@ end function getline
 !!     implicit none
 !!     character (len =: ), allocatable :: line
 !!     integer                          :: stat
-!!     integer                          :: icount=0
+!!     integer,                         :: icount
+!!        icount=0
 !!        open(unit=stdin,pad='yes')
 !!        INFINITE: do while (read_line(line,ios=stat) == 0)
 !!           icount=icount
@@ -3609,7 +3613,8 @@ character(len=:), allocatable :: base
    base = basename(path,suffix=char(0))//'  '
    select case (base)
    case ('.', '..');  yesno = .false.
-   case default;      yesno = merge(.true., .false., base(1:1) == '.')
+   case default;      yesno = base(1:1) == '.'
+   !case default;      yesno = merge(.true., .false., base(1:1) == '.')
    end select
 
 end function is_hidden_file
