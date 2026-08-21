@@ -1,4 +1,3 @@
-!===================================================================================================================================
 !-----------------------------------------------------------------------------------------------------------------------------------
 #define  __INTEL_COMP        1
 #define  __GFORTRAN_COMP     2
@@ -27,7 +26,7 @@
 !===================================================================================================================================
 MODULE M_io
 use, intrinsic :: iso_fortran_env, only : stdin=>input_unit, stdout=>output_unit, stderr=>error_unit
-
+use,intrinsic  :: iso_c_binding,   only : c_int, c_char
 implicit none
 private
 integer,parameter,private:: sp=kind(1.0), dp=kind(1.0d0)
@@ -58,6 +57,9 @@ public which
 public get_env
 public is_hidden_file
 public getname
+
+public putchar
+public getchar
 
 ! ident_1="@(#) M_io rd(3f) ask for string or number from standard input with user-definable prompt"
 interface rd
@@ -132,7 +134,19 @@ interface readenv
 end interface readenv
 public readenv
 !-----------------------------------
+interface
+   integer(kind=c_int) function system_putchar(ichar) bind (C,name="putchar")
+      import c_int
+      integer(kind=c_int),intent(in),value :: ichar
+   end function system_putchar
+end interface
 
+interface
+   integer(kind=c_int) function system_getchar() bind (C,name="getchar")
+      import c_int
+   end function system_getchar
+end interface
+!-----------------------------------
 CONTAINS
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -174,7 +188,7 @@ CONTAINS
 !!             except with a number appended at the end if needed. If could
 !!             not find a unique name a blank is returned.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample program
 !!
@@ -337,7 +351,7 @@ end function uniq
 !!           filename even if present
 !!    name   if lun = -1  or is not present then query by this filename
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -428,7 +442,11 @@ character(len=20)             :: sign           ; namelist/inquire/sign
 integer                       :: size           ; namelist/inquire/size
 character(len=20)             :: stream         ; namelist/inquire/stream
 !==============================================================================================
-   namein=merge_str(namein_in,'',present(namein_in))
+   if(present(namein_in))then
+      namein=namein_in
+   else
+      namein=''
+   endif
    if(present(lun_in))then
       lun=lun_in
    else
@@ -471,7 +489,7 @@ character(len=20)             :: stream         ; namelist/inquire/stream
        call journal('sc','*print_inquire* must specify either filename or unit number')
     endif
 !-----------------------------------------------------------------------------------------------------------------------------------
-   write(*,nml=inquire,delim='none')
+   write(*,nml=inquire,delim='quote') ! APOSTROPHE, QUOTE, or NONE
    return
 !-----------------------------------------------------------------------------------------------------------------------------------
 999   continue
@@ -513,7 +531,7 @@ end subroutine print_inquire
 !!
 !!    The value is cached as a return value for subsequent calls.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   sample usage
 !!
@@ -531,14 +549,13 @@ function separator() result(sep)
 implicit none
 integer                      :: ios
 integer                      :: i
-logical                      :: existing
+logical                      :: existing=.false.
 character(len=1)             :: sep
 !*!IFORT BUG:character(len=1),save        :: sep_cache=' '
 integer,save                 :: isep=-1
 character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
-    existing=.false. ! avoid some compilers complaining used uninitialized
     ! NOTE:  A parallel code might theoretically use multiple OS
     !*!FORT BUG:if(sep_cache /= ' ')then  ! use cached value.
     !*!FORT BUG:    sep=sep_cache
@@ -756,7 +773,7 @@ contains
     doubleprecision :: value
     ikeep=0
     do i=1,size(page,dim=1)
-       ! do this more rigourously
+       ! do this more rigorously
        ! [+-]NNNNNN[.NNNN][ED][+-]NN
        line=''
        ! get rid of all characters not in a number and
@@ -853,7 +870,7 @@ end subroutine read_table_r
 !!                 & status='old',iostat=ios)
 !!
 !!               An exception is that although stdin cannot currently
-!!               generally be treated as a stream file file the data
+!!               generally be treated as a stream file the data
 !!               will be read from stdin if the filename is '-'.
 !!
 !!    pageout    array of characters to hold file
@@ -1022,7 +1039,7 @@ end subroutine fileread
 !!                    & status='old',iostat=ios)
 !!
 !!                  An exception is that although stdin cannot currently
-!!                  generally be treated as a stream file file the data
+!!                  generally be treated as a stream file the data
 !!                  will be read from stdin if the filename is '-'.
 !!
 !!       text       array of characters to hold file
@@ -1038,6 +1055,7 @@ end subroutine fileread
 !!     implicit none
 !!     character(len=1),allocatable :: text(:) ! array to hold file in memory
 !!     character(len=*),parameter :: FILENAME='inputfile' ! file to read
+!!     integer :: length,lines
 !!
 !!     ! create test file
 !!     open(file=FILENAME,unit=10,action='write')
@@ -1046,13 +1064,19 @@ end subroutine fileread
 !!     write(10,'(a)') 'elif elpmas a si sihT'
 !!     close(unit=10)
 !!
-!!     call filebyte(FILENAME,text) ! allocate character array and copy file into it
+!!     call filebyte(FILENAME,text,length,lines) ! allocate character array and copy file into it
 !!
 !!     if(.not.allocated(text))then
 !!        write(*,*)'*rever* failed to load file '//FILENAME
 !!     else
+!!        write(*,'(*(g0))')'lines=',lines,' length=',length
+!!        write(*,'(a)')repeat('=',80)
+!!        ! write file
+!!        write(*,'(*(a:))',advance='no')text
+!!        write(*,'(a)')repeat('=',80)
 !!        ! write file reversed to stdout
 !!        write(*,'(*(a:))',advance='no')text(size(text):1:-1)
+!!        write(*,'(a)')repeat('=',80)
 !!        deallocate(text)  ! release memory
 !!     endif
 !!
@@ -1076,36 +1100,35 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-integer                                  :: nchars               ! holds size of file
-integer                                  :: igetunit             ! use newunit=igetunit in f08
-integer                                  :: ios                  ! used for I/O error status
-integer                                  :: length_local
-integer                                  :: lines_local
-integer                                  :: i
-integer                                  :: icount
-character(len=256)                       :: message
-character(len=4096)                      :: label
-character(len=:),allocatable             :: line
+integer :: nchars=0             ! holds size of file
+integer :: igetunit             ! use newunit=igetunit in f08
+integer :: ios=0                ! used for I/O error status
+integer :: length_local
+integer :: lines_local
+integer :: i
+integer :: icount
+character(len=256)  :: message
+character(len=4096) :: label
+character(len=:),allocatable :: line
    length_local=0
    lines_local=0
-   nchars=0
-   ios=0
+   label=''
    message=''
    select type(FILENAME)
     type is (character(len=*))
-       if(filename /= '-') then
+       if(filename /= '-'.and.filename /= '' ) then
           open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
            &form="unformatted", access="stream",status='old',iostat=ios)
           label=filename
        else ! copy stdin to a scratch file
-          call copystdin()
+          call copystdin_C()
        endif
     type is (integer)
        if(filename /= stdin) then
           rewind(unit=filename,iostat=ios,iomsg=message)
           igetunit=filename
        else ! copy stdin to a scratch file
-          call copystdin()
+          call copystdin_C()
        endif
        write(label,'("unit ",i0)')filename
    end select
@@ -1150,17 +1173,68 @@ character(len=:),allocatable             :: line
    endif
 !-----------------------------------------------------------------------------------------------------------------------------------
 contains
+subroutine copystdin_C()
+integer            :: iostat
+character(len=1)   :: byte
+character(len=255) :: iomsg
+   open(newunit=igetunit, iomsg=iomsg,&
+      &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+   if(iostat.eq.0)then
+      do while (getchar(byte).ge.0)
+         write(igetunit,iostat=iostat,iomsg=iomsg)byte
+         if(iostat.ne.0)exit
+      enddo
+   endif
+   if(iostat.ne.0)then
+      call stderr_local('<ERROR>*copystdin* '//trim(iomsg))
+   endif
+   rewind(igetunit,iostat=iostat,iomsg=iomsg)
+end subroutine copystdin_C
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine copystdin()
+integer            :: iostat
+character(len=256) :: iomsg
+character(len=1)   :: byte
+   open(newunit=igetunit, iomsg=iomsg,&
+      &form="unformatted", access="stream",status='scratch',iostat=iostat)
+   open(unit=stdin,pad='yes')
+      if(iostat.eq.0)then
+      INFINITE: do
+         read(stdin,'(a1)',iostat=iostat,advance='no')byte
+         if(is_iostat_eor(iostat)) then
+            byte=new_line('a')
+         elseif(is_iostat_end(iostat)) then
+            iostat=0
+            exit
+         elseif(iostat.ne.0)then
+            exit
+         endif
+         write(igetunit,iostat=iostat,iomsg=iomsg)byte
+         if(iostat.ne.0)exit
+      enddo INFINITE
+   endif
+   if(iostat.ne.0)then
+      call stderr_local('<ERROR>*copystdin* '//trim(iomsg))
+   endif
+   rewind(igetunit,iostat=iostat,iomsg=iomsg)
+end subroutine copystdin
+!-----------------------------------------------------------------------------------------------------------------------------------
+subroutine copystdin_ascii()
 integer :: iostat
    open(newunit=igetunit, iomsg=message,&
    &form="unformatted", access="stream",status='scratch',iostat=iostat)
    open(unit=stdin,pad='yes')
    INFINITE: do while (getline(line,iostat=iostat)==0)
-      write(igetunit)line//new_line('a')
+      if(is_iostat_eor(iostat))then
+         ! EOR does not imply NEW_LINE so could add NEW_LINE to end of file
+         write(igetunit)line,new_line('a')
+      else
+         write(igetunit)line
+      endif
    enddo INFINITE
    rewind(igetunit,iostat=iostat,iomsg=message)
-end subroutine copystdin
+end subroutine copystdin_ascii
 !-----------------------------------------------------------------------------------------------------------------------------------
 subroutine stderr_local(message)
 character(len=*) :: message
@@ -1300,7 +1374,7 @@ end function number_of_lines
 !!    Beginning with f2008, you can probably use OPEN(NEWUNIT=...) instead
 !!    of an open unit locator.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program:
@@ -1754,7 +1828,7 @@ end function basename
 !!        value that cannot be returned as a NEWUNIT value on an OPEN(3f))
 !!        and IOS will be non-zero.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Common usage
 !!
@@ -1799,7 +1873,11 @@ character(len=:),allocatable          :: local_mode
 character(len=256)                    :: message
 character(len=:),allocatable          :: action, position, access, form, status, file
 logical                               :: verbose
-   local_mode=lower(merge_str(mode,'',present(mode)))
+   if(present(mode))then
+      local_mode=mode
+   else
+      local_mode=''
+   endif
    file=trim(adjustl(filename))//'   '
    ifound=index(file,'>>')
    if(ifound /= 0)then
@@ -1912,7 +1990,7 @@ end function fileopen
 !!   LUN unit number to close
 !!##RETURNS
 !!   IOS status value from CLOSE
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -1974,7 +2052,7 @@ end function fileclose
 !!              Allowed values are  ASIS|REWIND|APPEND
 !!##RETURNS
 !!   IERR       status value. Zero indicates no error occurred
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2087,7 +2165,7 @@ end function filewrite
 !!   LUN  unit number of open file to delete or filename.
 !!##RETURNS
 !!   IOS  status returned by CLOSE().
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -2154,7 +2232,7 @@ end function filedelete_filename
 !!     the ends of sections and a separator (as returned by separator(3f)
 !!     ) placed between them, and duplicate adjacent separators removed
 !!     accept for one beginning the joined pathname.
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program
 !!
@@ -2247,7 +2325,7 @@ end function joinpath
 !!    routine is only intended for simple parsing of names of the form
 !!    "[dir/]name[.extension].
 !!
-!!##RESULTS
+!!##RETURNS
 !!    dir       Path of directories, including the trailing slash.
 !!    name      Name of file leaf or, if no file is specified in path,
 !!              name of the lowest directory.
@@ -2259,7 +2337,7 @@ end function joinpath
 !!    special name ".." is assumed to mean one directory above the current
 !!    directory.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   program demo_splitpath
 !!
@@ -2478,7 +2556,7 @@ end subroutine splitpath
 !!    IER     zero unless an error occurred. If not zero, LINE returns the
 !!            I/O error message.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2512,6 +2590,7 @@ character(len=:),allocatable,intent(out) :: line
 integer,intent(in),optional              :: lun
 integer,intent(out),optional             :: iostat
 integer                                  :: ier
+integer                                  :: iostat_local
 character(len=4096)                      :: message
 
 integer,parameter                        :: buflen=1024
@@ -2519,30 +2598,30 @@ character(len=:),allocatable             :: line_local
 character(len=buflen)                    :: buffer
 integer                                  :: isize
 integer                                  :: lun_local
-
    line_local=''
    ier=0
+   iostat_local=huge(0)
    if(present(lun))then
       lun_local=lun
    else
       lun_local=stdin
    endif
-
    INFINITE: do                                                   ! read characters from line and append to result
-      read(lun_local,pad='yes',iostat=ier,fmt='(a)',advance='no', &
+      read(lun_local,pad='yes',iostat=iostat_local,fmt='(a)',advance='no', &
       & size=isize,iomsg=message) buffer                          ! read next buffer (might use stream I/O for files
+      ier=iostat_local
                                                                   ! other than stdin so system line limit is not limiting
       if(isize > 0)line_local=line_local//buffer(:isize)          ! append what was read to result
-      if(is_iostat_eor(ier))then                                  ! if hit EOR reading is complete unless backslash ends the line
+      if(is_iostat_eor(iostat_local))then                         ! if hit EOR reading is complete
          ier=0                                                    ! hitting end of record is not an error for this routine
          exit INFINITE                                            ! end of reading line
-     elseif(ier /= 0)then                                         ! end of file or error
+     elseif(iostat_local /= 0)then                                ! end of file or error
         line=trim(message)
         exit INFINITE
      endif
    enddo INFINITE
    line=line_local                                                ! trim line
-   if(present(iostat))iostat=ier
+   if(present(iostat))iostat=iostat_local
 end function getline
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
@@ -2594,7 +2673,7 @@ end function getline
 !!    IER    status returned by READ(IOSTAT=IER). If not zero, an error
 !!           occurred or an end-of-file or end-of-record was encountered.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -2608,8 +2687,7 @@ end function getline
 !!     implicit none
 !!     character (len =: ), allocatable :: line
 !!     integer                          :: stat
-!!     integer,                         :: icount
-!!        icount=0
+!!     integer                          :: icount=0
 !!        open(unit=stdin,pad='yes')
 !!        INFINITE: do while (read_line(line,ios=stat) == 0)
 !!           icount=icount
@@ -2703,7 +2781,7 @@ end function read_line
 !!    nothing is set "/tmp/" is returned. The returned value always ends in
 !!    "/". No test is made that the directory exists or is writable.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!   Sample:
@@ -2808,7 +2886,7 @@ end function get_tmp
 !!    out       returned string or value. If an end-of-file or system error
 !!              is encountered the string "EOF" is returned, or a "Nan"
 !!              REAL numeric value, or huge(0), or .false. .
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3038,7 +3116,7 @@ end function rd_integer
 !!    getname(3f) returns the name of the current executable using
 !!    get_command_argument(3f) and inquire(3f).
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!    Sample getting a pathname of current executable:
 !!
@@ -3110,7 +3188,7 @@ end function getname
 !!    PATHNAME  the first pathname found in the current user path. Returns blank
 !!              if the command is not found.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3201,7 +3279,7 @@ end function which
 !!    PATHNAME  the first pathname found in the current user path. Returns blank
 !!              if the file is not found.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3298,7 +3376,7 @@ end function lookfor
 !!    IERR     return error code. Must be specified with a keyword.
 !!             It is zero if no error occurred.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3375,6 +3453,7 @@ character(len=*),intent(in),optional       :: DEFAULT
 type(force_keywd_hack),optional,intent(in) :: force_keywd
 integer,intent(out),optional               :: ierr
 character(len=:),allocatable               :: VALUE
+
 character(len=255)                         :: errmsg
 integer                                    :: howbig
 integer                                    :: stat
@@ -3569,7 +3648,7 @@ end function get_env_logical
 !!    YESNO    true if pathname points to a hidden file, otherwise it
 !!             is false.
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3613,8 +3692,7 @@ character(len=:), allocatable :: base
    base = basename(path,suffix=char(0))//'  '
    select case (base)
    case ('.', '..');  yesno = .false.
-   case default;      yesno = base(1:1) == '.'
-   !case default;      yesno = merge(.true., .false., base(1:1) == '.')
+   case default;      yesno = merge(.true., .false., base(1:1) == '.')
    end select
 
 end function is_hidden_file
@@ -3651,7 +3729,7 @@ end function is_hidden_file
 !!    IOS   The error status returned by the last read. It is zero (0) if
 !!          no error occurred
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!   Sample program:
 !!
@@ -3778,7 +3856,7 @@ end subroutine get_next_char
 !!              representing NUM.
 !!
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!
 !!    Sample program:
@@ -3833,6 +3911,104 @@ integer                      :: local_lenlimit
    write(filename(:),fmt) trim(adjustl(head)), num, trim(adjustl(tail))
    filename=trim(filename)
 end function filename_generator
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    putchar(3f) - [M_io:QUERY] write a single-byte character to stdout via C interface
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function putchar() result(ch)
+!!
+!!     character(len=1),intent(in) :: ch
+!!     integer :: putchar
+!!##DESCRIPTION
+!!    Write a single character to stdout using the C interface
+!!##OPTIONS
+!!    ch  A single character to place on stdout
+!!##RETURNS
+!!    A integer value for the ADE (ASCII Decimal Equivalent) of the
+!!    character, or a negative value if an error occurs.
+!!
+!!##EXAMPLES
+!!
+!!   sample usage
+!!
+!!    program demo_putchar
+!!    use M_io, only : getchar, putchar
+!!    implicit none
+!!    character(len=1) :: byte
+!!    integer :: istat
+!!       ! copy stdin to stdout as a stream one byte at a time
+!!       do while (getchar(byte).ge.0)
+!!          istat=putchar(byte)
+!!       enddo
+!!    end program demo_putchar
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function putchar(ch)
+character(len=1),intent(in) :: ch
+integer :: putchar
+   putchar=system_putchar(ichar(ch,kind=c_int))
+end function putchar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    getchar(3f) - [M_io:QUERY] read a single-byte character from stdin via C interface
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function getchar() result(ch)
+!!
+!!     character(len=1),intent(in) :: ch
+!!     integer :: getchar
+!!##DESCRIPTION
+!!    Read a single character from stdin using the C interface
+!!##OPTIONS
+!!    ch  A single character to read from stdin
+!!##RETURNS
+!!    A integer value for the ADE (ASCII Decimal Equivalent) of the
+!!    character, or a negative value if an error occurs.
+!!
+!!##EXAMPLES
+!!
+!!   sample usage
+!!
+!!    program demo_getchar
+!!    use M_io, only : getchar, putchar
+!!    implicit none
+!!    character(len=1) :: byte
+!!    integer :: istat
+!!       ! copy stdin to stdout as a stream one byte at a time
+!!       do while (getchar(byte).ge.0)
+!!          istat=putchar(byte)
+!!       enddo
+!!    end program demo_getchar
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function getchar(ch)
+character(len=1),intent(out) :: ch
+integer :: getchar
+integer(kind=c_int) :: ich
+   ich=system_getchar()
+   if(ich.ge.0)then
+      ch=char(ich)
+   else
+      ch=char(0)
+   endif
+   getchar=ich
+end function getchar
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
@@ -4683,7 +4859,7 @@ end function nospace
 !!##RETURNS
 !!    isspace  returns true if character is ASCII white space
 !!
-!!##EXAMPLE
+!!##EXAMPLES
 !!
 !!  Sample program:
 !!
@@ -5263,7 +5439,7 @@ integer                       :: increment
 contains
 
 subroutine print_generic(generic)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in) :: generic
    select type(generic)
@@ -5321,7 +5497,7 @@ integer                       :: increment
 contains
 
 subroutine print_generic(generic)
-!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64
+!use, intrinsic :: iso_fortran_env, only : int8, int16, int32, biggest=>int64, real32, real64, dp=>real128
 use,intrinsic :: iso_fortran_env, only : int8, int16, int32, int64, real32, real64, real128
 class(*),intent(in),optional :: generic(:)
 integer :: i
@@ -5357,7 +5533,7 @@ character(len=:),allocatable :: strout
    strout=trim(adjustl(strin))
 end function crop
 !===================================================================================================================================
-end module m_io
+end module M_io
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================

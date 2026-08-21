@@ -10,6 +10,7 @@ filewrite (3m_io)    - [M_io:WRITE] A simple write of a CHARACTER array to a fil
 get_env (3m_io)      - [M_io:QUERY] a function returning the value of an environment variable (LICENSE:PD)
 get_next_char (3m_io) - [M_io:READ] read from a file one character at a time (LICENSE:PD)
 get_tmp (3m_io)      - [M_io:QUERY] Return the name of the scratch directory (LICENSE:PD)
+getchar (3m_io)      - [M_io:QUERY] read a single-byte character from stdin via C interface (LICENSE:PD)
 getline (3m_io)      - [M_io:READ] read a line from specified LUN into allocatable string up to line length limit (LICENSE:PD)
 getname (3m_io)      - [M_io:QUERY] get name of the current executable (LICENSE:PD)
 is_hidden_file (3m_io) - [M_io:QUERY] determine if a pathname points to a hidden file, which is defined as a file basename starting with a period. (LICENSE:PD)
@@ -19,29 +20,129 @@ M_io (3m_io)	     - [M_io::INTRO] Fortran I/O module (LICENSE:PD)
 notopen (3m_io)      - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not in use (LICENSE:PD)
 number_of_lines (3m_io) - [M_io:QUERY] read an open sequential file to get number of lines (LICENSE:PD)
 print_inquire (3m_io) - [M_io:QUERY] Do INQUIRE on file by name/number and print results (LICENSE:PD)
+putchar (3m_io)      - [M_io:QUERY] write a single-byte character to stdout via C interface (LICENSE:PD)
 rd (3m_io)	     - [M_io:READ] ask for string from standard input with user-definable prompt (LICENSE:PD)
 read_line (3m_io)    - [M_io:READ] read a line from specified LUN into allocatable string up to line length limit cleaning up input line (LICENSE:PD)
 read_table (3m_io)   - [M_io:READ] read file containing a table of numeric values (LICENSE:PD)
-readenv (3m_io)      - [M_io:QUERY] a function returning the value of an environment variable (LICENSE:PD)
 separator (3m_io)    - [M_io:QUERY] try to determine pathname directory separator character (LICENSE:PD)
 splitpath (3m_io)    - [M_io:PATHNAMES] split a Unix pathname into components (LICENSE:PD)
 uniq (3m_io)	     - [M_io:QUERY] append a number to the end of filename to make a unique name if name exists (LICENSE:PD)
 which (3m_io)	     - [M_io:SCANNAMES] given a command name find the pathname by searching the directories in the environment variable $PATH (LICENSE:PD)
+joinpath(3m_io) 					       joinpath(3m_io)
+
+NAME
+  joinpath(3f) - [M_io:PATHNAMES] join parts of a pathname together
+  (LICENSE:PD)
+
+SYNOPSIS
+  function joinpath(a1,a2,a3,a4,a5,a6,a7,a8,a9)
+    result(path)
+
+      character(len=*), intent(in)	     :: a1, a2
+      character(len=*), intent(in), optional :: a3, a4, a5, a6, a7, a8, a9
+      character(len=:), allocatable	     :: path
+
+DESCRIPTION
+OPTIONS
+  a1,a2
+    the first two pathname sections to join. Required
+
+  a3-a9
+    additional optional sections to join
+
+RETURNS
+  pathname sections joined together with trailing spaces removed from the ends
+  of sections and a separator (as returned by separator(3f) ) placed between
+  them, and duplicate adjacent separators removed accept for one beginning the
+  joined pathname.
+
+EXAMPLES
+  Sample program
+
+       program demo_joinpath
+       use M_io, only : joinpath
+       implicit none
+	  write(*,*)joinpath(&
+	  &'/share/user','/man/','man3','joinpath.3m_io'//'.gz' &
+	  &)
+       end program demo_joinpath
+
+  Results:
+
+       >  /share/user/man/man3/joinpath.3m_io.gz
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	       joinpath(3m_io)
+lookfor(3m_io)							lookfor(3m_io)
+
+NAME
+  lookfor(3f) - [M_io:SCANNAMES] look for a filename in a number of
+  directories specified by an environment variable (LICENSE:PD)
+
+SYNTAX
+  function lookfor(basename,env) result(pathname)
+
+     character(len=:),intent(in)  :: basename
+     character(len=:),intent(in)  :: env
+     character(len=:),allocatable :: pathname
+
+DESCRIPTION
+  Given a base filename find the first file with that name in the directories
+  specified by the environment variable ENV
+
+OPTIONS
+  BASENAME
+    the file to search for
+
+  ENV
+    environment variable name. Separator between directory names is assumed to
+    be a colon on ULS (Unix-Like Systems) and semi-colon on MS-Windows
+    machines.
+
+RETURNS
+  PATHNAME
+    the first pathname found in the current user path. Returns blank if the
+    file is not found.
+
+EXAMPLES
+  Sample program:
+
+      program demo_lookfor
+      use M_io, only : lookfor
+      implicit none
+      character(len=:),allocatable :: returned
+	 returned=lookfor('ls','PATH')
+	 write(*,*)'ls is ',returned
+	 returned=lookfor('dir.exe','PATH')
+	 write(*,*)'dir is ',returned
+      end program demo_lookfor
+
+SEE ALSO
+  M_system:system_dir(3f)
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 		lookfor(3m_io)
 dirname(3m_io)							dirname(3m_io)
-
-
 
 NAME
   dirname(3f) - [M_io:PATHNAMES] strip last component from filename
   (LICENSE:PD)
-
 
 SYNOPSIS
   function dirname(FILENAME) result (DIRECTORY)
 
        character(len=*),intent(in)  :: FILENAME
        character(len=:),allocatable :: DIRECTORY
-
 
 DESCRIPTION
   Output FILENAME with its last non-slash component and trailing slashes
@@ -83,7 +184,6 @@ EXAMPLES
        demo_dirname dir1/str dir2/str  -> "dir1" followed by "dir2"
        demo_dirname stdio.h	       -> "."
 
-
 SEE ALSO
   dirname(3c), basename(3c), readlink(3c), realpath(3c)
 
@@ -93,16 +193,113 @@ AUTHOR
 LICENSE
   Public Domain
 
+				August 19, 2026 		dirname(3m_io)
+filebyte(3m_io) 					       filebyte(3m_io)
 
+NAME
+  filebyte(3f) - [M_io:READ] read (ie. slurp) a file into a character array
+  (LICENSE:PD)
 
-			       October 25, 2024 		dirname(3m_io)
+SYNOPSIS
+  subroutine filebyte(filename,text,length.lines)
+
+     character(len=*),intent(in) :: filename
+      or
+     integer,intent(in) 	 :: filenumber
+
+     character(len=1),allocatable,intent(out) :: text(:)
+     integer,intent(out),optional :: length
+     integer,intent(out),optional :: lines
+
+DESCRIPTION
+  Read an entire file as a stream into memory as an array of single
+  characters, retaining line end terminators.
+
+  NOTE:
+
+  Never casually read an entire file into memory if you can process it per
+  line or in smaller units; as large files can consume unreasonable amounts of
+  memory.
+
+OPTIONS
+  filename
+    filename to read into memory or LUN (Fortran Logical Unit Number) If a
+    LUN, file must be opened with
+
+		      form='unformatted',access='stream'
+
+  as in
+
+		     open(unit=igetunit, file=filename,     &
+		     & action="read", iomsg=message,	    &
+		     & form="unformatted", access="stream", &
+		     & status='old',iostat=ios)
+
+  An exception is that although stdin cannot currently generally be treated as
+  a stream file the data will be read from stdin if the filename is '-'.
+
+  text
+    array of characters to hold file
+
+  length
+    returns length of longest line read(Optional).
+
+  lines
+    returns number of lines read(Optional).
+
+EXAMPLES
+  Sample program, which
+    creates test input file "inputfile":
+
+      program demo_filebyte
+      use M_io, only	  : filebyte
+      implicit none
+      character(len=1),allocatable :: text(:) ! array to hold file in memory
+      character(len=*),parameter :: FILENAME='inputfile' ! file to read
+      integer :: length,lines
+
+      ! create test file
+      open(file=FILENAME,unit=10,action='write')
+      write(10,'(a)') new_line('A')//'esrever lliw'
+      write(10,'(a)') 'margorp elpmas eht taht'
+      write(10,'(a)') 'elif elpmas a si sihT'
+      close(unit=10)
+
+      call filebyte(FILENAME,text,length,lines) ! allocate character array and copy file into it
+
+      if(.not.allocated(text))then
+	 write(*,*)'*rever* failed to load file '//FILENAME
+      else
+	 write(*,'(*(g0))')'lines=',lines,' length=',length
+	 write(*,'(a)')repeat('=',80)
+	 ! write file
+	 write(*,'(*(a:))',advance='no')text
+	 write(*,'(a)')repeat('=',80)
+	 ! write file reversed to stdout
+	 write(*,'(*(a:))',advance='no')text(size(text):1:-1)
+	 write(*,'(a)')repeat('=',80)
+	 deallocate(text)  ! release memory
+      endif
+
+      end program demo_filebyte
+
+  Expected output:
+
+      >This is a sample file
+      >that the sample program
+      >will reverse
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	       filebyte(3m_io)
 fileclose(3m_io)					      fileclose(3m_io)
-
-
 
 NAME
   fileclose(3f) - [M_io] A simple close of a sequential file (LICENSE:PD)
-
 
 SYNOPSIS
   function fileclose(lun) result(ios)
@@ -120,7 +317,7 @@ OPTION
 RETURNS
   IOS status value from CLOSE
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
       program demo_fileclose
@@ -135,6 +332,81 @@ EXAMPLE
 	 ios=fileclose(lun)
       end program demo_fileclose
 
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	      fileclose(3m_io)
+basename(3m_io) 					       basename(3m_io)
+
+NAME
+  basename(3f) - [M_io:PATHNAMES] return last component from filename
+  (LICENSE:PD)
+
+SYNOPSIS
+  function basename(FILENAME,SUFFIX) result (LEAF)
+
+       character(len=:),allocatable :: FILENAME
+       character(len=*),intent(in),optional :: SUFFIX
+       character(len=*),intent(in) :: LEAF
+
+DESCRIPTION
+  Output LEAF of filename with directory paths removed.
+
+  Assumes leaf separator is a slash or backslash as determined by
+  separator(3f) and that filename does not contain trailing spaces.
+
+OPTIONS
+  FILENAME
+    pathname to extract the last leaf from
+
+  SUFFIX
+    suffix to remove. If not present the rightmost ".string" string is
+    removed.  If present the LEAF is returned with any matching suffix
+    removed.
+
+RETURNS
+  LEAF
+    returned leaf name
+
+EXAMPLES
+  Sample program:
+
+     program demo_basename
+     use M_io, only : basename
+     implicit none
+     character(len=:),allocatable :: fn
+     integer			  :: filename_length
+     integer			  :: i
+     ! get pathname from command line arguments
+     do i = 1, command_argument_count()
+	call get_command_argument (i, length=filename_length)
+	if(allocated(fn))deallocate(fn)
+	allocate(character(len=filename_length) :: fn)
+	call get_command_argument (i, value=fn)
+	! leaf with any suffix removed
+	! leaf with suffix retained
+	! with suffix unless it is ".f90"
+	write(*,'(*(a,1x))') basename(fn), basename(fn,''), basename(fn,'.f90')
+     enddo
+     end program demo_basename
+
+  Sample program executions:
+
+      $demo_basename /usr/bin/
+      bin bin bin
+      $demo_basename dir1/fred.x dir2/.y
+      fred fred.x fred.x
+      .y .y .y
+      $demo_basename stdio.h
+      stdio stdio.h stdio.h
+      $demo_basename /name.f90
+      name name.f90 name
+
+SEE ALSO
+  basename(3c), basename(3c), readlink(3c), realpath(3c)
 
 AUTHOR
   John S. Urban
@@ -142,17 +414,12 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	      fileclose(3m_io)
+				August 19, 2026 	       basename(3m_io)
 filedelete(3m_io)					     filedelete(3m_io)
-
-
 
 NAME
   filedelete(3f) - [M_io] A simple close of an open file with STATUS='DELETE'
   (LICENSE:PD)
-
 
 SYNOPSIS
   function filedelete(lun) result(ios)
@@ -161,7 +428,6 @@ SYNOPSIS
 	or
       character(len=*),intent(in) :: filename
       integer			  :: ios
-
 
 DESCRIPTION
   A convenience command for deleting an OPEN(3f) file that leaves an error
@@ -175,7 +441,7 @@ RETURNS
   IOS
     status returned by CLOSE().
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
       program demo_filedelete
@@ -193,351 +459,134 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	     filedelete(3m_io)
-filewrite(3m_io)					      filewrite(3m_io)
-
-
+				August 19, 2026 	     filedelete(3m_io)
+notopen(3m_io)							notopen(3m_io)
 
 NAME
-  filewrite(3f) - [M_io:WRITE] A simple write of a CHARACTER array to a file
-  (LICENSE:PD)
-
+  notopen(3f) - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not
+  in use (LICENSE:PD)
 
 SYNOPSIS
-  function filewrite(filename,data,status,position) result(ierr)
+  Usage
 
-       character(len=*),intent(in) :: filename
-       character(len=*),intent(in) :: data(:)
-       character(len=*),intent(in),optional :: status
-       character(len=*),intent(in),optional :: position
-       integer			   :: ierr
-
-DESCRIPTION
-  A convenience procedure for writing a CHARACTER array as a new file.
-
-OPTION
-  FILENAME
-    file to create or write. If the name ends in ">" the default for STATUS
-    changes to "REPLACE". If it ends in ">>" STATUS changes to "UNKNOWN" and
-    the default POSITION changes to "APPEND".
-
-  DATA
-    CHARACTER array to write to file
-
-  STATUS
-    STATUS to use on OPEN(7f). Defaults to "NEW".
-
-    Allowed values are
-      NEW|REPLACE|OLD|SCRATCH|UNKNOWN
-
-  POSITION
-    POSITION to use on OPEN(7f). Defaults to "REWIND".
-
-    Allowed values are
-      ASIS|REWIND|APPEND
-
-RETURNS
-  IERR
-    status value. Zero indicates no error occurred
-
-EXAMPLE
-  Sample program:
-
-      program demo_filewrite
-      use M_io, only : filewrite
-      implicit none
-      integer :: ierr
-      character(len=:),allocatable :: data(:)
-	 data=[ character(len=80) :: &
-	      &'This is the text to write  ', &
-	      &'into the file. It will be  ', &
-	      &'trimmed on the right side. ', &
-	      &' ', &
-	      &'     That is all Folks!    ', &
-	      &'']
-	 ierr=filewrite('_scratch.txt',data)
-      end program demo_filewrite
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	      filewrite(3m_io)
-get_env(3m_io)							get_env(3m_io)
-
-
-
-NAME
-  get_env(3f) - [M_io:QUERY] a function returning the value of an environment
-  variable (LICENSE:PD)
-
-
-SYNTAX
-  function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
-
-      character(len=*),intent(in)	     :: NAME
-
-      ! ONE OF ...
-      o character(len=*),intent(in),optional :: DEFAULT
-      o real,intent(in),optional	     :: DEFAULT
-      o integer,intent(in),optional	     :: DEFAULT
-      o doubleprecision,intent(in),optional  :: DEFAULT
-      o logical,intent(in),optional	     :: DEFAULT
-
-      integer,intent(out),optional	     :: IERR
-
-      ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
-      o character(len=:),allocatable	     :: VALUE
-      o integer 			     :: VALUE
-      o real				     :: VALUE
-      o doubleprecision 		     :: VALUE
-      o logical 			     :: VALUE
-
+	integer function notopen(start,end,err)
+	integer,optional,intent(in)  :: start
+	integer,optional,intent(in)  :: end
+	integer,optional,intent(out) :: err
 
 DESCRIPTION
-  Get the value of an environment variable or optionally return a default
-  value when the environment variable is not set or is set to a blank string.
+  A free FORTRAN unit number is needed to OPEN a file. NOTOPEN() returns a
+  FORTRAN unit number from START to END not currently associated with an I/O
+  unit. START and END are expected to be positive integers where
 
-  The type returned is the same as the type of the default value.
+  END
+    >=	START.
+
+  If NOTOPEN() returns -1, then no free FORTRAN unit could be found in the
+  specified range.
+
+  Otherwise, NOTOPEN() returns an integer representing a free FORTRAN logical
+  unit number. Note that NOTOPEN() assumes the following unit numbers defined
+  by the Fortran 2008 ISO_FORTRAN_ENV module
+
+	ERROR_UNIT,INPUT_UNIT,OUTPUT_UNIT
+
+  are special, and will never return those values.
 
 OPTIONS
-  NAME
-    name of environment variable
+  start
+    optional logical unit number to start scan at, defaults to 10.
 
-  DEFAULT
-    value to return if environment variable is not set or set to an empty
-    string. May be CHARACTER, REAL, INTEGER, LOGICAL or DOUBLEPRECISION.
-    Defaults to a null CHARACTER value.
+  end
+    optional logical unit number to stop scan at, defaults to 99.
 
-RETURNS
-  VALUE
-    the value of the environment variable or the default.  The type is the
-    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
-    is returned.
+  err
+    optional error flag returned. ERR will be non-zero if no errors. If not
+    present and an error occurs the program will stop instead of returning.
 
-    For a LOGICAL type, Any environment variable value starting with F,f,N or
-    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
-    period (".") is ignored.  Anything else returns .false. .
+NOTES
+  Why are the default START and END limits from 10 to 99? the Fortran 77
+  standard did not specify a specific limit on the upper range limit, but the
+  LUN range of 1 to 99 was almost always supported in conventional programming
+  environments. Additionally, units in the range 0-10 have often been the
+  units used for pre-assigned files. Occasionally 100, 101 and 102 are
+  reserved (for files such as standard input, standard output, standard error,
+  ...). Therefore, the defaults for START and END were selected to be 10 and
+  99. And most programs do not need more than 90 files simultaneously open, so
+  the defaults work well in practice with many versions/vintages of Fortran.
 
-  IERR
-    return error code. Must be specified with a keyword.  It is zero if no
-    error occurred.
+  Note that an environment may impose a limit on the number of simultaneously
+  open files (which some compilers work around).
 
-EXAMPLE
+  Beginning with f2008, you can probably use OPEN(NEWUNIT=...) instead of an
+  open unit locator.
+
+EXAMPLES
   Sample program:
 
-     program demo_get_env
-     use M_io, only : get_env, getname
-     character(len=*),parameter :: g='(*(g0))'
-     integer :: ierr
-     character(len=:),allocatable :: HOME
-       !Basics
-	HOME=get_env('HOME','UNKNOWN')
-	write(*,'(a)')HOME
-	write(*,'(a)')Get_env('PATH')
-
-       !call this program setting STOP=RUN unless STOP=RUN
-       !otherwise print various environment variable values
-       !converted to various types
-	if(get_env('STOP').eq.'RUN')then
-	   write(*,g)repeat('-',80)
-	   write(*,g)get_env('CHARACTER','string')
-	   write(*,g)get_env('INTEGER',100)
-	   write(*,g)get_env('REAL',200.0)
-	   write(*,g)get_env('DOUBLE',300.0d0)
-	   write(*,g)get_env('LOGICAL',.true.)
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)get_env('CHARACTER','string',ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)get_env('INTEGER',100,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)get_env('REAL',200.0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)get_env('DOUBLE',300.0d0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)get_env('LOGICAL',.true.)
-	   write(*,*)'ierr=',ierr
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)get_env('CHARACTER')
-	   write(*,g)get_env('HOME')
-	 else
-	   write(*,g)repeat('-',80)
-	   call execute_command_line('env STOP=RUN '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
-	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
-	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
-	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
-	   write(*,g)repeat('-',80)
-	   stop
-	endif
-
-     end program demo_get_env
-
-
-SEE ALSO
-  This duplicates system_getenv(3m_system) in most respects but avoids some
-  interdependencies as M_system(3) currently requires a POSIX programming
-  environment.
-
-  get_environment_variable(3fortran), system_getenv(3m_system),
-  set_environment_variable(3m_system), system_putenv(3m_system),
-  system_clearenv(3m_system), system_initenv(3m_system),
-  system_getenv(3m_system), system_unsetenv(3m_system)
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 		get_env(3m_io)
-get_next_char(3m_io)					  get_next_char(3m_io)
-
-
-
-NAME
-  get_next_char(3f) - [M_io:READ] read from a file one character at a time
-  (LICENSE:PD)
-
-
-SYNTAX
-  subroutine get_next_char(fd,c,ios)
-
-      integer,intent(in)    :: fd
-      character,intent(out) :: c
-      integer,intent(out)   :: ios
-
-
-
-DESCRIPTION
-  This reads a file opened with stream access one character at a time, much
-  like ""read(fd,iostat=ios) c" but with buffering, which I have found to be
-  up to sixty times faster than such a plain read, although this varies
-  depending on how or if the programming environment implements I/O buffering
-  itself.
-
-   IT USES SAVED VARIABLES AND CAN ONLY BE USED ON ONE FILE AT A TIME
-  IN THE CURRENT FORM. A user type including the saved values and the LUN
-  could easily resolve this.
-
-OPTIONS
-  FD
-    A Fortran unit number of a file opened for stream access
-
-  C The next returned character if IOS=0
-
-  IOS
-    The error status returned by the last read. It is zero (0) if no error
-    occurred
-
-EXAMPLE
-  Sample program:
-
-     program demo_get_next_char
-     use,intrinsic :: iso_fortran_env, only : iostat_end
-     use M_io, only : get_next_char
-     implicit none
-     character(len=4096) :: filename ! filename to read
-     character(len=256)  :: message  ! returned error messages
-     integer		 :: fd	     ! file descriptor for input file
-     integer		 :: ios,ios1 ! hold I/O error flag
-     character		 :: c1	     ! current character read
-	filename='test.in'
-	open(unit=fd,file=trim(filename),access='stream',status='old',&
-	& iostat=ios,action='read',form='unformatted',iomsg=message)
-	if(ios /= 0)then
-	   write(*,*)&
-	   '*demo_get_next_char* ERROR: could not open '//&
-	   trim(filename)
-	   write(*,*)&
-	   '*demo_get_next_char* ERROR: '//trim(message)
-	   stop 5
-	endif
-	! loop through read of file one character at a time
-	ONE_CHAR_AT_A_TIME: do
-	   ! get next character from buffered read from file
-	   call get_next_char(fd,c1,ios1)
-	   if(ios1 == iostat_end)then
-	      ! reached end of file so stop
-	      stop
-	   elseif(ios1 /= 0 )then
-	      ! error on file read
-	      write(*,*)&
-	   '*demo_get_next_char* ERROR: before end of '//&
-	   trim(filename)
-	      stop 1
-	   endif
-	   ! do something with the characters
-	   write(*,'(a)',advance='no')c1
-	enddo ONE_CHAR_AT_A_TIME
-     end program demo_get_next_char
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	  get_next_char(3m_io)
-get_tmp(3m_io)							get_tmp(3m_io)
-
-
-
-NAME
-  get_tmp(3f) - [M_io:QUERY] Return the name of the scratch directory
-  (LICENSE:PD)
-
-SYNOPSIS
-  function get_tmp() result(tname)
-
-       character(len=:),allocatable :: tname
-
-DESCRIPTION
-  Return the name of the scratch directory set by the most common environment
-  variables used to designate a scratch directory.  $TMPDIR is the canonical
-  environment variable in Unix and POSIX[1] to use to specify a temporary
-  directory for scratch space. If $TMPDIR is not set, $TEMP, $TEMPDIR, and
-  $TMP are examined in that order. If nothing is set "/tmp/" is returned. The
-  returned value always ends in "/". No test is made that the directory exists
-  or is writable.
-
-EXAMPLE
-  Sample:
-
-      program demo_get_tmp
-      use M_io, only : get_tmp, uniq
+      program demo_notopen ! test the NOTOPEN(3f) function
+      use m_io, only: notopen
       implicit none
-      character(len=:),allocatable :: answer
-	 answer=get_tmp()
-	 write(*,*)'result is ',answer
-	 answer=get_tmp()//uniq('_scratch',create=.false.)
-	 write(*,*)'the file ',answer, &
-	 & ' was a good scratch file name, at least a moment ago'
-      end program demo_get_tmp
+      integer :: ii, ierr, igot
 
-  Sample Results:
+      write(*,*)'check for preassigned files from unit 0 to unit 1000'
+      write(*,*)'(5 and 6 always return -1)'
 
-      > result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
-      >
-      > the file /cygdrive/c/Users/JSU/AppData/Local/Temp/_scratch
-      > was a good scratch file name, at least a moment ago
+      do ii=0,1000
+	 if(notopen(ii,ii,ierr)  /=  ii)then
+	    write(*,*)'INUSE:',ii, notopen(ii,ii,ierr)
+	 endif
+      enddo
 
+      ! open all files from UNIT=10 to UNIT=30 so have used units
+      do ii=10,30,1
+	open(unit=ii,status="scratch")
+      enddo
+      ! close UNIT=25
+      close(25)
+
+      ! find open file in range 10 to 30
+      write(*,*)'Should get 25 for this ..',notopen(10,30,ierr)
+
+      close(18)
+      do ii=10,32
+	igot=notopen(ii,ii,ierr)
+	write(*,*)'For unit ',ii,' I got ',igot,' with ERR=',ierr
+      enddo
+
+      end program demo_notopen
+
+  Expected output(can vary with each programming environment):
+
+	check for preassigned files from unit 0 to unit 1000
+	(5 and 6 always return -1)
+	INUSE:	  0    -1
+	INUSE:	  5    -1
+	INUSE:	  6    -1
+	Should get 25 for this .. 25
+	For  unit  10  I  got  -1  with  ERR=  -1
+	For  unit  11  I  got  -1  with  ERR=  -1
+	For  unit  12  I  got  -1  with  ERR=  -1
+	For  unit  13  I  got  -1  with  ERR=  -1
+	For  unit  14  I  got  -1  with  ERR=  -1
+	For  unit  15  I  got  -1  with  ERR=  -1
+	For  unit  16  I  got  -1  with  ERR=  -1
+	For  unit  17  I  got  -1  with  ERR=  -1
+	For  unit  18  I  got  18  with  ERR=	0
+	For  unit  19  I  got  -1  with  ERR=  -1
+	For  unit  20  I  got  -1  with  ERR=  -1
+	For  unit  21  I  got  -1  with  ERR=  -1
+	For  unit  22  I  got  -1  with  ERR=  -1
+	For  unit  23  I  got  -1  with  ERR=  -1
+	For  unit  24  I  got  -1  with  ERR=  -1
+	For  unit  25  I  got  25  with  ERR=	0
+	For  unit  26  I  got  -1  with  ERR=  -1
+	For  unit  27  I  got  -1  with  ERR=  -1
+	For  unit  28  I  got  -1  with  ERR=  -1
+	For  unit  29  I  got  -1  with  ERR=  -1
+	For  unit  30  I  got  -1  with  ERR=  -1
+	For  unit  31  I  got  31  with  ERR=	0
+	For  unit  32  I  got  32  with  ERR=	0
 
 AUTHOR
   John S. Urban
@@ -545,24 +594,18 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		get_tmp(3m_io)
+				August 19, 2026 		notopen(3m_io)
 number_of_lines(3m_io)					number_of_lines(3m_io)
-
-
 
 NAME
   number_of_lines(3f) - [M_io:QUERY] read an open sequential file to get
   number of lines (LICENSE:PD)
-
 
 SYNOPSIS
   function number_of_lines(lun) result(nlines)
 
      integer,intent(in) 	 :: lun
      integer			 :: nlines
-
 
 DESCRIPTION
   Rewind an open sequential file and read through it to count the number of
@@ -592,24 +635,18 @@ EXAMPLES
 	endif
      end program demo_number_of_lines
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	number_of_lines(3m_io)
+				August 19, 2026 	number_of_lines(3m_io)
 print_inquire(3m_io)					  print_inquire(3m_io)
-
-
 
 NAME
   print_inquire(3f) - [M_io:QUERY] Do INQUIRE on file by name/number and print
   results (LICENSE:PD)
-
 
 SYNOPSIS
   Definition:
@@ -619,7 +656,6 @@ SYNOPSIS
      subroutine print_inquire(name)
      integer,intent(in),optional	  :: lun
      character(len=*),intent(in),optional :: name
-
 
 DESCRIPTION
   Given either a Fortran file-unit-number or filename, call the INQUIRE(3f)
@@ -633,7 +669,7 @@ OPTIONS
   name
     if lun = -1  or is not present then query by this filename
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
      program demo_print_inquire
@@ -667,6 +703,49 @@ EXAMPLE
 	enddo
      end program demo_print_inquire
 
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	  print_inquire(3m_io)
+putchar(3m_io)							putchar(3m_io)
+
+NAME
+  putchar(3f) - [M_io:QUERY] write a single-byte character to stdout via C
+  interface (LICENSE:PD)
+
+SYNOPSIS
+  function putchar() result(ch)
+
+      character(len=1),intent(in) :: ch
+      integer :: putchar
+
+DESCRIPTION
+  Write a single character to stdout using the C interface
+
+OPTIONS
+  ch
+    A single character to place on stdout
+
+RETURNS
+  A integer value for the ADE (ASCII Decimal Equivalent) of the character, or
+  a negative value if an error occurs.
+
+EXAMPLES
+  sample usage
+
+     program demo_putchar
+     use M_io, only : getchar, putchar
+     implicit none
+     character(len=1) :: byte
+     integer :: istat
+	! copy stdin to stdout as a stream one byte at a time
+	do while (getchar(byte).ge.0)
+	   istat=putchar(byte)
+	enddo
+     end program demo_putchar
 
 AUTHOR
   John S. Urban
@@ -674,12 +753,8 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	  print_inquire(3m_io)
+				August 19, 2026 		putchar(3m_io)
 rd(3m_io)							     rd(3m_io)
-
-
 
 NAME
   rd(3f) - [M_io:READ] ask for string from standard input with user-definable
@@ -706,8 +781,6 @@ NAME
      logical,intent(in) 		      :: default
      logical,intent(out)		      :: out
 
-
-
 DESCRIPTION
   Ask for string or value from standard input with user-definable prompt up to
   20 times.
@@ -731,7 +804,7 @@ RETURNS
     the string "EOF" is returned, or a "Nan" REAL numeric value, or huge(0),
     or .false. .
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
      program demo_rd
@@ -757,24 +830,18 @@ EXAMPLE
 
      end program demo_rd
 
-
 AUTHOR
   John S. Urban, 1993
 
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		     rd(3m_io)
+				August 19, 2026 		     rd(3m_io)
 read_line(3m_io)					      read_line(3m_io)
-
-
 
 NAME
   read_line(3f) - [M_io:READ] read a line from specified LUN into allocatable
   string up to line length limit cleaning up input line (LICENSE:PD)
-
 
 SYNTAX
   function read_line(line,lun,ios) result(ier)
@@ -783,7 +850,6 @@ SYNTAX
      integer,intent(in),optional	      :: lun
      integer,optional			      :: ios
      integer				      :: ier
-
 
 DESCRIPTION
   Read a line of any length up to the programming environment maximum line
@@ -825,7 +891,7 @@ RETURNS
     status returned by READ(IOSTAT=IER). If not zero, an error occurred or an
     end-of-file or end-of-record was encountered.
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
   Checking the error message and counting lines:
@@ -850,24 +916,85 @@ EXAMPLE
 	 endif
       end program demo_read_line
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
+				August 19, 2026 	      read_line(3m_io)
+filename_generator(3m_io)			     filename_generator(3m_io)
 
+NAME
+  notopen(3f) - [M_io:FILENAME] generate a filename containing a number
+  (LICENSE:PD)
 
-			       October 25, 2024 	      read_line(3m_io)
+SYNOPSIS
+  Usage
+
+	function filename_generator(head,tail,num,lenlimit) result(filename)
+	character(len=*),intent(in)  :: head
+	character(len=*),intent(in)  :: tail
+	integer,intent(in) :: num
+	integer,intent(in) :: lenlimit
+	character(len=:),allocatable :: filename
+
+DESCRIPTION
+  Generate a filename containing a representation of the specified whole
+  number. This is useful for generating a series of filenames differing by a
+  number such as "file1.txt", "file2.txt",
+
+OPTIONS
+  head
+    filename prefix.
+
+  tail
+    filename suffix.
+
+  num
+    number to represent as a string between HEAD and TAIL.
+
+  lenlimit
+    number of digits up to which to zero-pad the string representing NUM.
+
+EXAMPLES
+  Sample program:
+
+	program demo_filename_generator
+	use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
+	use M_io, only : filename_generator
+	implicit none
+
+	    ! no zero-fill
+	    write(*,*) filename_generator("file_",".dat",11)
+	    ! zero-fill till 3 digits
+	    write(*,*) filename_generator("file_",".dat",11,3)
+	    ! zero-fill till 9 digits
+	    write(*,*) filename_generator("file_",".dat",11,9)
+	    ! same as default (no zero-fill)
+	    write(*,*) filename_generator("file_",".dat",11,0)
+
+	end program demo_filename_generator
+
+  Results
+
+	> file_11.dat
+	> file_011.dat
+	> file_000000011.dat
+	> file_11.dat
+
+AUTHOR
+  Zh, Niu; with modifications by John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026      filename_generator(3m_io)
 read_table(3m_io)					     read_table(3m_io)
-
-
 
 NAME
   read_table(3f) - [M_io:READ] read file containing a table of numeric values
   (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine read_table(filename,array,ierr,comment)
@@ -981,30 +1108,23 @@ EXAMPLES
 	4.000000000000000      30.04440000000000     -10.00000000000000
 	40.00000000000000      30.55549999999999     -10.00000000000000
 
-
 AUTHOR
   John S. Urban
 
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	     read_table(3m_io)
+				August 19, 2026 	     read_table(3m_io)
 separator(3m_io)					      separator(3m_io)
-
-
 
 NAME
   separator(3f) - [M_io:QUERY] try to determine pathname directory separator
   character (LICENSE:PD)
 
-
 SYNOPSIS
   function separator() result(sep)
 
       character(len=1) :: sep
-
 
 DESCRIPTION
   Try to determine the separator character used to separate directory names
@@ -1023,7 +1143,7 @@ DESCRIPTION
 
   The value is cached as a return value for subsequent calls.
 
-EXAMPLE
+EXAMPLES
   sample usage
 
      program demo_separator
@@ -1032,17 +1152,538 @@ EXAMPLE
 	write(*,*)'separator=',separator()
      end program demo_separator
 
+				August 19, 2026 	      separator(3m_io)
+fileopen(3m_io) 					       fileopen(3m_io)
 
+NAME
+  fileopen(3f) - [M_io] A simple open of a sequential file (LICENSE:PD)
 
-			       October 25, 2024 	      separator(3m_io)
+SYNOPSIS
+  function fileopen(filename,mode,ios) result(lun)
+
+     character(len=*),intent(in)	   :: filename
+     character(len=*),intent(in),optional  :: mode
+     integer,intent(out),optional	   :: ios
+     integer				   :: lun
+
+DESCRIPTION
+  fileopen(3f) is a convenience routine that allows you to open a file for
+  sequential reading and writing as a text file in a form commonly found in C
+  and interpreted languages such as shells. See the OPEN(3f) statement for
+  more demanding I/O specifications (asynchronous, direct, unformatted, ... ).
+  The documentation for the flexible and powerful OPEN(3f) statement can be a
+  bit overwhelming; this routine cuts it down to the just the simple basic
+  functions typically available in a scripting language such as bash, tcsh,
+  sh, ...
+
+  Specify the file's name as the string FILENAME with a shell-like prefix
+  specifying the access mode, or alternatively specify a plain FILENAME and
+  the kind of access you need to the file with the string MODE.
+
+  Three fundamental kinds of access are available: read, write, and append.
+
+OPTION
+  FILENAME
+    The filename to open. If the beginning of the filename is
+
+	      <   open for read. File must exist
+	      >   open for write. Will overwrite current file
+	      >>  open for append. Will append to current file
+
+	      If no prefix exists to specify a file access mode, it
+	      will depend on the values of the MODE argument (meaning
+	      the default will be "readwrite").
+
+	      A blank filename causes a unit number for a scratch file
+	      to be returned.
+
+  MODE
+    [rwa][tb][+] An alternate way to specify the file access mode is to
+    specify a MODE value. It should begin with one of the three characters
+    "r", "w", or "a". It defaults to 'rw'. It is case-insensitive.
+
+   READING PREFIX
+  r,<
+    Open the file for reading; the operation will fail if the file does not
+    exist, or if the host system does not permit you to read it.
+
+   WRITING PREFIXES
+  w,>
+    Open a file for writing from the beginning of the file.  If the file whose
+    name you specified already existed, the call fails.
+
+  •  Open the file for writing from the beginning of the file: effectively,
+     this always creates a new file. If the file whose name you specified
+     already existed, its old contents are discarded.
+
+  a,<<
+     Initially open the file for appending data (ie. writing at the end of
+     file).
+
+   SUFFIX
+  b Append a "b" to any of the three modes above to specify that you are
+    opening the file as a "binary file" (the default is to open the file as a
+    sequential formatted text file. This switch changes to to an unformatted
+    stream).
+
+		    open( ... access='stream';form='unformatted')
+
+  t Append a "t" to any of the three modes (rwa) to specify a formatted stream
+
+		    open( ... access='stream';form='formatted')
+
+  •  Finally, you might need to both read and write from the same file. You
+     can specify "rw" or you can append a `+' to any of the three primary
+     modes ("rwa") to permit "readwrite" access
+
+  v  Additionally, "v" selects verbose mode, which prints the OPEN(3f) options
+     explicitly selected
+
+   NOTES
+  If you want to append both `b' and `+', you can do it in either order: for
+  example, "rb+" means the same thing as "r+b" when used as a mode string.)
+
+  IOS
+    The error code returned by the OPEN(3f) statement ultimately executed by
+    this function. If not present the program stops on an error.
+
+RETURNS
+  FILEOPEN(3f) returns a Fortran unit number which you can use for other file
+  operations, unless the file you requested could not be opened; in that
+  situation, the result is -1 (a reserved value that cannot be returned as a
+  NEWUNIT value on an OPEN(3f)) and IOS will be non-zero.
+
+EXAMPLES
+  Common usage
+
+   READ
+  R=fileopen('<in.txt') or R=fileopen('in.txt','r')
+
+   WRITE
+  W=fileopen('>out.txt') or W=fileopen('out.txt','W')
+
+   READWRITE
+  RW=fileopen('inout.txt')
+
+   APPEND
+  A=fileopen('>>inout.txt') or A=fileopen('inout.txt','a')
+
+  Sample program
+
+	program demo_fileopen
+	use M_io, only : fileopen, fileclose, print_inquire
+	implicit none
+	integer :: lun
+	lun=fileopen('fred.txt')
+	call print_inquire(lun)
+	end program demo_fileopen
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	       fileopen(3m_io)
+filewrite(3m_io)					      filewrite(3m_io)
+
+NAME
+  filewrite(3f) - [M_io:WRITE] A simple write of a CHARACTER array to a file
+  (LICENSE:PD)
+
+SYNOPSIS
+  function filewrite(filename,data,status,position) result(ierr)
+
+       character(len=*),intent(in) :: filename
+       character(len=*),intent(in) :: data(:)
+       character(len=*),intent(in),optional :: status
+       character(len=*),intent(in),optional :: position
+       integer			   :: ierr
+
+DESCRIPTION
+  A convenience procedure for writing a CHARACTER array as a new file.
+
+OPTION
+  FILENAME
+    file to create or write. If the name ends in ">" the default for STATUS
+    changes to "REPLACE". If it ends in ">>" STATUS changes to "UNKNOWN" and
+    the default POSITION changes to "APPEND".
+
+  DATA
+    CHARACTER array to write to file
+
+  STATUS
+    STATUS to use on OPEN(7f). Defaults to "NEW".
+
+    Allowed values are
+      NEW|REPLACE|OLD|SCRATCH|UNKNOWN
+
+  POSITION
+    POSITION to use on OPEN(7f). Defaults to "REWIND".
+
+    Allowed values are
+      ASIS|REWIND|APPEND
+
+RETURNS
+  IERR
+    status value. Zero indicates no error occurred
+
+EXAMPLES
+  Sample program:
+
+      program demo_filewrite
+      use M_io, only : filewrite
+      implicit none
+      integer :: ierr
+      character(len=:),allocatable :: data(:)
+	 data=[ character(len=80) :: &
+	      &'This is the text to write  ', &
+	      &'into the file. It will be  ', &
+	      &'trimmed on the right side. ', &
+	      &' ', &
+	      &'     That is all Folks!    ', &
+	      &'']
+	 ierr=filewrite('_scratch.txt',data)
+      end program demo_filewrite
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	      filewrite(3m_io)
+get_env(3m_io)							get_env(3m_io)
+
+NAME
+  get_env(3f) - [M_io:QUERY] a function returning the value of an environment
+  variable (LICENSE:PD)
+
+SYNTAX
+  function get_env(NAME,DEFAULT,IERR=IERR) result(VALUE)
+
+      character(len=*),intent(in)	     :: NAME
+
+      ! ONE OF ...
+      o character(len=*),intent(in),optional :: DEFAULT
+      o real,intent(in),optional	     :: DEFAULT
+      o integer,intent(in),optional	     :: DEFAULT
+      o doubleprecision,intent(in),optional  :: DEFAULT
+      o logical,intent(in),optional	     :: DEFAULT
+
+      integer,intent(out),optional	     :: IERR
+
+      ! ONE OF THE FOLLOWING, MATCHING TYPE OF DEFAULT
+      o character(len=:),allocatable	     :: VALUE
+      o integer 			     :: VALUE
+      o real				     :: VALUE
+      o doubleprecision 		     :: VALUE
+      o logical 			     :: VALUE
+
+DESCRIPTION
+  Get the value of an environment variable or optionally return a default
+  value when the environment variable is not set or is set to a blank string.
+
+  The type returned is the same as the type of the default value.
+
+OPTIONS
+  NAME
+    name of environment variable
+
+  DEFAULT
+    value to return if environment variable is not set or set to an empty
+    string. May be CHARACTER, REAL, INTEGER, LOGICAL or DOUBLEPRECISION.
+    Defaults to a null CHARACTER value.
+
+RETURNS
+  VALUE
+    the value of the environment variable or the default.  The type is the
+    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
+    is returned.
+
+    For a LOGICAL type, Any environment variable value starting with F,f,N or
+    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
+    period (".") is ignored.  Anything else returns .false. .
+
+  IERR
+    return error code. Must be specified with a keyword.  It is zero if no
+    error occurred.
+
+EXAMPLES
+  Sample program:
+
+     program demo_get_env
+     use M_io, only : get_env, getname
+     character(len=*),parameter :: g='(*(g0))'
+     integer :: ierr
+     character(len=:),allocatable :: HOME
+       !Basics
+	HOME=get_env('HOME','UNKNOWN')
+	write(*,'(a)')HOME
+	write(*,'(a)')Get_env('PATH')
+
+       !call this program setting STOP=RUN unless STOP=RUN
+       !otherwise print various environment variable values
+       !converted to various types
+	if(get_env('STOP').eq.'RUN')then
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER','string')
+	   write(*,g)get_env('INTEGER',100)
+	   write(*,g)get_env('REAL',200.0)
+	   write(*,g)get_env('DOUBLE',300.0d0)
+	   write(*,g)get_env('LOGICAL',.true.)
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER','string',ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('INTEGER',100,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('REAL',200.0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('DOUBLE',300.0d0,ierr=ierr)
+	   write(*,*)'ierr=',ierr
+	   write(*,g)get_env('LOGICAL',.true.)
+	   write(*,*)'ierr=',ierr
+
+	   write(*,g)repeat('-',80)
+	   write(*,g)get_env('CHARACTER')
+	   write(*,g)get_env('HOME')
+	 else
+	   write(*,g)repeat('-',80)
+	   call execute_command_line('env STOP=RUN '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
+	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
+	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
+	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
+	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
+	   write(*,g)repeat('-',80)
+	   stop
+	endif
+
+     end program demo_get_env
+
+SEE ALSO
+  This duplicates system_getenv(3m_system) in most respects but avoids some
+  interdependencies as M_system(3) currently requires a POSIX programming
+  environment.
+
+  get_environment_variable(3fortran), system_getenv(3m_system),
+  set_environment_variable(3m_system), system_putenv(3m_system),
+  system_clearenv(3m_system), system_initenv(3m_system),
+  system_getenv(3m_system), system_unsetenv(3m_system)
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 		get_env(3m_io)
+getline(3m_io)							getline(3m_io)
+
+NAME
+  getline(3f) - [M_io:READ] read a line from specified LUN into allocatable
+  string up to line length limit (LICENSE:PD)
+
+SYNTAX
+  function getline(line,lun,iostat) result(ier)
+
+     character(len=:),allocatable,intent(out) :: line
+     integer,intent(in),optional	      :: lun
+     integer,intent(out),optional	      :: iostat
+     integer				      :: ier
+
+DESCRIPTION
+  Read a line of any length up to programming environment maximum line length.
+  Requires Fortran 2003+.
+
+  It is primarily expected to be used when reading input which will then be
+  parsed.
+
+  The input file must have a PAD attribute of YES for the function to work
+  properly, which is typically true.
+
+  The simple use of a loop that repeatedly re-allocates a character variable
+  in addition to reading the input file one buffer at a time could (depending
+  on the programming environment used) be inefficient, as it could reallocate
+  and allocate memory used for the output string with each buffer read.
+
+OPTIONS
+  LINE
+    line read
+
+  LUN
+    optional LUN (Fortran logical I/O unit) number. Defaults to stdin.
+
+  IOSTAT
+    status returned by READ(IOSTAT=IOS). If not zero, an error occurred or an
+    end-of-file or end-of-record was encountered.  This is the same value as
+    returned by the function. See the example program for a usage case.
+
+RETURNS
+  IER
+    zero unless an error occurred. If not zero, LINE returns the I/O error
+    message.
+
+EXAMPLES
+  Sample program:
+
+     program demo_getline
+     use,intrinsic :: iso_fortran_env, only : stdin=>input_unit
+     use,intrinsic :: iso_fortran_env, only : iostat_end
+     use M_io, only : getline
+     implicit none
+     integer :: iostat
+     character(len=:),allocatable :: line
+	open(unit=stdin,pad='yes')
+	INFINITE: do while (getline(line,iostat=iostat)==0)
+	   write(*,'(a)')'['//line//']'
+	enddo INFINITE
+	if(iostat /= iostat_end)then
+	   write(*,*)'error reading input:',trim(line)
+	endif
+     end program demo_getline
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 		getline(3m_io)
+getname(3m_io)							getname(3m_io)
+
+NAME
+  getname(3f) - [M_io:QUERY] get name of the current executable (LICENSE:PD)
+
+SYNOPSIS
+  function getname() result(name)
+
+      character(len=:),allocatable	   :: getname
+
+DESCRIPTION
+  getname(3f) returns the name of the current executable using
+  get_command_argument(3f) and inquire(3f).
+
+EXAMPLES
+  Sample getting a pathname of current executable:
+
+       program demo_getname
+       use M_io, only : getname
+       implicit none
+	  write(*,'(*(a))')'Running ',getname()
+       end program demo_getname
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 		getname(3m_io)
+fileread(3m_io) 					       fileread(3m_io)
+
+NAME
+  fileread(3f) - [M_io:READ] read (ie. slurp) a file into a string array
+  (LICENSE:PD)
+
+SYNOPSIS
+  subroutine fileread(filename,pageout)
+
+     character(len=*),intent(in) :: filename
+       or
+     integer,intent(in) 	 :: io
+
+     character(len=:),allocatable,intent(out) :: pageout(:)
+
+DESCRIPTION
+  Read an entire file into memory as a character array, one character variable
+  per line.
+
+  NOTE:
+
+  Do not casually read an entire file into memory if you can process it per
+  line or in smaller units; as large files can consume unreasonable amounts of
+  memory.
+
+OPTIONS
+  filename
+    filename to read into memory, or LUN (Fortran Logical Unit Number). If
+    filename is a LUN, file must be opened with
+
+		   form='unformatted',access='stream'
+
+  as in
+
+		  open(unit=igetunit, file=filename,	 &
+		  & action="read", iomsg=message,	 &
+		  & form="unformatted", access="stream", &
+		  & status='old',iostat=ios)
+
+  An exception is that although stdin cannot currently generally be treated as
+  a stream file the data will be read from stdin if the filename is '-'.
+
+  pageout
+    array of characters to hold file
+
+EXAMPLES
+  Sample program
+
+     program demo_fileread
+     use M_io,	    only : fileread
+     implicit none
+     character(len=4096)	  :: FILENAME	! file to read
+     character(len=:),allocatable :: pageout(:) ! array to hold file in memory
+     integer			  :: longest, lines, i
+     character(len=*),parameter   :: gen='(*(g0,1x))'
+	! get a filename
+	call get_command_argument(1, FILENAME)
+	! allocate character array and copy file into it
+	call fileread(FILENAME,pageout)
+	if(.not.allocated(pageout))then
+	   write(*,gen)'*demo_fileread* failed to load file',FILENAME
+	else
+	   ! write file from last line to first line
+	   longest=len(pageout)
+	   lines=size(pageout)
+	   write(*,gen)'number of lines is',lines
+	   write(*,gen)'and length of lines is',longest
+	   write(*,'(a)')repeat('%',longest+2)
+	   write(*,'("%",a,"%")')(trim(pageout(i)),i=lines,1,-1)
+	   write(*,'(a)')repeat('%',longest+2)
+	   deallocate(pageout)	! release memory
+	endif
+     end program demo_fileread
+
+  Given
+
+     first line
+     second line
+     third line
+
+  Expected output
+
+     >	number of lines is 3
+     >	and length of lines is 11
+     > %%%%%%%%%%%%%
+     > %third line %
+     > %second line%
+     > %first line %
+     > %%%%%%%%%%%%%
+
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	       fileread(3m_io)
 splitpath(3m_io)					      splitpath(3m_io)
-
-
 
 NAME
   splitpath(3f) - [M_io:PATHNAMES] split a Unix pathname into components
   (LICENSE:PD)
-
 
 SYNOPSIS
   subroutine splitpath(path,dir,name,basename,ext)
@@ -1053,7 +1694,6 @@ SYNOPSIS
      character(len=maxlen),intent(out),optional :: name
      character(len=maxlen),intent(out),optional :: basename
      character(len=maxlen),intent(out),optional :: ext
-
 
 DESCRIPTION
   splitpath(3f) splits given pathname assuming a forward slash separates
@@ -1086,7 +1726,7 @@ OPTIONS
   Using these rules helps to reduce incorrect parsing, but the routine is only
   intended for simple parsing of names of the form "[dir/]name[.extension].
 
-RESULTS
+RETURNS
   dir
     Path of directories, including the trailing slash.
 
@@ -1104,7 +1744,7 @@ RESULTS
   special name "." is assumed to mean the current directory, and the special
   name ".." is assumed to mean one directory above the current directory.
 
-EXAMPLE
+EXAMPLES
   program demo_splitpath
 
      use m_io, only : splitpath
@@ -1170,6 +1810,117 @@ EXAMPLE
      | ..	     |		     |		     |		     |
      | ...	     |		     | ...	     | ..	     | .
 
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	      splitpath(3m_io)
+is_hidden_file(3m_io)					 is_hidden_file(3m_io)
+
+NAME
+  is_hidden_file(3f) - [M_io:QUERY] determine if a pathname points to a hidden
+  file, which is defined as a file basename starting with a period.
+  (LICENSE:PD)
+
+SYNTAX
+  impure elemental function is_hidden_file(PATH) result(YESNO)
+
+       character(len=*),intent(in) :: PATH
+       logical			   :: YESNO
+
+DESCRIPTION
+  Given a pathname determine if it is a hidden file. This is simply assumed to
+  be a basename that does not begin with a period and is not a single or
+  double period, assumed to represent the current directory and parent
+  directory.
+
+LIMITATIONS
+  Pathnames are not expanded to a canonical form, so if the basename is value
+  will still be .FALSE. . Filenames are assumed to not contain leading or
+  trailing spaces.
+
+OPTIONS
+  PATH
+    pathname to classify. It need not exist.
+
+RETURNS
+  YESNO
+    true if pathname points to a hidden file, otherwise it is false.
+
+EXAMPLES
+  Sample program:
+
+	program demo_is_hidden_file
+	use M_io, only : is_hidden_file, basename
+	   call showit('.abc')
+	   call showit('./.')
+	   call showit('..')
+	   call showit('...')
+	   call showit('/abc/def/notes.txt')
+	   call showit('/abc/def/.hide')
+	contains
+	subroutine showit(path)
+	character(len=*),intent(in) :: path
+	   write(*,*)is_hidden_file(path), &
+	    & ' ,path=',path
+	end subroutine showit
+	end program demo_is_hidden_file
+
+  Results:
+
+      >  T  ,path=.abc
+      >  F  ,path=./.
+      >  F  ,path=..
+      >  T  ,path=...
+      >  F  ,path=/abc/def/notes.txt
+      >  T  ,path=/abc/def/.hide
+
+SEE ALSO
+AUTHOR
+  John S. Urban
+
+LICENSE
+  Public Domain
+
+				August 19, 2026 	 is_hidden_file(3m_io)
+getchar(3m_io)							getchar(3m_io)
+
+NAME
+  getchar(3f) - [M_io:QUERY] read a single-byte character from stdin via C
+  interface (LICENSE:PD)
+
+SYNOPSIS
+  function getchar() result(ch)
+
+      character(len=1),intent(in) :: ch
+      integer :: getchar
+
+DESCRIPTION
+  Read a single character from stdin using the C interface
+
+OPTIONS
+  ch
+    A single character to read from stdin
+
+RETURNS
+  A integer value for the ADE (ASCII Decimal Equivalent) of the character, or
+  a negative value if an error occurs.
+
+EXAMPLES
+  sample usage
+
+     program demo_getchar
+     use M_io, only : getchar, putchar
+     implicit none
+     character(len=1) :: byte
+     integer :: istat
+	! copy stdin to stdout as a stream one byte at a time
+	do while (getchar(byte).ge.0)
+	   istat=putchar(byte)
+	enddo
+     end program demo_getchar
 
 AUTHOR
   John S. Urban
@@ -1177,12 +1928,8 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 	      splitpath(3m_io)
+				August 19, 2026 		getchar(3m_io)
 uniq(3m_io)							   uniq(3m_io)
-
-
 
 NAME
   uniq(3f) - [M_io:QUERY] append a number to the end of filename to make a
@@ -1196,7 +1943,6 @@ SYNOPSIS
 	integer,intent(in),optional :: istart
 	logical,intent(in),optional :: verbose
 	logical,intent(in),optional :: create
-
 
 DESCRIPTION
   Given a filename test if it is in use or exists. If it is, or if it ends in
@@ -1226,7 +1972,7 @@ RETURNS
     a number appended at the end if needed. If could not find a unique name a
     blank is returned.
 
-EXAMPLE
+EXAMPLES
   Sample program
 
 	program demo_uniq
@@ -1261,31 +2007,24 @@ EXAMPLE
       FILENAME:does_exist0010
       FILENAME:does_exist0011
 
-
 AUTHOR
   John S. Urban, 1993
 
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		   uniq(3m_io)
+				August 19, 2026 		   uniq(3m_io)
 which(3m_io)							  which(3m_io)
-
-
 
 NAME
   which(3f) - [M_io:SCANNAMES] given a command name find the pathname by
   searching the directories in the environment variable $PATH (LICENSE:PD)
-
 
 SYNTAX
   function which(command) result(pathname)
 
      character(len=*),intent(in)  :: command
      character(len=:),allocatable :: pathname
-
 
 DESCRIPTION
   Given a command name find the first file with that name in the directories
@@ -1300,7 +2039,7 @@ RETURNS
     the first pathname found in the current user path. Returns blank if the
     command is not found.
 
-EXAMPLE
+EXAMPLES
   Sample program:
 
       program demo_which
@@ -1311,7 +2050,6 @@ EXAMPLE
 	 write(*,*)'install is ',which('install')
       end program demo_which
 
-
 SEE ALSO
   M_system:system_dir(3f)
 
@@ -1321,115 +2059,82 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		  which(3m_io)
-getline(3m_io)							getline(3m_io)
-
-
+				August 19, 2026 		  which(3m_io)
+get_next_char(3m_io)					  get_next_char(3m_io)
 
 NAME
-  getline(3f) - [M_io:READ] read a line from specified LUN into allocatable
-  string up to line length limit (LICENSE:PD)
-
+  get_next_char(3f) - [M_io:READ] read from a file one character at a time
+  (LICENSE:PD)
 
 SYNTAX
-  function getline(line,lun,iostat) result(ier)
+  subroutine get_next_char(fd,c,ios)
 
-     character(len=:),allocatable,intent(out) :: line
-     integer,intent(in),optional	      :: lun
-     integer,intent(out),optional	      :: iostat
-     integer				      :: ier
-
+      integer,intent(in)    :: fd
+      character,intent(out) :: c
+      integer,intent(out)   :: ios
 
 DESCRIPTION
-  Read a line of any length up to programming environment maximum line length.
-  Requires Fortran 2003+.
+  This reads a file opened with stream access one character at a time, much
+  like ""read(fd,iostat=ios) c" but with buffering, which I have found to be
+  up to sixty times faster than such a plain read, although this varies
+  depending on how or if the programming environment implements I/O buffering
+  itself.
 
-  It is primarily expected to be used when reading input which will then be
-  parsed.
-
-  The input file must have a PAD attribute of YES for the function to work
-  properly, which is typically true.
-
-  The simple use of a loop that repeatedly re-allocates a character variable
-  in addition to reading the input file one buffer at a time could (depending
-  on the programming environment used) be inefficient, as it could reallocate
-  and allocate memory used for the output string with each buffer read.
+   IT USES SAVED VARIABLES AND CAN ONLY BE USED ON ONE FILE AT A TIME
+  IN THE CURRENT FORM. A user type including the saved values and the LUN
+  could easily resolve this.
 
 OPTIONS
-  LINE
-    line read
+  FD
+    A Fortran unit number of a file opened for stream access
 
-  LUN
-    optional LUN (Fortran logical I/O unit) number. Defaults to stdin.
+  C The next returned character if IOS=0
 
-  IOSTAT
-    status returned by READ(IOSTAT=IOS). If not zero, an error occurred or an
-    end-of-file or end-of-record was encountered.  This is the same value as
-    returned by the function. See the example program for a usage case.
+  IOS
+    The error status returned by the last read. It is zero (0) if no error
+    occurred
 
-RETURNS
-  IER
-    zero unless an error occurred. If not zero, LINE returns the I/O error
-    message.
-
-EXAMPLE
+EXAMPLES
   Sample program:
 
-     program demo_getline
-     use,intrinsic :: iso_fortran_env, only : stdin=>input_unit
+     program demo_get_next_char
      use,intrinsic :: iso_fortran_env, only : iostat_end
-     use M_io, only : getline
+     use M_io, only : get_next_char
      implicit none
-     integer :: iostat
-     character(len=:),allocatable :: line
-	open(unit=stdin,pad='yes')
-	INFINITE: do while (getline(line,iostat=iostat)==0)
-	   write(*,'(a)')'['//line//']'
-	enddo INFINITE
-	if(iostat /= iostat_end)then
-	   write(*,*)'error reading input:',trim(line)
+     character(len=4096) :: filename ! filename to read
+     character(len=256)  :: message  ! returned error messages
+     integer		 :: fd	     ! file descriptor for input file
+     integer		 :: ios,ios1 ! hold I/O error flag
+     character		 :: c1	     ! current character read
+	filename='test.in'
+	open(unit=fd,file=trim(filename),access='stream',status='old',&
+	& iostat=ios,action='read',form='unformatted',iomsg=message)
+	if(ios /= 0)then
+	   write(*,*)&
+	   '*demo_get_next_char* ERROR: could not open '//&
+	   trim(filename)
+	   write(*,*)&
+	   '*demo_get_next_char* ERROR: '//trim(message)
+	   stop 5
 	endif
-     end program demo_getline
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 		getline(3m_io)
-getname(3m_io)							getname(3m_io)
-
-
-
-NAME
-  getname(3f) - [M_io:QUERY] get name of the current executable (LICENSE:PD)
-
-
-SYNOPSIS
-  function getname() result(name)
-
-      character(len=:),allocatable	   :: getname
-
-
-DESCRIPTION
-  getname(3f) returns the name of the current executable using
-  get_command_argument(3f) and inquire(3f).
-
-EXAMPLE
-  Sample getting a pathname of current executable:
-
-       program demo_getname
-       use M_io, only : getname
-       implicit none
-	  write(*,'(*(a))')'Running ',getname()
-       end program demo_getname
-
+	! loop through read of file one character at a time
+	ONE_CHAR_AT_A_TIME: do
+	   ! get next character from buffered read from file
+	   call get_next_char(fd,c1,ios1)
+	   if(ios1 == iostat_end)then
+	      ! reached end of file so stop
+	      stop
+	   elseif(ios1 /= 0 )then
+	      ! error on file read
+	      write(*,*)&
+	   '*demo_get_next_char* ERROR: before end of '//&
+	   trim(filename)
+	      stop 1
+	   endif
+	   ! do something with the characters
+	   write(*,'(a)',advance='no')c1
+	enddo ONE_CHAR_AT_A_TIME
+     end program demo_get_next_char
 
 AUTHOR
   John S. Urban
@@ -1437,218 +2142,23 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		getname(3m_io)
-is_hidden_file(3m_io)					 is_hidden_file(3m_io)
-
-
-
-NAME
-  is_hidden_file(3f) - [M_io:QUERY] determine if a pathname points to a hidden
-  file, which is defined as a file basename starting with a period.
-  (LICENSE:PD)
-
-
-SYNTAX
-  impure elemental function is_hidden_file(PATH) result(YESNO)
-
-       character(len=*),intent(in) :: PATH
-       logical			   :: YESNO
-
-
-DESCRIPTION
-  Given a pathname determine if it is a hidden file. This is simply assumed to
-  be a basename that does not begin with a period and is not a single or
-  double period, assumed to represent the current directory and parent
-  directory.
-
-LIMITATIONS
-  Pathnames are not expanded to a canonical form, so if the basename is value
-  will still be .FALSE. . Filenames are assumed to not contain leading or
-  trailing spaces.
-
-OPTIONS
-  PATH
-    pathname to classify. It need not exist.
-
-RETURNS
-  YESNO
-    true if pathname points to a hidden file, otherwise it is false.
-
-EXAMPLE
-  Sample program:
-
-	program demo_is_hidden_file
-	use M_io, only : is_hidden_file, basename
-	   call showit('.abc')
-	   call showit('./.')
-	   call showit('..')
-	   call showit('...')
-	   call showit('/abc/def/notes.txt')
-	   call showit('/abc/def/.hide')
-	contains
-	subroutine showit(path)
-	character(len=*),intent(in) :: path
-	   write(*,*)is_hidden_file(path), &
-	    & ' ,path=',path
-	end subroutine showit
-	end program demo_is_hidden_file
-
-  Results:
-
-      >  T  ,path=.abc
-      >  F  ,path=./.
-      >  F  ,path=..
-      >  T  ,path=...
-      >  F  ,path=/abc/def/notes.txt
-      >  T  ,path=/abc/def/.hide
-
-
-SEE ALSO
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	 is_hidden_file(3m_io)
-joinpath(3m_io) 					       joinpath(3m_io)
-
-
-
-NAME
-  joinpath(3f) - [M_io:PATHNAMES] join parts of a pathname together
-  (LICENSE:PD)
-
-
-SYNOPSIS
-  function joinpath(a1,a2,a3,a4,a5,a6,a7,a8,a9)
-    result(path)
-
-      character(len=*), intent(in)	     :: a1, a2
-      character(len=*), intent(in), optional :: a3, a4, a5, a6, a7, a8, a9
-      character(len=:), allocatable	     :: path
-
-DESCRIPTION
-OPTIONS
-  a1,a2
-    the first two pathname sections to join. Required
-
-  a3-a9
-    additional optional sections to join
-
-RETURNS
-  pathname sections joined together with trailing spaces removed from the ends
-  of sections and a separator (as returned by separator(3f) ) placed between
-  them, and duplicate adjacent separators removed accept for one beginning the
-  joined pathname.
-
-EXAMPLE
-  Sample program
-
-       program demo_joinpath
-       use M_io, only : joinpath
-       implicit none
-	  write(*,*)joinpath(&
-	  &'/share/user','/man/','man3','joinpath.3m_io'//'.gz' &
-	  &)
-       end program demo_joinpath
-
-  Results:
-
-       >  /share/user/man/man3/joinpath.3m_io.gz
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	       joinpath(3m_io)
-lookfor(3m_io)							lookfor(3m_io)
-
-
-
-NAME
-  lookfor(3f) - [M_io:SCANNAMES] look for a filename in a number of
-  directories specified by an environment variable (LICENSE:PD)
-
-
-SYNTAX
-  function lookfor(basename,env) result(pathname)
-
-     character(len=:),intent(in)  :: basename
-     character(len=:),intent(in)  :: env
-     character(len=:),allocatable :: pathname
-
-
-DESCRIPTION
-  Given a base filename find the first file with that name in the directories
-  specified by the environment variable ENV
-
-OPTIONS
-  BASENAME
-    the file to search for
-
-  ENV
-    environment variable name. Separator between directory names is assumed to
-    be a colon on ULS (Unix-Like Systems) and semi-colon on MS-Windows
-    machines.
-
-RETURNS
-  PATHNAME
-    the first pathname found in the current user path. Returns blank if the
-    file is not found.
-
-EXAMPLE
-  Sample program:
-
-      program demo_lookfor
-      use M_io, only : lookfor
-      implicit none
-      character(len=:),allocatable :: returned
-	 returned=lookfor('ls','PATH')
-	 write(*,*)'ls is ',returned
-	 returned=lookfor('dir.exe','PATH')
-	 write(*,*)'dir is ',returned
-      end program demo_lookfor
-
-
-SEE ALSO
-  M_system:system_dir(3f)
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 		lookfor(3m_io)
+				August 19, 2026 	  get_next_char(3m_io)
 untitled()							    untitled()
-
-
 
 	      [GPF Home Page]
 
    NAME
   M_io(3f) - [M_io::INTRO] Fortran I/O module (LICENSE:PD)
 
-
    SYNOPSIS
-  use M_io, only : notopen, print_inquire, read_table, filename_generator use
-  M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, bas ename
-  use M_io, only : separator, getname, which, lookfor use M_io, only :
+  public entities:
+
+	 use M_io, only : notopen, print_inquire, read_table, filename_generator
+	 use M_io, only : dirname, splitpath, joinpath, get_tmp, scratch, uniq, ba
+  sename use M_io, only : separator, getname, which, lookfor use M_io, only :
   read_line, getline, rd, get_next_char use M_io, only : fileopen, fileclose,
-  filedelete, filewrite, fileread, fil ebyte use M_io, only : number_of_lines
-  use M_io, only : get_env, is_hidden_file
+  filedelete, filewrite, fileread, fi lebyte use M_io, only : number_of_lines
+  use M_io, only : get_env, is_hidden_file use M_io, only : putchar, getchar
 
    DESCRIPTION
   The M_io module is a collection of routines related to basic I/O
@@ -1736,139 +2246,47 @@ untitled()							    untitled()
    LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		    untitled()
-notopen(3m_io)							notopen(3m_io)
-
-
+				August 19, 2026 		    untitled()
+get_tmp(3m_io)							get_tmp(3m_io)
 
 NAME
-  notopen(3f) - [M_io:QUERY] Find a FUN/LUN (Fortran-unit-number) that is not
-  in use (LICENSE:PD)
+  get_tmp(3f) - [M_io:QUERY] Return the name of the scratch directory
+  (LICENSE:PD)
 
 SYNOPSIS
-  Usage
+  function get_tmp() result(tname)
 
-	integer function notopen(start,end,err)
-	integer,optional,intent(in)  :: start
-	integer,optional,intent(in)  :: end
-	integer,optional,intent(out) :: err
+       character(len=:),allocatable :: tname
 
 DESCRIPTION
-  A free FORTRAN unit number is needed to OPEN a file. NOTOPEN() returns a
-  FORTRAN unit number from START to END not currently associated with an I/O
-  unit. START and END are expected to be positive integers where
+  Return the name of the scratch directory set by the most common environment
+  variables used to designate a scratch directory.  $TMPDIR is the canonical
+  environment variable in Unix and POSIX[1] to use to specify a temporary
+  directory for scratch space. If $TMPDIR is not set, $TEMP, $TEMPDIR, and
+  $TMP are examined in that order. If nothing is set "/tmp/" is returned. The
+  returned value always ends in "/". No test is made that the directory exists
+  or is writable.
 
-  END
-    >=	START.
+EXAMPLES
+  Sample:
 
-  If NOTOPEN() returns -1, then no free FORTRAN unit could be found in the
-  specified range.
-
-  Otherwise, NOTOPEN() returns an integer representing a free FORTRAN logical
-  unit number. Note that NOTOPEN() assumes the following unit numbers defined
-  by the Fortran 2008 ISO_FORTRAN_ENV module
-
-	ERROR_UNIT,INPUT_UNIT,OUTPUT_UNIT
-
-  are special, and will never return those values.
-
-OPTIONS
-  start
-    optional logical unit number to start scan at, defaults to 10.
-
-  end
-    optional logical unit number to stop scan at, defaults to 99.
-
-  err
-    optional error flag returned. ERR will be non-zero if no errors. If not
-    present and an error occurs the program will stop instead of returning.
-
-NOTES
-  Why are the default START and END limits from 10 to 99? the Fortran 77
-  standard did not specify a specific limit on the upper range limit, but the
-  LUN range of 1 to 99 was almost always supported in conventional programming
-  environments. Additionally, units in the range 0-10 have often been the
-  units used for pre-assigned files. Occasionally 100, 101 and 102 are
-  reserved (for files such as standard input, standard output, standard error,
-  ...). Therefore, the defaults for START and END were selected to be 10 and
-  99. And most programs do not need more than 90 files simultaneously open, so
-  the defaults work well in practice with many versions/vintages of Fortran.
-
-  Note that an environment may impose a limit on the number of simultaneously
-  open files (which some compilers work around).
-
-  Beginning with f2008, you can probably use OPEN(NEWUNIT=...) instead of an
-  open unit locator.
-
-EXAMPLE
-  Sample program:
-
-      program demo_notopen ! test the NOTOPEN(3f) function
-      use m_io, only: notopen
+      program demo_get_tmp
+      use M_io, only : get_tmp, uniq
       implicit none
-      integer :: ii, ierr, igot
+      character(len=:),allocatable :: answer
+	 answer=get_tmp()
+	 write(*,*)'result is ',answer
+	 answer=get_tmp()//uniq('_scratch',create=.false.)
+	 write(*,*)'the file ',answer, &
+	 & ' was a good scratch file name, at least a moment ago'
+      end program demo_get_tmp
 
-      write(*,*)'check for preassigned files from unit 0 to unit 1000'
-      write(*,*)'(5 and 6 always return -1)'
+  Sample Results:
 
-      do ii=0,1000
-	 if(notopen(ii,ii,ierr)  /=  ii)then
-	    write(*,*)'INUSE:',ii, notopen(ii,ii,ierr)
-	 endif
-      enddo
-
-      ! open all files from UNIT=10 to UNIT=30 so have used units
-      do ii=10,30,1
-	open(unit=ii,status="scratch")
-      enddo
-      ! close UNIT=25
-      close(25)
-
-      ! find open file in range 10 to 30
-      write(*,*)'Should get 25 for this ..',notopen(10,30,ierr)
-
-      close(18)
-      do ii=10,32
-	igot=notopen(ii,ii,ierr)
-	write(*,*)'For unit ',ii,' I got ',igot,' with ERR=',ierr
-      enddo
-
-      end program demo_notopen
-
-  Expected output(can vary with each programming environment):
-
-	check for preassigned files from unit 0 to unit 1000
-	(5 and 6 always return -1)
-	INUSE:	  0    -1
-	INUSE:	  5    -1
-	INUSE:	  6    -1
-	Should get 25 for this .. 25
-	For  unit  10  I  got  -1  with  ERR=  -1
-	For  unit  11  I  got  -1  with  ERR=  -1
-	For  unit  12  I  got  -1  with  ERR=  -1
-	For  unit  13  I  got  -1  with  ERR=  -1
-	For  unit  14  I  got  -1  with  ERR=  -1
-	For  unit  15  I  got  -1  with  ERR=  -1
-	For  unit  16  I  got  -1  with  ERR=  -1
-	For  unit  17  I  got  -1  with  ERR=  -1
-	For  unit  18  I  got  18  with  ERR=	0
-	For  unit  19  I  got  -1  with  ERR=  -1
-	For  unit  20  I  got  -1  with  ERR=  -1
-	For  unit  21  I  got  -1  with  ERR=  -1
-	For  unit  22  I  got  -1  with  ERR=  -1
-	For  unit  23  I  got  -1  with  ERR=  -1
-	For  unit  24  I  got  -1  with  ERR=  -1
-	For  unit  25  I  got  25  with  ERR=	0
-	For  unit  26  I  got  -1  with  ERR=  -1
-	For  unit  27  I  got  -1  with  ERR=  -1
-	For  unit  28  I  got  -1  with  ERR=  -1
-	For  unit  29  I  got  -1  with  ERR=  -1
-	For  unit  30  I  got  -1  with  ERR=  -1
-	For  unit  31  I  got  31  with  ERR=	0
-	For  unit  32  I  got  32  with  ERR=	0
-
+      > result is /cygdrive/c/Users/JSU/AppData/Local/Temp/
+      >
+      > the file /cygdrive/c/Users/JSU/AppData/Local/Temp/_scratch
+      > was a good scratch file name, at least a moment ago
 
 AUTHOR
   John S. Urban
@@ -1876,642 +2294,4 @@ AUTHOR
 LICENSE
   Public Domain
 
-
-
-			       October 25, 2024 		notopen(3m_io)
-filename_generator(3m_io)			     filename_generator(3m_io)
-
-
-
-NAME
-  notopen(3f) - [M_io:FILENAME] generate a filename containing a number
-  (LICENSE:PD)
-
-SYNOPSIS
-  Usage
-
-	function filename_generator(head,tail,num,lenlimit) result(filename)
-	character(len=*),intent(in)  :: head
-	character(len=*),intent(in)  :: tail
-	integer,intent(in) :: num
-	integer,intent(in) :: lenlimit
-	character(len=:),allocatable :: filename
-
-
-DESCRIPTION
-  Generate a filename containing a representation of the specified whole
-  number. This is useful for generating a series of filenames differing by a
-  number such as "file1.txt", "file2.txt",
-
-OPTIONS
-  head
-    filename prefix.
-
-  tail
-    filename suffix.
-
-  num
-    number to represent as a string between HEAD and TAIL.
-
-  lenlimit
-    number of digits up to which to zero-pad the string representing NUM.
-
-EXAMPLE
-  Sample program:
-
-	program demo_filename_generator
-	use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
-	use M_io, only : filename_generator
-	implicit none
-
-	    ! no zero-fill
-	    write(*,*) filename_generator("file_",".dat",11)
-	    ! zero-fill till 3 digits
-	    write(*,*) filename_generator("file_",".dat",11,3)
-	    ! zero-fill till 9 digits
-	    write(*,*) filename_generator("file_",".dat",11,9)
-	    ! same as default (no zero-fill)
-	    write(*,*) filename_generator("file_",".dat",11,0)
-
-	end program demo_filename_generator
-
-  Results
-
-	> file_11.dat
-	> file_011.dat
-	> file_000000011.dat
-	> file_11.dat
-
-
-AUTHOR
-  Zh, Niu; with modifications by John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024      filename_generator(3m_io)
-fileopen(3m_io) 					       fileopen(3m_io)
-
-
-
-NAME
-  fileopen(3f) - [M_io] A simple open of a sequential file (LICENSE:PD)
-
-
-SYNOPSIS
-  function fileopen(filename,mode,ios) result(lun)
-
-     character(len=*),intent(in)	   :: filename
-     character(len=*),intent(in),optional  :: mode
-     integer,intent(out),optional	   :: ios
-     integer				   :: lun
-
-
-DESCRIPTION
-  fileopen(3f) is a convenience routine that allows you to open a file for
-  sequential reading and writing as a text file in a form commonly found in C
-  and interpreted languages such as shells. See the OPEN(3f) statement for
-  more demanding I/O specifications (asynchronous, direct, unformatted, ... ).
-  The documentation for the flexible and powerful OPEN(3f) statement can be a
-  bit overwhelming; this routine cuts it down to the just the simple basic
-  functions typically available in a scripting language such as bash, tcsh,
-  sh, ...
-
-  Specify the file's name as the string FILENAME with a shell-like prefix
-  specifying the access mode, or alternatively specify a plain FILENAME and
-  the kind of access you need to the file with the string MODE.
-
-  Three fundamental kinds of access are available: read, write, and append.
-
-OPTION
-  FILENAME
-    The filename to open. If the beginning of the filename is
-
-	      <   open for read. File must exist
-	      >   open for write. Will overwrite current file
-	      >>  open for append. Will append to current file
-
-	      If no prefix exists to specify a file access mode, it
-	      will depend on the values of the MODE argument (meaning
-	      the default will be "readwrite").
-
-	      A blank filename causes a unit number for a scratch file
-	      to be returned.
-
-
-  MODE
-    [rwa][tb][+] An alternate way to specify the file access mode is to
-    specify a MODE value. It should begin with one of the three characters
-    "r", "w", or "a". It defaults to 'rw'. It is case-insensitive.
-
-   READING PREFIX
-  r,<
-    Open the file for reading; the operation will fail if the file does not
-    exist, or if the host system does not permit you to read it.
-
-   WRITING PREFIXES
-  w,>
-    Open a file for writing from the beginning of the file.  If the file whose
-    name you specified already existed, the call fails.
-
-  •  Open the file for writing from the beginning of the file: effectively,
-     this always creates a new file. If the file whose name you specified
-     already existed, its old contents are discarded.
-
-  a,<<
-     Initially open the file for appending data (ie. writing at the end of
-     file).
-
-   SUFFIX
-  b Append a "b" to any of the three modes above to specify that you are
-    opening the file as a "binary file" (the default is to open the file as a
-    sequential formatted text file. This switch changes to to an unformatted
-    stream).
-
-		    open( ... access='stream';form='unformatted')
-
-
-  t Append a "t" to any of the three modes (rwa) to specify a formatted stream
-
-		    open( ... access='stream';form='formatted')
-
-
-  •  Finally, you might need to both read and write from the same file. You
-     can specify "rw" or you can append a `+' to any of the three primary
-     modes ("rwa") to permit "readwrite" access
-
-  v  Additionally, "v" selects verbose mode, which prints the OPEN(3f) options
-     explicitly selected
-
-   NOTES
-  If you want to append both `b' and `+', you can do it in either order: for
-  example, "rb+" means the same thing as "r+b" when used as a mode string.)
-
-  IOS
-    The error code returned by the OPEN(3f) statement ultimately executed by
-    this function. If not present the program stops on an error.
-
-RETURNS
-  FILEOPEN(3f) returns a Fortran unit number which you can use for other file
-  operations, unless the file you requested could not be opened; in that
-  situation, the result is -1 (a reserved value that cannot be returned as a
-  NEWUNIT value on an OPEN(3f)) and IOS will be non-zero.
-
-EXAMPLE
-  Common usage
-
-   READ
-  R=fileopen('<in.txt') or R=fileopen('in.txt','r')
-
-   WRITE
-  W=fileopen('>out.txt') or W=fileopen('out.txt','W')
-
-   READWRITE
-  RW=fileopen('inout.txt')
-
-   APPEND
-  A=fileopen('>>inout.txt') or A=fileopen('inout.txt','a')
-
-  Sample program
-
-	program demo_fileopen
-	use M_io, only : fileopen, fileclose, print_inquire
-	implicit none
-	integer :: lun
-	lun=fileopen('fred.txt')
-	call print_inquire(lun)
-	end program demo_fileopen
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	       fileopen(3m_io)
-fileread(3m_io) 					       fileread(3m_io)
-
-
-
-NAME
-  fileread(3f) - [M_io:READ] read (ie. slurp) a file into a string array
-  (LICENSE:PD)
-
-SYNOPSIS
-  subroutine fileread(filename,pageout)
-
-     character(len=*),intent(in) :: filename
-       or
-     integer,intent(in) 	 :: io
-
-     character(len=:),allocatable,intent(out) :: pageout(:)
-
-DESCRIPTION
-  Read an entire file into memory as a character array, one character variable
-  per line.
-
-  NOTE:
-
-  Do not casually read an entire file into memory if you can process it per
-  line or in smaller units; as large files can consume unreasonable amounts of
-  memory.
-
-OPTIONS
-  filename
-    filename to read into memory, or LUN (Fortran Logical Unit Number). If
-    filename is a LUN, file must be opened with
-
-		   form='unformatted',access='stream'
-
-  as in
-
-		  open(unit=igetunit, file=filename,	 &
-		  & action="read", iomsg=message,	 &
-		  & form="unformatted", access="stream", &
-		  & status='old',iostat=ios)
-
-  An exception is that although stdin cannot currently generally be treated as
-  a stream file file the data will be read from stdin if the filename is '-'.
-
-  pageout
-    array of characters to hold file
-
-EXAMPLES
-  Sample program
-
-     program demo_fileread
-     use M_io,	    only : fileread
-     implicit none
-     character(len=4096)	  :: FILENAME	! file to read
-     character(len=:),allocatable :: pageout(:) ! array to hold file in memory
-     integer			  :: longest, lines, i
-     character(len=*),parameter   :: gen='(*(g0,1x))'
-	! get a filename
-	call get_command_argument(1, FILENAME)
-	! allocate character array and copy file into it
-	call fileread(FILENAME,pageout)
-	if(.not.allocated(pageout))then
-	   write(*,gen)'*demo_fileread* failed to load file',FILENAME
-	else
-	   ! write file from last line to first line
-	   longest=len(pageout)
-	   lines=size(pageout)
-	   write(*,gen)'number of lines is',lines
-	   write(*,gen)'and length of lines is',longest
-	   write(*,'(a)')repeat('%',longest+2)
-	   write(*,'("%",a,"%")')(trim(pageout(i)),i=lines,1,-1)
-	   write(*,'(a)')repeat('%',longest+2)
-	   deallocate(pageout)	! release memory
-	endif
-     end program demo_fileread
-
-  Given
-
-     first line
-     second line
-     third line
-
-  Expected output
-
-     >	number of lines is 3
-     >	and length of lines is 11
-     > %%%%%%%%%%%%%
-     > %third line %
-     > %second line%
-     > %first line %
-     > %%%%%%%%%%%%%
-
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	       fileread(3m_io)
-filebyte(3m_io) 					       filebyte(3m_io)
-
-
-
-NAME
-  filebyte(3f) - [M_io:READ] read (ie. slurp) a file into a character array
-  (LICENSE:PD)
-
-SYNOPSIS
-  subroutine filebyte(filename,text,length.lines)
-
-     character(len=*),intent(in) :: filename
-      or
-     integer,intent(in) 	 :: filenumber
-
-     character(len=1),allocatable,intent(out) :: text(:)
-     integer,intent(out),optional :: length
-     integer,intent(out),optional :: lines
-
-DESCRIPTION
-  Read an entire file as a stream into memory as an array of single
-  characters, retaining line end terminators.
-
-  NOTE:
-
-  Never casually read an entire file into memory if you can process it per
-  line or in smaller units; as large files can consume unreasonable amounts of
-  memory.
-
-OPTIONS
-  filename
-    filename to read into memory or LUN (Fortran Logical Unit Number) If a
-    LUN, file must be opened with
-
-		      form='unformatted',access='stream'
-
-  as in
-
-		     open(unit=igetunit, file=filename,     &
-		     & action="read", iomsg=message,	    &
-		     & form="unformatted", access="stream", &
-		     & status='old',iostat=ios)
-
-  An exception is that although stdin cannot currently generally be treated as
-  a stream file file the data will be read from stdin if the filename is '-'.
-
-  text
-    array of characters to hold file
-
-  length
-    returns length of longest line read(Optional).
-
-  lines
-    returns number of lines read(Optional).
-
-EXAMPLES
-  Sample program, which
-    creates test input file "inputfile":
-
-      program demo_filebyte
-      use M_io, only	  : filebyte
-      implicit none
-      character(len=1),allocatable :: text(:) ! array to hold file in memory
-      character(len=*),parameter :: FILENAME='inputfile' ! file to read
-
-      ! create test file
-      open(file=FILENAME,unit=10,action='write')
-      write(10,'(a)') new_line('A')//'esrever lliw'
-      write(10,'(a)') 'margorp elpmas eht taht'
-      write(10,'(a)') 'elif elpmas a si sihT'
-      close(unit=10)
-
-      call filebyte(FILENAME,text) ! allocate character array and copy file into it
-
-      if(.not.allocated(text))then
-	 write(*,*)'*rever* failed to load file '//FILENAME
-      else
-	 ! write file reversed to stdout
-	 write(*,'(*(a:))',advance='no')text(size(text):1:-1)
-	 deallocate(text)  ! release memory
-      endif
-
-      end program demo_filebyte
-
-  Expected output:
-
-      >This is a sample file
-      >that the sample program
-      >will reverse
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	       filebyte(3m_io)
-basename(3m_io) 					       basename(3m_io)
-
-
-
-NAME
-  basename(3f) - [M_io:PATHNAMES] return last component from filename
-  (LICENSE:PD)
-
-
-SYNOPSIS
-  function basename(FILENAME,SUFFIX) result (LEAF)
-
-       character(len=:),allocatable :: FILENAME
-       character(len=*),intent(in),optional :: SUFFIX
-       character(len=*),intent(in) :: LEAF
-
-
-DESCRIPTION
-  Output LEAF of filename with directory paths removed.
-
-  Assumes leaf separator is a slash or backslash as determined by
-  separator(3f) and that filename does not contain trailing spaces.
-
-OPTIONS
-  FILENAME
-    pathname to extract the last leaf from
-
-  SUFFIX
-    suffix to remove. If not present the rightmost ".string" string is
-    removed.  If present the LEAF is returned with any matching suffix
-    removed.
-
-RETURNS
-  LEAF
-    returned leaf name
-
-EXAMPLES
-  Sample program:
-
-     program demo_basename
-     use M_io, only : basename
-     implicit none
-     character(len=:),allocatable :: fn
-     integer			  :: filename_length
-     integer			  :: i
-     ! get pathname from command line arguments
-     do i = 1, command_argument_count()
-	call get_command_argument (i, length=filename_length)
-	if(allocated(fn))deallocate(fn)
-	allocate(character(len=filename_length) :: fn)
-	call get_command_argument (i, value=fn)
-	! leaf with any suffix removed
-	! leaf with suffix retained
-	! with suffix unless it is ".f90"
-	write(*,'(*(a,1x))') basename(fn), basename(fn,''), basename(fn,'.f90')
-     enddo
-     end program demo_basename
-
-  Sample program executions:
-
-      $demo_basename /usr/bin/
-      bin bin bin
-      $demo_basename dir1/fred.x dir2/.y
-      fred fred.x fred.x
-      .y .y .y
-      $demo_basename stdio.h
-      stdio stdio.h stdio.h
-      $demo_basename /name.f90
-      name name.f90 name
-
-
-SEE ALSO
-  basename(3c), basename(3c), readlink(3c), realpath(3c)
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 25, 2024 	       basename(3m_io)
-readenv(3m_io)							readenv(3m_io)
-
-
-
-NAME
-  readenv(3f) - [M_io:QUERY] a function returning the value of an environment
-  variable (LICENSE:PD)
-
-
-SYNTAX
-  function readenv(NAME,DEFAULT,IERR=IERR) result(VALUE)
-
-      character(len=*),intent(in)	   :: NAME
-      character(len=*),intent(in),optional :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      character(len=:),allocatable	   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      real,intent(in),optional		   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      real				   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      integer,intent(in),optional	   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      integer				   :: VALUE
-
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      doubleprecision,intent(in),optional  :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      doubleprecision			   :: VALUE
-       or
-
-      character(len=*),intent(in)	   :: NAME
-      logical,intent(in),optional	   :: DEFAULT
-      integer,intent(out),optional	   :: IERR
-      logical				   :: VALUE
-
-
-
-DESCRIPTION
-  Get the value of an environment variable or optionally return a default
-  value if the returned value would be a blank string.
-
-  The type returned is the same as the type of the default
-
-OPTIONS
-  NAME
-    name of environment variable
-
-  DEFAULT
-    value to return if environment variable is not set or set to an empty
-    string. May be CHARACTER, REAL, INTEGER, or DOUBLEPRECISION. Defaults to a
-    null CHARACTER value.
-
-RETURNS
-  VALUE
-    the value of the environment variable or the default.  The type is the
-    same as DEFAULT. If an error occurs and it is numeric, huge(0|0.0|0.0d0)
-    is returned.
-
-    For a LOGICAL type, Any environment variable value starting with F,f,N or
-    n is .FALSE. and any value starting with Y,y,T or t is true. A leading
-    period (".") is ignored.  Anything else returns .false. .
-
-  IERR
-    return error code. Must be specified with a keyword.  It is zero if no
-    error occurred.
-
-EXAMPLE
-  Sample program:
-
-     program demo_readenv
-     use M_io, only : readenv, getname
-     character(len=*),parameter :: g='(*(g0))'
-     integer :: ierr
-
-	if(readenv('STOP').eq.'RUN')then
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER','string')
-	   write(*,g)readenv('INTEGER',100)
-	   write(*,g)readenv('REAL',200.0)
-	   write(*,g)readenv('DOUBLE',300.0d0)
-	   write(*,g)readenv('LOGICAL',.true.)
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER','string',ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('INTEGER',100,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('REAL',200.0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('DOUBLE',300.0d0,ierr=ierr)
-	   write(*,*)'ierr=',ierr
-	   write(*,g)readenv('LOGICAL',.true.)
-	   write(*,*)'ierr=',ierr
-
-	   write(*,g)repeat('-',80)
-	   write(*,g)readenv('CHARACTER')
-	   write(*,g)readenv('HOME')
-	 else
-	   write(*,g)repeat('-',80)
-	   call execute_command_line('env STOP=RUN '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=aaaa &
-	   & INTEGER=1 REAL=2.3 DOUBLE=444444444444 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=bbbb &
-	   & INTEGER=1 REAL=2.3 DOUBLE=44.555 '//getname())
-	   call execute_command_line('env STOP=RUN CHARACTER=cccc &
-	   & INTEGER=asdf REAL=asdf DOUBLE=adsf '//getname())
-	   write(*,g)repeat('-',80)
-	   stop
-	endif
-
-     end program demo_readenv
-
-
-SEE ALSO
-  get_environment_variable(3fortran), system_getenv(3m_system),
-  set_environment_variable(3m_system), system_putenv(3m_system),
-  system_clearenv(3m_system), system_initenv(3m_system),
-  system_getenv(3m_system), system_unsetenv(3m_system)
-
-AUTHOR
-  John S. Urban
-
-LICENSE
-  Public Domain
-
-
-
-			       October 02, 2024 		readenv(3m_io)
+				August 19, 2026 		get_tmp(3m_io)

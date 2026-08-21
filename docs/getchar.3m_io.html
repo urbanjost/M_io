@@ -48,7 +48,7 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 <div id="Container">
 <div id="Content">
 <CENTER>
-<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>filename_generator (3m_io)</NOBR><HR></H1>
+<H1><HR><I>Manual Reference Pages &nbsp;-&nbsp;</I><NOBR>getchar (3m_io)</NOBR><HR></H1>
 </CENTER>
 <A name=0>
 
@@ -56,34 +56,31 @@ a.existingWikiWord[title]{ //border: 1px dashed #BBB; }
 
 </A>
 <BLOCKQUOTE>
-notopen(3f) - [M_io:FILENAME] generate a filename containing a number
+getchar(3f) - [M_io:QUERY] read a single-byte character from stdin via C interface
 (LICENSE:PD)
+<P>
 </BLOCKQUOTE>
 <A name=contents></A><H3>CONTENTS</H3></A>
 <BLOCKQUOTE>
 <A HREF=#1>Synopsis</A><BR>
 <A HREF=#2>Description</A><BR>
 <A HREF=#3>Options</A><BR>
-<A HREF=#4>Examples</A><BR>
-<A HREF=#5>Author</A><BR>
-<A HREF=#6>License</A><BR>
+<A HREF=#4>Returns</A><BR>
+<A HREF=#5>Examples</A><BR>
+<A HREF=#6>Author</A><BR>
+<A HREF=#7>License</A><BR>
 </BLOCKQUOTE>
-<A name=7>
+<A name=8>
 
      <H3>SYNOPSIS</H3>
 
 </A>
 <BLOCKQUOTE>
-Usage
+function getchar() result(ch)
 <P>
 <PRE>
-      function filename_generator(head,tail,num,lenlimit) result(filename)
-      character(len=*),intent(in)  :: head
-      character(len=*),intent(in)  :: tail
-      integer,intent(in) :: num
-      integer,intent(in) :: lenlimit
-      character(len=:),allocatable :: filename
-<P>
+    character(len=1),intent(in) :: ch
+    integer :: getchar
 </PRE>
 </BLOCKQUOTE>
 <A name=2>
@@ -92,11 +89,7 @@ Usage
 
 </A>
 <BLOCKQUOTE>
-<P>
-Generate a filename containing a representation of the specified
-whole number. This is useful for generating a series of filenames
-differing by a number such as "file1.txt", "file2.txt",
-&#46;&#46;&#46; .
+Read a single character from stdin using the C interface
 </BLOCKQUOTE>
 <A name=3>
 
@@ -104,72 +97,52 @@ differing by a number such as "file1.txt", "file2.txt",
 
 </A>
 <BLOCKQUOTE>
-<P>
 <TABLE cellpadding=3>
 <TR valign=top><TD width=6% nowrap>
-<B>head</B> </TD><TD valign=bottom>
-filename prefix.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>tail</B> </TD><TD valign=bottom>
-filename suffix.
-</TD></TR>
-<TR valign=top><TD width=6% nowrap>
-<B>num</B> </TD><TD valign=bottom>
-number to represent as a string between HEAD and TAIL.
-</TD></TR>
-<TR valign=top><TD colspan=2>
-<B>lenlimit</B> </TD></TR><TR valign=top><TD width=6%>&nbsp;</TD><TD>
-number of digits up to which to zero-pad the string
-representing NUM.
+<B>ch</B> </TD><TD valign=bottom>
+A single character to read from stdin
 </TD></TR>
 <TR></TR></TABLE></BLOCKQUOTE>
 <A name=4>
+
+     <H3>RETURNS</H3>
+
+</A>
+<BLOCKQUOTE>
+A integer value for the ADE (ASCII Decimal Equivalent) of the
+character, or a negative value if an error occurs.
+</BLOCKQUOTE>
+<A name=5>
 
      <H3>EXAMPLES</H3>
 
 </A>
 <BLOCKQUOTE>
-<P>
-Sample program:
-<P>
-<PRE>
-      program demo_filename_generator
-      use,intrinsic::iso_fortran_env,only:int8,int16,int32,int64
-      use M_io, only : filename_generator
-      implicit none
-<P>
-          ! no zero-fill
-          write(*,*) filename_generator("file_",".dat",11)
-          ! zero-fill till 3 digits
-          write(*,*) filename_generator("file_",".dat",11,3)
-          ! zero-fill till 9 digits
-          write(*,*) filename_generator("file_",".dat",11,9)
-          ! same as default (no zero-fill)
-          write(*,*) filename_generator("file_",".dat",11,0)
-<P>
-      end program demo_filename_generator
-<P>
-</PRE>
-Results
+sample usage
 <P>
 <PRE>
-      &gt; file_11.dat
-      &gt; file_011.dat
-      &gt; file_000000011.dat
-      &gt; file_11.dat
+   program demo_getchar
+   use M_io, only : getchar, putchar
+   implicit none
+   character(len=1) :: byte
+   integer :: istat
+      ! copy stdin to stdout as a stream one byte at a time
+      do while (getchar(byte).ge.0)
+         istat=putchar(byte)
+      enddo
+   end program demo_getchar
 <P>
 </PRE>
 </BLOCKQUOTE>
-<A name=5>
+<A name=6>
 
      <H3>AUTHOR</H3>
 
 </A>
 <BLOCKQUOTE>
-Zh, Niu; with modifications by John S. Urban
+John S. Urban
 </BLOCKQUOTE>
-<A name=6>
+<A name=7>
 
      <H3>LICENSE</H3>
 
@@ -178,7 +151,7 @@ Zh, Niu; with modifications by John S. Urban
 Public Domain
 </BLOCKQUOTE>
 <P><HR>
-<br><br><center><img src="images/filename_generator.gif"></center>
+<br><br><center><img src="images/getchar.gif"></center>
 </div>
 </div>
 </body>
