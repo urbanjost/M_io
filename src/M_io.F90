@@ -18,6 +18,9 @@
 #elif __NVCOMPILER
 #   undef FLOAT128
 #   define __COMPILER__ __NVIDIA_COMP
+#elif __NVCOMPILER_LLVM__
+#   undef FLOAT128
+#   define __COMPILER__ __NVIDIA_COMP
 #else
 #   define __COMPILER__ __UNKNOWN_COMP
 #   warning  NOTE: UNKNOWN COMPILER
@@ -55,8 +58,10 @@ public separator
 public lookfor
 public which
 public get_env
-public is_hidden_file
+public expand_env
+public get_arg
 public getname
+public is_hidden_file
 
 public putchar
 public getchar
@@ -113,6 +118,14 @@ interface get_env
    module procedure get_env_character
    module procedure get_env_logical
 end interface get_env
+
+interface get_arg
+   module procedure get_arg_integer
+   module procedure get_arg_real
+   module procedure get_arg_double
+   module procedure get_arg_character
+   module procedure get_arg_logical
+end interface get_arg
 
 type :: force_keywd_hack  ! force keywords, using @awvwgk method
 end type force_keywd_hack
@@ -549,13 +562,14 @@ function separator() result(sep)
 implicit none
 integer                      :: ios
 integer                      :: i
-logical                      :: existing=.false.
+logical                      :: existing
 character(len=1)             :: sep
 !*!IFORT BUG:character(len=1),save        :: sep_cache=' '
 integer,save                 :: isep=-1
 character(len=4096)          :: name
 character(len=:),allocatable :: envnames(:)
 
+    existing=.false. ! some compilers complain value not initialized
     ! NOTE:  A parallel code might theoretically use multiple OS
     !*!FORT BUG:if(sep_cache /= ' ')then  ! use cached value.
     !*!FORT BUG:    sep=sep_cache
@@ -1100,9 +1114,9 @@ class(*),intent(in)                      :: filename    ! filename to shlep
 character(len=1),allocatable,intent(out) :: text(:)     ! array to hold file
 integer,intent(out),optional             :: length      ! length of longest line
 integer,intent(out),optional             :: lines       ! number of lines
-integer :: nchars=0             ! holds size of file
+integer :: nchars               ! holds size of file
 integer :: igetunit             ! use newunit=igetunit in f08
-integer :: ios=0                ! used for I/O error status
+integer :: iostat               ! used for I/O error status
 integer :: length_local
 integer :: lines_local
 integer :: i
@@ -1110,6 +1124,8 @@ integer :: icount
 character(len=256)  :: message
 character(len=4096) :: label
 character(len=:),allocatable :: line
+   nchars=0
+   iostat=0
    length_local=0
    lines_local=0
    label=''
@@ -1118,21 +1134,21 @@ character(len=:),allocatable :: line
     type is (character(len=*))
        if(filename /= '-'.and.filename /= '' ) then
           open(newunit=igetunit, file=trim(filename), action="read", iomsg=message,&
-           &form="unformatted", access="stream",status='old',iostat=ios)
+           &form="unformatted", access="stream",status='old',iostat=iostat)
           label=filename
        else ! copy stdin to a scratch file
           call copystdin_C()
        endif
     type is (integer)
        if(filename /= stdin) then
-          rewind(unit=filename,iostat=ios,iomsg=message)
+          rewind(unit=filename,iostat=iostat,iomsg=message)
           igetunit=filename
        else ! copy stdin to a scratch file
           call copystdin_C()
        endif
        write(label,'("unit ",i0)')filename
    end select
-   if(ios == 0)then  ! if file was successfully opened
+   if(iostat == 0)then  ! if file was successfully opened
       inquire(unit=igetunit, size=nchars)
       if(nchars <= 0)then
          call stderr_local( '*filebyte* empty file '//trim(label) )
@@ -1141,8 +1157,8 @@ character(len=:),allocatable :: line
       ! read file into text array
       if(allocated(text))deallocate(text) ! make sure text array not allocated
       allocate ( text(nchars) )           ! make enough storage to hold file
-      read(igetunit,iostat=ios,iomsg=message) text      ! load input file -> text array
-      if(ios /= 0)then
+      read(igetunit,iostat=iostat,iomsg=message) text      ! load input file -> text array
+      if(iostat /= 0)then
          call stderr_local( '*filebyte* bad read of '//trim(label)//':'//trim(message) )
       endif
    else
@@ -1150,7 +1166,7 @@ character(len=:),allocatable :: line
       allocate ( text(0) )           ! make enough storage to hold file
    endif
 
-   close(iostat=ios,unit=igetunit)            ! close if opened successfully or not
+   close(iostat=iostat,unit=igetunit)            ! close if opened successfully or not
 
    if(present(lines).or.present(length))then  ! get length of longest line and number of lines
       icount=0
@@ -4009,6 +4025,409 @@ integer(kind=c_int) :: ich
    endif
    getchar=ich
 end function getchar
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    expand_env(3f) - [M_io:QUERY] implements basic shell-style variable expansion
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function expand_env(in) result(out)
+!!
+!!     character(len=1),intent(in)  :: in
+!!     character(len=:),allocatable :: out
+!!
+!!##DESCRIPTION
+!!
+!! expand_env(3f) implements basic shell-style variable expansion for
+!! environment variables and some pre-defined names.  That is, it scans for
+!! '$' and replaces '$VAR' or '${VAR}' with values from environment variables
+!! or pre-defined substitutions.
+!!
+!! Given a string containing "$VAR" and "${VAR}" strings it replaces it
+!! with the value of the environment variable "VAR".  If the environment
+!! variable name returns a null string or the variable is not defined,
+!! the following predefined names will be expanded:
+!!
+!!  o FILE:  same as value returned by GET_COMMAND_ARGUMENT(0,string)
+!!  o 0,1,2,....: same as value returned by GET_COMMAND_ARGUMENT(N,string)
+!!  o *: all command line arguments from 1 to N joined with a space separator
+!!
+!!  o COMPILER: same as value returned by COMPILER_VERSION() intrinsic
+!!  o COMPILER_OPTIONS: same as value returned by COMPILER__OPTIONS() intrinsic
+!!
+!!  o DATE: returns a string of the form CCYY-MM-DD
+!!  o TIME: returns a string of the form HH:MM:SS
+!!  o ZONE: returns a string of the form (+-)HHMM, representing the
+!!          difference with respect to Coordinated Universal Time (UTC)
+!!  o TIMEZONE:  CCYY-MM-DDTHH:MM:SS
+!!
+!!##OPTIONS
+!!    A string containing names of the syntax $VAR or ${VAR} in addition to
+!!    plain text not to be expanded.
+!!
+!!##RETURNS
+!!    A string where $VAR and ${VAR} are replaced with the value of the
+!!    environment variable. If the returned value is null several predefined
+!!    variable names will be expanded per the table above.
+!!
+!!##EXAMPLES
+!!
+!!    Sample program
+!!
+!!     program demo_expand_env
+!!     use M_io, only : expand_env
+!!     implicit none
+!!     integer                       :: i
+!!     character(len=:), allocatable :: expanded
+!!     character(len=*), parameter   :: tests(*) = [ character(len=80) :: &
+!!      "-------------- Testing Pure Fortran Word Expansion --------------",&
+!!      " scratch space is $TMP for $USER with home directory  ${HOME}",    &
+!!      " DATE is $DATE TIME is 22:31:03 ZONE is $ZONE TIMESTAMP $TIMESTAMP",&
+!!      " FILE is $FILE ARGS: 0: $0 1: $1 2: $2 3: $3",                     &
+!!      " COMPILER is $COMPILER COMPILER_OPTIONS are ${COMPILER_OPTIONS}",  &
+!!      " ${0} versus M_io.FF  $0 versus $FILE",                            &
+!!      " All arguments is ${0} ${*}",                                      &
+!!      " unknown $UNKNOWN incorrect ${ A B C} but syntax OK",              &
+!!      " Bad $  ${  and stuff $UNKNOWN ${ A B C}",                         &
+!!      ""]
+!!
+!!        do i = 1,size(tests)
+!!           expanded=expand_env(tests(i))
+!!           print '(A)', "Input:  "//trim(tests(i))
+!!           print '(A)', "Result: "//expanded
+!!           print '(A)', ""
+!!        enddo
+!!
+!!     end program demo_expand_env
+!!
+!!##SEE ALSO
+!!    wordexp(3c) and POSIX shell string expansion
+!!##AUTHOR
+!!    John S. Urban
+!!##LICENSE
+!!    Public Domain
+function expand_env(input_str) result(output_str)
+!
+! implements basic shell-style variable expansion ($VAR) for environment variables and some pre-defined names
+! That is, it scans for '$' and replaces '$VAR' or '${VAR}' with values from environment variables or pre-defined substitutions
+!
+use,intrinsic :: iso_fortran_env, only : compiler_version, compiler_options
+character(len=*), intent(in)  :: input_str
+character(len=:), allocatable :: in
+character(len=:), allocatable :: output_str
+integer                       :: i, j, k
+integer                       :: iarg
+integer                       :: input_len
+integer                       :: var_start, var_end
+character(len=:), allocatable :: var_name, var_val, temp
+character,parameter           :: &
+& int*(*)  = '1234567890',                 &
+& low*(*)  = 'abcdefghijklmnopqrstuvwxyz', &
+& upp*(*)  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', &
+& punc*(*) = "!""#$%&’()*+,‐./:;<=>?@[\]ˆ_‘{|}˜"
+
+output_str = ""
+input_len = len(input_str)
+in = input_str//'  '
+i = 1
+var_name = ''
+var_val = ''
+temp = ''
+
+do while (i <= input_len)
+   if ( in(i:i) == '$' ) then
+      if ( i >= input_len )exit ! syntax error with line ending in $
+      var_start = i + 1
+         ! Handle bracketed syntax ${VAR}
+      if (in(var_start:var_start) == '{') then
+         var_start = var_start + 1
+         var_end = var_start + 1
+         do while (var_end <= input_len )
+            if (in(var_end:var_end) == '}') exit
+            var_end = var_end + 1
+         enddo
+         var_name = in(var_start:var_end-1)
+         i = var_end + 1
+      else
+            ! Handle unbracketed syntax $VAR (stops if not [A-Za-z0-9_]
+         var_end = var_start
+         do while (var_end <= input_len)
+            if (index(int//low//upp//'_',in(var_end:var_end)).eq.0)exit
+            var_end = var_end + 1
+         enddo
+         var_name = in(var_start:var_end-1)
+         i = var_end
+      endif
+         ! Fetch the environment variable value natively in Fortran
+      if(var_name.ne.'')then
+         var_val = get_env(var_name)
+      else
+         var_val = ''
+      endif
+      if (var_val=='') then
+         select case (var_name)
+         case ('DATE')
+            var_val = repeat(' ',8)
+            call date_and_time(date=var_val)
+            var_val = var_val(1:4)//'-'//var_val(5:6)//'-'//var_val(7:8)
+         case ('TIME')
+            var_val = repeat(' ',10)
+            call date_and_time(time=var_val)
+            var_val = var_val(1:2)//':'//var_val(3:4)//':'//var_val(5:6)
+         case ('ZONE')
+            var_val = repeat(' ',5)
+            call date_and_time(zone=var_val)
+         case ('TIMESTAMP')
+            var_val = repeat(' ',8)
+            call date_and_time(date=var_val)
+            temp = var_val(1:4)//'-'//var_val(5:6)//'-'//var_val(7:8)
+            var_val = repeat(' ',10)
+            call date_and_time(time=var_val)
+            temp = temp//'T'//var_val(1:2)//':'//var_val(3:4)//':'//var_val(5:6)
+            var_val = repeat(' ',5)
+            call date_and_time(zone=var_val)
+            var_val = temp//var_val
+         case ('FILE')
+            var_val = get_arg(0)
+         case ('COMPILER')
+            var_val = compiler_version()
+         case ('COMPILER_OPTIONS')
+            var_val = compiler_options()
+         case ('*')
+            var_val = ''
+            do j = 1,command_argument_count()
+               var_val = var_val//get_arg(j)//' '
+            enddo
+            var_val = trim(var_val)
+         case default  ! $NNN is command argument
+            if(var_name.eq.'')then ! syntax error
+               var_val=''
+            elseif (verify(trim(var_name), '0123456789') == 0 ) then ! determine if string is a valid integer
+               var_name = var_name//repeat(' ',9)
+               read(var_name,'(i9)')iarg
+               var_val = get_arg(iarg)
+            else  ! variable with blank value, unknown variable, or syntax error
+               var_val = ''
+            endif
+         end select
+      endif
+      output_str = output_str//var_val
+      var_val = ''
+   else
+      ! regular character, not part of variable name
+      output_str = output_str//in(i:i)
+      i = i + 1
+   endif
+enddo
+end function expand_env
+!===================================================================================================================================
+!()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
+!===================================================================================================================================
+!>
+!!##NAME
+!!    get_arg(3f) - [M_io:QUERY] implements basic shell-style variable expansion
+!!    (LICENSE:PD)
+!!
+!!##SYNOPSIS
+!!
+!!    function get_arg(n,default,ierr) result(arg)
+!!
+!!      integer,intent(in)           :: n
+!!      integer|real|doubleprecision|character|logical :: default
+!!      integer,intent(out),optional :: ierr
+!!      character(len=:),allocatable :: arg
+!!
+!!##DESCRIPTION
+!!
+!! get_arg(3f) returns the Nth command line argument.
+!!
+!!##OPTIONS
+!!    n        The number of the argument, from 0 to the count of the
+!!             total number of arguments.
+!!    default  The value to return if the argument is not present. The
+!!             type of the value determines the type of the returned
+!!             value. It may be REAL, DOUBLE_PRECISION, INTEGER, CHARACTER,
+!!             or LOGICAL.  The default type returned is CHARACTER.
+!!
+!!##RETURNS
+!!    arg      The value of the Nth command line argument after attempting
+!!             to convert it to the same type as DEFAULT.
+!!
+!!    ierr     zero if no error occurred. Keyword syntax is required.
+!!
+!!##EXAMPLES
+!!
+!!
+!!    Sample program
+!!
+!!     program demo_get_arg
+!!     use M_io, only : get_arg
+!!     implicit none
+!!     integer                       :: i
+!!     character(len=:), allocatable :: expanded
+!!
+!!        print '(A)', 'The program name is '//get_arg(0)
+!!
+!!        do i = 1,command_argument_count()
+!!           expanded=get_arg(i)
+!!           print '(A)', expanded
+!!        enddo
+!!
+!!     end program demo_get_arg
+!!
+!!##SEE ALSO
+!!     get_command_argument(3f), command_argument_count(3f)
+!!
+!!##AUTHOR
+!!    John S. Urban
+!!
+!!##LICENSE
+!!    Public Domain
+function get_arg_character(n,default,force_keywd,ierr) result(arg)
+integer,intent(in)                           :: n
+character(len=*),intent(in),optional         :: default
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional                 :: ierr
+integer                                      :: argument_length, istat
+character(len=:),allocatable                 :: arg
+   !
+   ! allocate string big enough to hold command line argument
+   !
+   call get_command_argument( number=n, length=argument_length )
+   if (allocated(arg))deallocate( arg )
+   allocate(character(len=argument_length) :: arg )
+   call get_command_argument(n, arg, status=istat )
+   if(arg.eq.'')arg=default
+   if (present(ierr)) ierr = istat
+end function get_arg_character
+
+function get_arg_real(n,DEFAULT,force_keywd,ierr) result(VALUE)
+integer,intent(in)                           :: n
+real,intent(in)                              :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional                 :: ierr
+real                                         :: VALUE
+integer                                      :: iostat
+character(len=255)                           :: iomsg, fmt
+character(len=:),allocatable                 :: string
+   STRING=get_arg_character(n,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* n=',n,' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_arg_real
+
+function get_arg_double(n,DEFAULT,force_keywd,ierr) result(VALUE)
+integer,intent(in)                           :: n
+doubleprecision,intent(in)                   :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional                 :: ierr
+doubleprecision                              :: VALUE
+character(len=:),allocatable                 :: STRING
+integer                                      :: iostat
+character(len=255)                           :: iomsg, fmt
+   STRING=get_arg_character(n,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+   else
+      write(fmt,'(*(g0))')'(g',max(1,len(string)),'.0)'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0.0d0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* n=',n,' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_arg_double
+
+function get_arg_integer(n,DEFAULT,force_keywd,ierr) result(VALUE)
+integer,intent(in)                           :: n
+integer,intent(in)                           :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional                 :: ierr
+integer                                      :: VALUE
+character(len=:),allocatable                 :: STRING
+integer                                      :: iostat
+character(len=255)                           :: iomsg, fmt
+   STRING=get_arg_character(n,'')
+   iostat=0
+   iomsg=''
+   if(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      write(fmt,'(*(g0))')'(i',max(1,len(string)),')'
+      string=string//' '
+      read(STRING,fmt,iostat=iostat,iomsg=iomsg)value
+      if(iostat.ne.0)then
+         value=-huge(0)
+      endif
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* n=',n,' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_arg_integer
+
+function get_arg_logical(n,DEFAULT,force_keywd,ierr) result(VALUE)
+integer,intent(in)                           :: n
+logical,intent(in)                           :: DEFAULT
+type(force_keywd_hack), optional, intent(in) :: force_keywd
+integer,intent(out),optional                 :: ierr
+logical                                      :: VALUE
+character(len=:),allocatable                 :: STRING
+integer                                      :: iostat
+character(len=255)                           :: iomsg, fmt
+character(len=1)                             :: ch
+   STRING=get_arg_character(n,'',ierr=iostat)
+   if(iostat.ne.0)then
+      VALUE=.false.
+   elseif(STRING.eq.'')then
+      VALUE=DEFAULT
+      iostat=0
+   else
+      string=string//'  '
+      ch=string(1:1)
+      if(ch.eq.'.')ch=string(2:2)
+      select case(ch)
+      case('t','T','y','Y')
+         value=.true.
+      case('f','F','n','N')
+         value=.false.
+       case default
+         value=.false.
+      end select
+   endif
+   if(present(ierr))then
+      ierr=iostat
+   elseif(iostat.ne.0)then
+      write(stderr,'(a)')'<ERROR>*get_env* n=',n,' STRING='//STRING//':'//trim(iomsg)
+   endif
+end function get_arg_logical
 !===================================================================================================================================
 !()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()()!
 !===================================================================================================================================
